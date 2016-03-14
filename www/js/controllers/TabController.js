@@ -1,4 +1,4 @@
-﻿app.controller('TabController', function ($rootScope, $scope, $stickyState, $state, $modal, $log, AuthService,
+﻿app.controller('TabController', function ($rootScope, $scope, $stickyState, $state, $modal, $log, AuthService, CommonService,
     AUTH_EVENTS, NETWORK_EVENTS, USER_ROLES, USER_LEVELS) {
     $scope.setTabVisibility = function (flag1, flag2) {
         if (document.getElementById("tab"))
@@ -28,8 +28,21 @@
                         $scope.role = 'sale'; break;
                     case USER_LEVELS.SALE_SUP:
                         $scope.role = 'sale-sup'; break;
+                    case USER_LEVELS.ASM:
+                        $scope.role = 'asm'; break;
+                    case USER_LEVELS.RSM:
+                        $scope.role = 'rsm'; break;
+                    case USER_LEVELS.NSM:
+                        $scope.role = 'nsm'; break;
                 }
         }
+
+        CommonService.checkResetPassword().then(function (data) {
+            if (data.ChangedPassword == 0) {
+                $state.go('change-password', {}, {reload: true});
+            }
+        }, function () {
+        });
     }
 
     getUser();

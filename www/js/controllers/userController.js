@@ -56,7 +56,7 @@ app.controller('UserController', function ($scope, $rootScope, $state, $modal, $
                                 $rootScope.processRequestError(err);
                             }); break;
                         case USER_LEVELS.ASM:
-                            $state.go("home.sale", {}, { reload: true }).then(function () {
+                            $state.go("tabs.asm-list", {}, { reload: true }).then(function () {
                                 console.log("CLOSED");
                                 if ($scope.modal) $scope.modal.dismiss('closing');
                             }, function (err) {
@@ -64,7 +64,7 @@ app.controller('UserController', function ($scope, $rootScope, $state, $modal, $
                                 $rootScope.processRequestError(err);
                             }); break;
                         case USER_LEVELS.RSM:
-                            $state.go("home.sale", {}, { reload: true }).then(function () {
+                            $state.go("tabs.rsm-list", {}, { reload: true }).then(function () {
                                 console.log("CLOSED");
                                 if ($scope.modal) $scope.modal.dismiss('closing');
                             }, function (err) {
@@ -72,7 +72,7 @@ app.controller('UserController', function ($scope, $rootScope, $state, $modal, $
                                 $rootScope.processRequestError(err);
                             }); break;
                         case USER_LEVELS.NSM:
-                            $state.go("home.sale", {}, { reload: true }).then(function () {
+                            $state.go("tabs.nsm-list", {}, { reload: true }).then(function () {
                                 console.log("CLOSED");
                                 if ($scope.modal) $scope.modal.dismiss('closing');
                             }, function (err) {
@@ -81,37 +81,7 @@ app.controller('UserController', function ($scope, $rootScope, $state, $modal, $
                             }); break;
                     }
                     break;
-                case USER_ROLES.SC:
-                    switch (AuthService.user().Level) {
-                        case USER_LEVELS.SC:
-                            $state.go("home.sc", {}, { reload: true }).then(function () {
-                                console.log("CLOSED");
-                                if ($scope.modal) $scope.modal.dismiss('closing');
-                            }, function (err) {
-                                if ($scope.modal) $scope.modal.dismiss('closing');
-                                $rootScope.processRequestError(err);
-                            });
-                            break;
-                        case USER_LEVELS.SC_SUP:
-                            $state.go("home.sc-sup", {}, { reload: true }).then(function () {
-                                console.log("CLOSED");
-                                if ($scope.modal) $scope.modal.dismiss('closing');
-                            }, function (err) {
-                                if ($scope.modal) $scope.modal.dismiss('closing');
-                                $rootScope.processRequestError(err);
-                            });
-                            break;
-                    }
-                    break;
-                case USER_ROLES.ADMIN:
-                    $state.go("home.admin", {}, { reload: true }).then(function () {
-                        console.log("CLOSED");
-                        if ($scope.modal) $scope.modal.dismiss('closing');
-                    }, function (err) {
-                        if ($scope.modal) $scope.modal.dismiss('closing');
-                        $rootScope.processRequestError(err);
-                    });
-                    break;
+                default: $state.go('login');
             }
         }, function (err) {
             if ($scope.modal) $scope.modal.dismiss('closing');

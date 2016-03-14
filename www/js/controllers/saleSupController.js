@@ -165,21 +165,21 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
         }, 1000);
     }
     $scope.statusCollapse = {
-        open: true,
-        flag: false
+        open: false,
+        flag: true
     };
     $scope.flagCount = 0;
     //$scope.log = '';
-    $scope.$watch('statusCollapse.open', function (newValue, oldValue) {
-        if (oldValue != newValue) {
-            $scope.flagCount += 1;
-            if ($scope.flagCount == 2) {
-                $scope.flagCount = 0;
-                $scope.statusCollapse.flag = !$scope.statusCollapse.flag;
-            }
-        }
-        //$scope.log += '' + oldValue + newValue + '  ';
-    });
+    //$scope.$watch('statusCollapse.open', function (newValue, oldValue) {
+    //    if (oldValue != newValue) {
+    //        $scope.flagCount += 1;
+    //        if ($scope.flagCount == 2) {
+    //            $scope.flagCount = 0;
+    //            $scope.statusCollapse.flag = !$scope.statusCollapse.flag;
+    //        }
+    //    }
+    //    //$scope.log += '' + oldValue + newValue + '  ';
+    //});
     $rootScope.loadOrderByStatus = function (statusId) {
         console.log('loadOrderByStatus');
         if ($state.current.name != 'home.sale-sup') {
@@ -277,6 +277,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
     $scope.filter.Status = 0;
     $scope.filter.Year = currentYear();
     $scope.filter.Month = currentMonth();
+    $scope.keyword = '';
     var table = null;
 
     $scope.filter = function () {
@@ -303,6 +304,9 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
         }
         else if (year) {
             params += ("&year=" + year);
+        }
+        if ($scope.keyword) {
+            params += "&search=" + $scope.keyword;
         }
 
         console.log(params);
@@ -357,6 +361,9 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
             }
             else if (year) {
                 params += ("&year=" + year);
+            }
+            if ($scope.keyword) {
+                params += "&search=" + $scope.keyword;
             }
 
             console.log(params);

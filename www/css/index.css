@@ -313,9 +313,17 @@ textarea {
     padding: 0;
 }
 .login-background {
-    background-image: url('/masan-web.jpg');
+    background-image: url('masan-web.jpg');
 }
 
 .form-signin {
     margin-bottom: 5px;
+}
+
+a > i {
+    color: white;
+}
+
+.input-group {
+    padding-top: 5px;
 }

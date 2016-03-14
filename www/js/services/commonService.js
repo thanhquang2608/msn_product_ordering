@@ -687,6 +687,12 @@ app.service('CommonService', function ($http, NETWORK, TIMER, AuthService) {
             return response.data;
         });
     }
+    
+    var _checkResetPassword = function () {
+        return $http.get(serviceBase + "/user/firstlogin", { timeout: TIMER.TIME_OUT }).then(function (response) {
+            return response.data;
+        });
+    }
 
     commonServiceFactory.getFactories = _getFactories;
     commonServiceFactory.getLabels = _getLabels;
@@ -759,6 +765,7 @@ app.service('CommonService', function ($http, NETWORK, TIMER, AuthService) {
     commonServiceFactory.updateSCList = _updateSCList;
     commonServiceFactory.updateUserList = _updateUserList;
     commonServiceFactory.getDealerInfoBySale = _getDealerInfoBySale;
+    commonServiceFactory.checkResetPassword = _checkResetPassword;
 
     return commonServiceFactory;
 });

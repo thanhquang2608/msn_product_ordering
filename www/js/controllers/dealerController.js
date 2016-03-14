@@ -273,6 +273,7 @@ app
     $scope.total.Quantity = 0;
     $scope.total.Price = 0;
     $scope.status = ORDER_STATUS;
+    $scope.keyword = '';
 
     $scope.days = [0, 1, 2, 3, 4, 5, 6, 7];
     $scope.selectedDay = 1;
@@ -300,21 +301,21 @@ app
     //    }, 500);
     //}
     $scope.statusCollapse = {
-        open: true,
-        flag: false
+        open: false,
+        flag: true
     };
     $scope.flagCount = 0;
     //$scope.log = '';
-    $scope.$watch('statusCollapse.open', function (newValue, oldValue) {
-        if (oldValue != newValue) {
-            $scope.flagCount += 1;
-            if ($scope.flagCount == 2) {
-                $scope.flagCount = 0;
-                $scope.statusCollapse.flag = !$scope.statusCollapse.flag;
-            }
-        }
-        //$scope.log += '' + oldValue + newValue + '  ';
-    });
+    //$scope.$watch('statusCollapse.open', function (newValue, oldValue) {
+    //    if (oldValue != newValue) {
+    //        $scope.flagCount += 1;
+    //        if ($scope.flagCount == 2) {
+    //            $scope.flagCount = 0;
+    //            $scope.statusCollapse.flag = !$scope.statusCollapse.flag;
+    //        }
+    //    }
+    //    //$scope.log += '' + oldValue + newValue + '  ';
+    //});
     function loadOrder(status, year, month) {
         if (year == null && month != null)
             return;
@@ -332,6 +333,9 @@ app
         }
         else if (year) {
             params += ("&year=" + year);
+        }
+        if ($scope.keyword) {
+            params += "&search=" + $scope.keyword;
         }
 
         console.log(params);
@@ -556,7 +560,9 @@ app
         else if (year) {
             params += ("&year=" + year);
         }
-
+        if ($scope.keyword) {
+            params += "&search=" + $scope.keyword;
+        }
         console.log(params);
         CommonService.getListOrderByParam(params).then(function (data) {
             $scope.orders = data;
@@ -1588,6 +1594,8 @@ app
         });
     }
     ////////// END DEALER INFO
-
-    
+    $scope.log = '';
+    $scope.addLog = function () {
+        $scope.log += "click ";
+    }
 })
