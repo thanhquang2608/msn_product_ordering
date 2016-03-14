@@ -1,0 +1,321 @@
+﻿body {
+}
+/* Empty. Add your own CSS if you like */
+
+@-ms-viewport {
+    width: device-width;
+}
+
+.no-padding {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.no-margin {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.max-width-height {
+    width: 100%;
+    height: 100%;
+}
+
+.nav {
+    display: block !important;
+    /*width:100%;*/
+    height: 60px;
+    margin: 0px;
+}
+
+.tab-content {
+    margin-top: 63px;
+    max-height: 100%;
+    height: 100%;
+}
+/*.android-scroll-bar ::-webkit-scrollbar {width: 5px;}
+
+.android-scroll-bar ::-webkit-scrollbar-track { border-radius: 10px;}
+
+.android-scroll-bar ::-webkit-scrollbar-thumb { border-radius: 10px; background: rgb(169,169,169); }
+
+.android-scroll-bar ::-webkit-scrollbar-thumb:window-inactive {background: rgb(128,128,128); }*/
+.nav li span {
+    font-size: x-large;
+}
+
+.nav li a {
+    font-size: smaller;
+    color: white;
+    background-color: cornflowerblue;
+    border-radius: 0 0 0 0 !important;
+    border-right-color: white !important;
+    border-left-color: white !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+.order-list {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+    .order-list .title {
+        font-weight: bold;
+        font-size: 120%;
+    }
+
+    .order-list .info {
+        font-size: 85%;
+    }
+
+.icon {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    font-size: 32px;
+}
+
+.item {
+    position: relative;
+    border-bottom: 1px solid black;
+}
+
+    .item:active {
+        background-color: #ddd;
+    }
+
+.scrollable-menu {
+    height: auto;
+    max-height: calc(100% - 63px);
+    overflow-x: hidden;
+}
+
+.vertical-align {
+    display: flex !important;
+    align-items: center;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
+.modal {
+    text-align: center;
+    padding: 0 !important;
+}
+
+    .modal:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -4px;
+    }
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.no-margin-bot {
+    margin-bottom: 0px;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+#bar {
+    background-color: cornflowerblue;
+    color: white;
+}
+
+
+.catalog-item {
+    /*font-size: 75%;*/
+}
+
+    .catalog-item .left {
+        float: left;
+        display: -webkit-box;
+        display: box;
+        width: 10%;
+    }
+
+    .catalog-item .right {
+        float: right;
+        display: -webkit-box;
+        display: box;
+    }
+
+    .catalog-item .index {
+        margin-top: 25px;
+        padding: 0 10px;
+        width: 40px;
+    }
+
+    .catalog-item .text {
+        -webkit-box-ordinal-group: 2;
+        box-ordinal-group: 2;
+        /*margin-top: 8px;*/
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+        .catalog-item .text .title {
+            font-weight: bold;
+        }
+
+        .catalog-item .text .type {
+            font-style: italic;
+        }
+
+    .catalog-item .price {
+        -webkit-box-ordinal-group: 1;
+        box-ordinal-group: 1;
+        margin-top: 25px;
+        text-align: right;
+        padding-right: 10px;
+        font-size: 100%;
+        font-weight: bold;
+    }
+
+    .catalog-item .button {
+        -webkit-box-ordinal-group: 2;
+        margin-top: 25px;
+        box-ordinal-group: 2;
+    }
+/*.catalog-item .button .integrated-button {
+  width: 80px;
+  height: 50px;
+  font-size: 110%;
+  line-height: 20px;
+  color: #008822;
+}}*/
+
+td {
+    padding: 5px !important;
+}
+
+
+.no-background-right .panel-heading {
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-image: none !important;
+    background-color: transparent !important;
+}
+
+.panel-heading {
+    text-transform: uppercase;
+}
+
+.panel-title {
+    font-size: 14px !important;
+}
+
+.label-status {
+    font-size: 12px !important;
+}
+
+.label-pending {
+    color: #0026ff !important;
+}
+
+.label-delivered {
+    color: #555 !important;
+}
+
+.label-approve {
+    color: #65B688 !important;
+}
+
+.label-disapprove {
+    color: #D65C4F !important;
+}
+
+.label-error {
+    color: red;
+}
+
+.form-control {
+    padding: 4px 4px !important;
+}
+
+table tr td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+
+.footer {
+    margin-bottom: 10px;
+}
+
+input[type=checkbox] {
+    vertical-align: middle !important;
+    position: relative !important;
+    bottom: 2px !important;
+    width: 19px;
+    height: 19px;
+}
+
+textarea {
+    resize: none;
+}
+
+.scrollable {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 65px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+#wrapper {
+    position: absolute;
+    z-index: 1;
+    top: 65px;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    overflow: auto;
+    background: none !important;
+}
+
+#scroller {
+    position: absolute;
+    z-index: 1;
+    /*	-webkit-touch-callout:none;*/
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    width: 100%;
+    padding: 0;
+}
+.login-background {
+    background-image: url('/masan-web.jpg');
+}
+
+.form-signin {
+    margin-bottom: 5px;
+}
