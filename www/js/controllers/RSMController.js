@@ -1245,9 +1245,9 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     }
 
     $scope.homePage = function () {
-        $state.go('home.rsm', {
-            DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
-            Data: { ProvinceId: $scope.provinceId }
+        $state.go('tabs.rsm-list', {
+            //DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
+            //Data: { ProvinceId: $scope.provinceId }
         }, { reload: true });
     }
 

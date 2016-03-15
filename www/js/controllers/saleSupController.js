@@ -1245,7 +1245,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
     }
 
     $scope.homePage = function () {
-        $state.go('home.sale-sup', {
+        $state.go('tabs.sale-sup-list', {
             DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
             Data: { ProvinceId: $scope.provinceId }
         }, { reload: true });

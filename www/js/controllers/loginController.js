@@ -40,7 +40,7 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
     }
     getUser();
 })
-    .controller('LoginController', function ($scope, $rootScope, $state, $modal, $log,
+.controller('LoginController', function ($scope, $rootScope, $state, $modal, $log,
     AuthService, USER_ROLES, USER_LEVELS) {
         $scope.user = {};
         function getUser() {

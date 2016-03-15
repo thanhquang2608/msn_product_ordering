@@ -1245,9 +1245,9 @@ app.controller('NSMController', function ($scope, $rootScope, $timeout, $statePa
     }
 
     $scope.homePage = function () {
-        $state.go('home.nsm', {
-            DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
-            Data: { ProvinceId: $scope.provinceId }
+        $state.go('tabs.nsm-list', {
+            //DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
+            //Data: { ProvinceId: $scope.provinceId }
         }, { reload: true });
     }
 

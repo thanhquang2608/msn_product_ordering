@@ -6,13 +6,13 @@ app.controller('UserController', function ($scope, $rootScope, $state, $modal, $
     $scope.submit = false;
 
     // on refresh - close tab - exit browser
-    window.addEventListener("beforeunload", function (e) {
-        AuthService.logout();
-        //var confirmationMessage = "\o/";
+    //window.addEventListener("beforeunload", function (e) {
+    //    AuthService.logout();
+    //    //var confirmationMessage = "\o/";
 
-        //(e || window.event).returnValue = confirmationMessage; //Gecko + IE
-        //return confirmationMessage;                            //Webkit, Safari, Chrome
-    });
+    //    //(e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    //    //return confirmationMessage;                            //Webkit, Safari, Chrome
+    //});
 
     function getUser() {
         if (!AuthService.isAuthenticated() || AuthService.user().ChangedPassword != 0)

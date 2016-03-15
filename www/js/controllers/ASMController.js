@@ -1245,9 +1245,9 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
     }
 
     $scope.homePage = function () {
-        $state.go('home.asm', {
-            DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
-            Data: { ProvinceId: $scope.provinceId }
+        $state.go('tabs.asm-list', {
+            //DealerId: $scope.dealer == null ? null : $scope.dealer.DealerId,
+            //Data: { ProvinceId: $scope.provinceId }
         }, { reload: true });
     }
 

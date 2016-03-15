@@ -1225,7 +1225,7 @@ app
         }
     }
     $scope.homePage = function () {
-        $state.go('home.dealer', {}, { reload: true });
+        $state.go('tabs.dealer-list', {}, { reload: true });
     }
 
     $scope.collapse = {

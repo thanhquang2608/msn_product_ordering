@@ -5,7 +5,7 @@
 </ul>-->
 <ul id="tab" class="nav nav-tabs navbar-fixed-top row text-center no-padding no-margin" role="tablist">
     <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{'active': $state.current.name.indexOf('tabs.{{role}}-list') > -1}">
-        <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-list"><span class="glyphicon glyphicon-list-alt"></span><br />Danh sách đơn hàng</a>
+        <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-list"><span class="glyphicon glyphicon-list-alt"></span><br />Đơn hàng</a>
     </li>
     <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{'active': $state.current.name.indexOf('tabs.{{role}}-order') > -1}">
         <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-order"><span class="glyphicon glyphicon-edit"></span><br />Đặt hàng</a>
@@ -27,7 +27,7 @@
 
 <div class="tab-content" ui-view>
 </div>
-<!--<div class="tab-content" ng-show="$state.includes('tabs.dealer-list')" ui-view="dealer-list"></div>-->
+<div class="tab-content" ng-show="$state.includes('tabs.dealer-list')" ui-view="dealer-list"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.dealer-order')" ui-view="dealer-order"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.sale-list')" ui-view="sale-list"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.sale-order')" ui-view="sale-order"></div>

@@ -40,13 +40,13 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             /////// TAB DEALER
             .state('tabs.dealer-list', {
                 url: '/dealer-list',
-                //sticky: true,
-                //views: {
-                //    'dealer-list': {
+                sticky: true,
+                views: {
+                    'dealer-list': {
                         templateUrl: 'views/dealer/tabs-dealer-order-list.html',
                         controller: 'DealerController'
-                //    }
-                //}
+                    }
+                }
             })
 
             .state('tabs.dealer-list-order-detail', {
@@ -87,7 +87,7 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             ///////// TAB SALE
             .state('tabs.sale-list', {
                 url: '/sale-list',
-                //sticky: true,
+                sticky: true,
                 views: {
                     'sale-list': {
                         templateUrl: 'views/sale/tabs-sale-order-list.html',
@@ -133,7 +133,7 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             ///////// TAB SALE SUP
             .state('tabs.sale-sup-list', {
                 url: '/sale-sup-list',
-                //sticky: true,
+                sticky: true,
                 views: {
                     'sale-sup-list': {
                         templateUrl: 'views/sale_sup/tabs-sale-sup-order-list.html',
@@ -178,7 +178,7 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             ///////// TAB ASM
             .state('tabs.asm-list', {
                 url: '/asm-list',
-                //sticky: true,
+                sticky: true,
                 views: {
                     'asm-list': {
                         templateUrl: 'views/asm/tabs-asm-order-list.html',
@@ -223,7 +223,7 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
         ///////// TAB rsm
             .state('tabs.rsm-list', {
                 url: '/rsm-list',
-                //sticky: true,
+                sticky: true,
                 views: {
                     'rsm-list': {
                         templateUrl: 'views/rsm/tabs-rsm-order-list.html',
@@ -268,7 +268,7 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
         ///////// TAB nsm
             .state('tabs.nsm-list', {
                 url: '/nsm-list',
-                //sticky: true,
+                sticky: true,
                 views: {
                     'nsm-list': {
                         templateUrl: 'views/nsm/tabs-nsm-order-list.html',
