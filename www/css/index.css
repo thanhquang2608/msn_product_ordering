@@ -327,3 +327,21 @@ a > i {
 .input-group {
     padding-top: 5px;
 }
+
+.panel-body {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+.panel-body .row {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+#resize.btn-lg {
+    padding: 6px 12px;
+}
+
+.no-padding-top {
+    padding-top: 0px !important;
+}

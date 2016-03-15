@@ -30,7 +30,7 @@
     <script src="scripts/angular-local-storage.min.js"></script>
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/iscroll4.js"></script>
-    <script src="scripts/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <script src="scripts/ui-bootstrap-tpls-0.13.0.js"></script>
     <!-- STYLES END-->
     <script>
         (function (i, s, o, g, r, a, m) {
@@ -195,9 +195,9 @@
                 <h4 class="no-margin-bot">Thêm sản phẩm</h4>
             </div>
         </div>
-        <form name="frmOrder" ng-submit="ok(frmOrder.$valid)" novalidate>
+        <form name="frmOrder" ng-submit="ok(frmOrder.$valid)" novalidate stop-event="touchend">
             <div class="modal-body">
-                <div class="row">
+                <div class="row" >
                     <table>
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Mã số SP</td>
@@ -224,7 +224,7 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong><input name="numOrder" class="form-control" pattern="[0-9]*" min="1" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                <strong><input  name="numOrder" class="form-control" pattern="[0-9]*" min="1" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
                                 <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
                             </td>
                         </tr>
@@ -271,7 +271,7 @@
                 <h4 class="no-margin-bot">Sản phẩm thứ {{index+1}}</h4>
             </div>
         </div>
-        <form name="frmOrder" ng-submit="ok(1, frmOrder.$valid)" novalidate>
+        <form name="frmOrder" ng-submit="ok(1, frmOrder.$valid)" novalidate stop-event="touchend">
             <div class="modal-body">
                 <div class="row">
                     <table>

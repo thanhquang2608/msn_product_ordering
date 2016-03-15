@@ -365,6 +365,17 @@ app.run(function ($rootScope, $state, AuthService, USER_ROLES, USER_LEVELS) {
             }
         }
     });
+})
+
+.directive('stopEvent', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            element.on(attr.stopEvent, function (e) {
+                e.stopPropagation();
+            });
+        }
+    };
 });
 //app.run(['authService', function (authService) {
 //    authService.fillAuthData();

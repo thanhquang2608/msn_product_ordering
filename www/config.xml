@@ -110,4 +110,7 @@
   <preference name="InAppBrowserStorageEnabled" value="True" />
   <preference name="SuppressesIncrementalRendering" value="True" />
   <preference name="Orientation" value="default" />
+  <preference name="StatusBarOverlaysWebView" value="false"/>
+  <preference name="StatusBarBackgroundColor" value="#000000"/>
+  <preference name="StatusBarStyle" value="lightcontent" />
 </widget>

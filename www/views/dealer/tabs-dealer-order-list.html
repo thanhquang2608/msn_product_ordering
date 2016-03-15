@@ -2,10 +2,10 @@
     <div id="wrapper">
         <div id="scroller">
             <!--<accordion>-->
-            <div class="panel-body" style="padding-top: 8px; padding-bottom: 8px;">
+            <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-2">
-                        <a class="btn btn-primary btn-lg" ng-click="filter()"><i class="glyphicon glyphicon-refresh"></i></a>
+                        <a id="resize" class="btn btn-primary btn-lg" ng-click="filter()"><i class="glyphicon glyphicon-refresh"></i></a>
                     </div>
                     <div class="col-xs-7">
                         <div class="input-group">
@@ -23,7 +23,7 @@
             </div>
 
 
-            <div class="panel-body" collapse="statusCollapse.open">
+            <div class="panel-body no-padding-top" collapse="statusCollapse.open">
                 <div class="row">
                     <div class="col-xs-6">
                         <span>Trạng thái</span>
