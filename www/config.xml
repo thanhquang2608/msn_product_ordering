@@ -10,7 +10,7 @@
   <preference name="windows-target-version" value="8.1" />
   <!-- Support for Cordova 5.0.0 plugin system -->
   <plugin name="cordova-plugin-whitelist" version="1" />
-  <gap:plugin name="org.apache.cordova.statusbar"/>
+  <plugin name="cordova-plugin-statusbar" source="npm"/>
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
   <allow-intent href="tel:*" />
