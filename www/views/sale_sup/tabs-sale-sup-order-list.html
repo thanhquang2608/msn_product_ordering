@@ -27,39 +27,38 @@
 
             <div class="panel-body" collapse="statusCollapse.open">
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="default-padding col-xs-12">
                         <span>Tỉnh</span>
                         <select class="form-control" ng-model="selected.Province" ng-change="loadDealers()" ng-options="item as item.ProvinceName for item in provinces"></select>
                     </div>
 
                 </div>
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="default-padding col-xs-12">
                         <span>Đại lí</span>
                         <select class="form-control" ng-model="selected.Dealer" ng-change="reloadOrder(selected.Dealer)" ng-options="dealer as dealer.DealerName for dealer in dealers"></select>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-5">
+                    <div class="default-padding col-xs-5">
                         <span>Trạng thái</span>
                         <select class="form-control" ng-model="filter.Status" ng-change="filter()">
                             <option value="0">Tất cả</option>
                             <option value="1">Chờ xử lý</option>
                             <option value="3">Từ chối</option>
                             <option value="2">Đã xử lý</option>
-                            <opti
                             <option value="5">Đã hoàn tất</option>
                             <option value="6">Quá hạn</option>
                         </select>
                     </div>
-                    <div class="col-xs-4">
+                    <div class="default-padding col-xs-4">
                         <span>Năm</span>
                         <select class="form-control" ng-model="filter.Year" ng-change="filter()" ng-options="item as item for item in years">
                             <!--<option ng-repeat="item in years" value="{{item}}">{{item}}</option>-->
                         </select>
                     </div>
 
-                    <div class="col-xs-3">
+                    <div class="default-padding col-xs-3">
                         <span>Tháng</span>
                         <select class="form-control" ng-model="filter.Month" ng-change="filter()">
                             <option value="1">1</option>
@@ -108,7 +107,7 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class="price">{{format(order.Money, 0)}} vnd</div>
+                            <div class="price">{{format(order.Money, 0)}} vnđ</div>
                             <div class="button">
                                 <i class="glyphicon glyphicon-chevron-right"></i>
                             </div>
@@ -134,7 +133,7 @@
                             </div>
                         </div>
                         <div class="right">
-                            <div class="price">50,000,000 vnd</div>
+                            <div class="price">50,000,000 vnđ</div>
                             <div class="button">
                                 <i class="glyphicon glyphicon-chevron-right"></i>
                             </div>

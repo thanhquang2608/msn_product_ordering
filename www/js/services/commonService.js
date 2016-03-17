@@ -694,6 +694,12 @@ app.service('CommonService', function ($http, NETWORK, TIMER, AuthService) {
         });
     }
 
+    var _getListOrderBySale = function (params) {
+        return $http.get(serviceBase + "/order/sale/list?" + params, { timeout: TIMER.TIME_OUT }).then(function (response) {
+            return response.data;
+        });
+    }
+
     commonServiceFactory.getFactories = _getFactories;
     commonServiceFactory.getLabels = _getLabels;
     commonServiceFactory.getProducts = _getProducts;
@@ -766,6 +772,7 @@ app.service('CommonService', function ($http, NETWORK, TIMER, AuthService) {
     commonServiceFactory.updateUserList = _updateUserList;
     commonServiceFactory.getDealerInfoBySale = _getDealerInfoBySale;
     commonServiceFactory.checkResetPassword = _checkResetPassword;
+    commonServiceFactory.getListOrderBySale = _getListOrderBySale;
 
     return commonServiceFactory;
 });

@@ -345,3 +345,8 @@ a > i {
 .no-padding-top {
     padding-top: 0px !important;
 }
+
+.default-padding {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+}

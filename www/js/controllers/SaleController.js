@@ -312,9 +312,11 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         if ($scope.keyword) {
             params += "&search=" + $scope.keyword;
         }
-
+        if ($scope.selected.Province) {
+            params += '&provinceid=' + $scope.selected.Province.ProvinceId;
+        }
         console.log(params);
-        CommonService.getListOrderByParam(params).then(function (data) {
+        CommonService.getListOrderBySale(params).then(function (data) {
             $scope.orders = data;
             $scope.refreshScroll();
             // dismiss progress
@@ -423,6 +425,10 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
                 CommonService.getDealerBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel, $scope.selected.Province.ProvinceId).then(function (data) {
                     console.log(data);
                     $scope.dealers = data;
+                    $scope.dealers.unshift({
+                        DealerId: 0,
+                        DealerName: 'Tất Cả'
+                    });
                     if ($stateParams.DealerId != null) {
                         for (var idx in $scope.dealers) {
                             if ($scope.dealers[idx].DealerId == parseInt($stateParams.DealerId))
