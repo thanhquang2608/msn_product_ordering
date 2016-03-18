@@ -237,9 +237,9 @@ app
             return;
         var data = { isRemove: 0, index: $scope.index, orderItem: $scope.order };
         if (mode == 2) {
-            data.isRemove = 1;         
+            data.isRemove = 1;
         }
-         $modalInstance.close(data);
+        $modalInstance.close(data);
     };
 
     $scope.cancel = function () {
@@ -284,9 +284,9 @@ app
     $scope.confirmLabel = false;
 
     //////// COMMON
-    
+
     $scope.collapsing = false;
-    
+
     //$scope.changeCollapse = function () {
     //    $timeout(function () {
     //        $scope.statusCollapse.open = !$scope.statusCollapse.open;
@@ -345,7 +345,7 @@ app
             $timeout(function () {
                 myScroll.refresh();
             }, 0)
-            
+
             // dismiss progress
             $scope.modalProgress.dismiss('close');
             document.body.style.cursor = 'auto';
@@ -430,7 +430,7 @@ app
     $scope.currentLevel = USER_LEVELS.DEALER;
     //////// BEGIN ORDER LIST
     $scope.filter = {}
-    $scope.filter.Status = 0;  
+    $scope.filter.Status = 0;
     $scope.filter.Year = currentYear();
     $scope.filter.Month = currentMonth();
 
@@ -1057,7 +1057,7 @@ app
                                 console.log($scope.labels[idx].BrandName);
                                 //if (idx == $scope.labels.length - 1) $scope.modalProgress.dismiss('close');                                
                             });
-                            
+
                         }
                     }
                 }
@@ -1088,12 +1088,12 @@ app
                     }
                 }
             }
-                
+
 
             modelsBack = clone($scope.models);
             console.log(modelsBack);
             console.log("END");
-            
+
         }
     }
 
@@ -1520,10 +1520,9 @@ app
             document.body.style.cursor = 'wait';
 
             CommonService.removeOrder(order.OrderId, $scope.currentRole, $scope.currentLevel, result).then(function (data) {
-                $state.go('tabs.dealer-list', {}, {reload: true}).then(function () {
-                    $scope.modalProgress.dismiss('close');
-                    document.body.style.cursor = 'auto';
-                });
+                $scope.modalProgress.dismiss('close');
+                document.body.style.cursor = 'auto';
+                $state.go('tabs.dealer-list', {}, { reload: true });
             }, function (err) {
                 $scope.modalProgress.dismiss('close');
                 document.body.style.cursor = 'auto';
@@ -1546,7 +1545,7 @@ app
         $state.go('login', {}, { reload: true }).then(function () {
         });
     }
-    
+
     $scope.initDealerInfo = function () {
         $scope.openProgress();
         CommonService.getRecommendFactory(null, $scope.currentRole, $scope.currentLevel).then(function (data) {

@@ -1453,9 +1453,10 @@ app.controller('NSMController', function ($scope, $rootScope, $timeout, $statePa
                 document.body.style.cursor = 'wait';
 
                 CommonService.removeOrder(order.OrderId, $scope.currentRole, $scope.currentLevel, result).then(function (data) {
-                    $state.go('home.nsm', { DealerId: $scope.order.DealerId }, { reload: true }).then(function () {
-                        $scope.modalProgress.dismiss('close');
-                        document.body.style.cursor = 'auto';
+                    $scope.modalProgress.dismiss('close');
+                    document.body.style.cursor = 'auto';
+                    $state.go('tabs.nsm-list', { DealerId: $scope.order.DealerId }, { reload: true }).then(function () {
+                        
                     });
                 }, function (err) {
                     $scope.modalProgress.dismiss('close');

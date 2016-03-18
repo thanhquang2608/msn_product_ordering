@@ -350,3 +350,7 @@ a > i {
     padding-left: 7px !important;
     padding-right: 7px !important;
 }
+
+.black-color {
+    color: black !important;
+}
