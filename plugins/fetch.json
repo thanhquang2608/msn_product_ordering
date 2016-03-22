@@ -7,10 +7,10 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-screen-orientation": {
+    "cordova-plugin-statusbar": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-screen-orientation"
+            "id": "cordova-plugin-statusbar"
         },
         "is_top_level": true,
         "variables": {}
