@@ -9,7 +9,7 @@
   <preference name="SplashScreen" value="screen" />
   <preference name="windows-target-version" value="8.1" />
   <!-- Support for Cordova 5.0.0 plugin system -->
-  <gap:plugin name="cordova-plugin-whitelist" version="1" />
+  <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0" />
   <gap:plugin name="org.apache.cordova.statusbar" spec="0.1.4" source="pgb" />
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
