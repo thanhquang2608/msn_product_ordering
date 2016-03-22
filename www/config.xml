@@ -25,11 +25,11 @@
     <allow-intent href="itms-apps:*" />
   </platform>
   <icon src="icon.png" />
+  <icon src="resources/icons/android/drawable-ldpi-icon.png" gap:platform="android" density="ldpi" />
+  <icon src="resources/icons/android/drawable-mdpi-icon.png" gap:platform="android" density="mdpi" />
+  <icon src="resources/icons/android/drawable-hdpi-icon.png" gap:platform="android" density="hdpi" />
+  <icon src="resources/icons/android/drawable-xdpi-icon.png" gap:platform="android" density="xhdpi" />
   <platform name="android">
-    <icon src="resources/icons/android/drawable-ldpi-icon.png" density="ldpi" />
-    <icon src="resources/icons/android/drawable-mdpi-icon.png" density="mdpi" />
-    <icon src="resources/icons/android/drawable-hdpi-icon.png" density="hdpi" />
-    <icon src="resources/icons/android/drawable-xdpi-icon.png" density="xhdpi" />
     <splash src="resources/screens/android/drawable-land-hdpi-screen.png" density="land-hdpi" />
     <splash src="resources/screens/android/drawable-land-ldpi-screen.png" density="land-ldpi" />
     <splash src="resources/screens/android/drawable-land-mdpi-screen.png" density="land-mdpi" />
