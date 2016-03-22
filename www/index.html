@@ -2,15 +2,17 @@
 <html ng-app="OrderApp">
 <head>
     <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no">
     <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no">
+    
     <!--
         Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
         For details, see http://go.microsoft.com/fwlink/?LinkID=617521
     -->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
-    <title>MasanSurvey</title>
+    <title>Masan Order</title>
 
     <!-- STYLES-->
     <link href="css/index.css" rel="stylesheet" />
@@ -132,14 +134,14 @@
         </div>
     </script>
     <script type="text/ng-template" id="confirm-message-norequire.html">
-        <div stop-event="touchend">
+        <div stop-event="touchend" class="lager-width">
             <div class="modal-header no-margin-bot">
                 <div>
                     <h4 class="no-margin-bot">{{message}}</h4>
                 </div>
             </div>
             <div class="modal-body col-xs-12">
-                <textarea style="min-width: 280px" class="form-control" rows="4" ng-model="reason"></textarea>
+                <textarea class="form-control" rows="4" ng-model="reason"></textarea>
             </div>
             <div class="modal-footer no-margin-bot">
                 <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Hủy bỏ</button>
@@ -148,7 +150,7 @@
         </div>
     </script>
     <script type="text/ng-template" id="confirm-message-require.html">
-        <div stop-event="touchend">
+        <div stop-event="touchend" class="lager-width">
             <div class="modal-header no-margin-bot">
                 <div>
                     <h4 class="no-margin-bot">{{message}}</h4>

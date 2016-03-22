@@ -318,6 +318,7 @@ textarea {
 
 .form-signin {
     margin-bottom: 5px;
+    width: 70%;
 }
 
 a > i {
@@ -352,5 +353,9 @@ a > i {
 }
 
 .black-color {
-    color: black !important;
+    /*color: black !important;*/
+}
+
+.modal-lg {
+    min-width: 85%;
 }

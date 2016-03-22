@@ -253,11 +253,9 @@ app.constant('AUTH_EVENTS', {
 })
 
 .constant('NETWORK', {
+    BASE_URL: 'http://masan.nhaben.com',
     //BASE_URL: 'http://order-anco.rhcloud.com'
-    BASE_URL: 'http://server-masan.rhcloud.com'
-    //BASE_URL: 'http://server-masandev.rhcloud.com'
-    // BASE_URL: 'http://localhost:1337'
-    //BASE_URL: 'http://113.161.152.115:1337'
+    //BASE_URL: 'http://server-masan.rhcloud.com'
 })
 
 .constant('TIMER', {

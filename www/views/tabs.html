@@ -14,13 +14,13 @@
         <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-info"><span class="glyphicon glyphicon-user"></span><br />Thông tin cá nhân</a>
     </li>
 </ul>
-<div id="bar" class="navbar-fixed-top row" style="visibility: hidden">
-    <div class="col-xs-2">
-        <a class="btn" ng-click="backPage()" ng-show="prevState">
+<div id="bar" class="navbar-fixed-top" style="visibility: hidden">
+    <div>
+        <a class="btn" ng-click="backPage()" ng-show="prevState" style="position: absolute;">
             <i class="glyphicon glyphicon-chevron-left" style="height: 100%; vertical-align:middle; font-size:20px; color: white"></i>
         </a>
     </div>
-    <div class="col-xs-10">
+    <div>
         <h3 class="text-center" style="margin-top: 10px">{{title}}</h3>
     </div>
 </div>
@@ -29,6 +29,7 @@
 </div>
 <div class="tab-content" ng-show="$state.includes('tabs.dealer-list')" ui-view="dealer-list"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.dealer-order')" ui-view="dealer-order"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.dealer-info')" ui-view="dealer-info"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.sale-list')" ui-view="sale-list"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.sale-order')" ui-view="sale-order"></div>
 <div class="tab-content" ng-show="$state.includes('tabs.sale-sup-list')" ui-view="sale-sup-list"></div>

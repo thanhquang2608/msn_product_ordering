@@ -80,8 +80,13 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
 
             .state('tabs.dealer-info', {
                 url: '/dealer-info',
-                templateUrl: 'views/dealer/tabs-dealer-info.html',
-                controller: 'DealerController'
+                sticky: true,
+                views: {
+                    'dealer-info': {
+                        templateUrl: 'views/dealer/tabs-dealer-info.html',
+                        controller: 'DealerController'
+                    }
+                }
             })
 
             ///////// TAB SALE
