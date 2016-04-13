@@ -5,14 +5,12 @@
     <meta name="format-detection" content="telephone=no">
     <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="format-detection" content="telephone=no">
-    
     <!--
         Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
         For details, see http://go.microsoft.com/fwlink/?LinkID=617521
     -->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
-    <title>Masan Order</title>
+    <title>MasanSurvey</title>
 
     <!-- STYLES-->
     <link href="css/index.css" rel="stylesheet" />
@@ -216,9 +214,10 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <p ng-if="isLabelLoading">Đang tải...</p>
+                                <strong>{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
+                                <!--<p ng-if="isLabelLoading">Đang tải...</p>                              
                                 <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
-                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn quy cách</p>
+                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn quy cách</p>-->
                             </td>
                         </tr>
                         <tr>
@@ -231,8 +230,9 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong><input name="numOrder" class="form-control" pattern="[0-9]*" min="1" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                <strong><input id="numOrder" name="numOrder" class="form-control" pattern="[0-9]*" min="1" max="1000000" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
                                 <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
+                                <p ng-if="frmOrder.numOrder.$error.min || frmOrder.numOrder.$error.max" class="label-error">Số bao chưa hợp lệ</p>
                             </td>
                         </tr>
                         <tr>
@@ -292,9 +292,10 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <p ng-if="isLabelLoading">Đang tải...</p>
+                                <strong>{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
+                                <!--<p ng-if="isLabelLoading">Đang tải...</p>
                                 <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
-                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>
+                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>-->
                             </td>
                         </tr>
                         <tr>
@@ -307,8 +308,9 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong><input name="numOrder" class="form-control" min="1" pattern="[0-9]*" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                <strong><input id="numOrder" name="numOrder" class="form-control" min="1" max="1000000" pattern="[0-9]*" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
                                 <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
+                                <p ng-if="frmOrder.numOrder.$error.min || frmOrder.numOrder.$error.max" class="label-error">Số bao chưa hợp lệ</p>
                             </td>
                         </tr>
                         <tr>
@@ -496,7 +498,7 @@
         </div>
     </script>
     <!--prevent tiny screen-->
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         $(document).ready(function () {
             //if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
             var msViewportStyle = document.createElement("style");
@@ -506,6 +508,6 @@
             document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
             //}
         });
-    </script>
+    </script>-->
 </body>
 </html>

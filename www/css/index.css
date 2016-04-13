@@ -313,7 +313,7 @@ textarea {
     padding: 0;
 }
 .login-background {
-    background-image: url('masan-web.jpg');
+    background-image: url('background.jpg');
 }
 
 .form-signin {
@@ -358,4 +358,26 @@ a > i {
 
 .modal-lg {
     min-width: 85%;
+}
+
+.nav-tabs>li>a:hover {
+    border-color: none none #ddd;
+}
+.nav>li>a:not(.active):hover {
+    background-color: cornflowerblue;
+}
+.nav>li>a:active {
+    text-decoration: none;
+    background-color: #eee !important;
+}
+
+.modal-footer {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+}
+
+.login-main {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 10px;
 }

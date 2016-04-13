@@ -26,8 +26,8 @@ app.service('CommonService', function ($http, NETWORK, TIMER, AuthService) {
         });
     }
 
-    var _getSpecify = function (productName, dealerId, roleId, level) {
-        var params = "productname=" + productName + "&roleid=" + roleId + "&level=" + level;
+    var _getSpecify = function (productName, dealerId, roleId, level, factoryId, brandId) {
+        var params = "productname=" + productName + "&roleid=" + roleId + "&level=" + level + "&factoryid=" + factoryId + "&brandid=" + brandId;
         if (dealerId)
             params += "&dealerid=" + dealerId;
 

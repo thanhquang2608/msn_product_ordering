@@ -148,15 +148,15 @@
                     <td class="text-right">{{format(QuantityLastMonth + QuantityCurrentMonth + total.Quantity, 3)}} (tấn)</td>
                 </tr>
                 <!--<tr>
-                <th>Chỉ tiêu</th>
-                <td class="text-right">{{format(indicators, 3)}} (tấn)</td>
-            </tr>
-            <tr>
-                <th class="text-danger">Còn lại</th>
-                <td class="text-right">
-                    <h6 class="text-danger">{{format(indicators - total.Quantity - QuantityCurrentMonth, 3)}} (tấn)</h6>
-                </td>
-            </tr>-->
+                    <th>Chỉ tiêu</th>
+                    <td class="text-right">{{format(indicators, 3)}} (tấn)</td>
+                </tr>
+                <tr>
+                    <th class="text-danger">Còn lại</th>
+                    <td class="text-right">
+                        <h6 class="text-danger">{{format(indicators - total.Quantity - QuantityCurrentMonth, 3)}} (tấn)</h6>
+                    </td>
+                </tr>-->
             </tbody>
         </table>
     </accordion-group>
@@ -172,6 +172,6 @@
 </div>
 <div class="panel-body">
     <div class="row col-xs-12 text-center">
-            <h4 ng-if="success" class="label-approve">Đặt hàng thành công! <a ng-click="homePage()">Quay về Danh sách đơn hàng</a></h4>
+        <h4 ng-if="success" class="label-approve">Đặt hàng thành công! <a ng-click="homePage()">Quay về Danh sách đơn hàng</a></h4>
     </div>
 </div>

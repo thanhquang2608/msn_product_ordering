@@ -6,6 +6,7 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
 
     /////////// COMMON
     $scope.selected = {};
+    $scope.info = {};
     $scope.days = [0, 1, 2, 3, 4, 5, 6, 7];
     $scope.selected.Day = 1;
 
@@ -740,8 +741,8 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         CommonService.getRecommendDriver($scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel).then(function (data) {
             console.log(data);
             $scope.recommend = data;
-            $scope.recipient = data.Recipient;
-            $scope.licensePlate = data.LicensePlate;
+            $scope.info.recipient = data.Recipient;
+            $scope.info.licensePlate = data.LicensePlate;
         }, function (err) {
             console.log(err);
             $rootScope.processRequestError(err);
@@ -934,7 +935,7 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
     }
 
     $scope.loadSpecify = function (order) {
-        CommonService.getSpecify(order.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel).then(function (data) {
+        CommonService.getSpecify(order.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel, $scope.selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
             //console.log(data)
             order.specifies = data.slice();
 
@@ -1040,11 +1041,7 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
                 if ($scope.models[item] && !modelsBack[item]) { // Add data
                     for (var idx in $scope.labels) {
                         if ($scope.labels[idx].BrandName == item) {
-                            $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName).then(function () {
-                                console.log($scope.labels[idx].BrandName);
-                                //if (idx == $scope.labels.length - 1) $scope.modalProgress.dismiss('close');                                
-                            });
-
+                            $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
                         }
                     }
                 }
@@ -1127,11 +1124,11 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
             Total: $scope.total,
             Factory: $scope.selected.Factory,
             Days: $scope.selected.Day,
-            Note: $scope.note,
+            Note: $scope.info.note,
             ProvinceId: $stateParams.ProvinceId,
             ExtendInfo: {
-                recipient: $scope.recipient,
-                licensePlate: $scope.licensePlate
+                recipient: $scope.info.recipient,
+                licensePlate: $scope.info.licensePlate
             }
         };
         $state.go('tabs.sale-order-review', { Data: data }).then(function () {
@@ -1155,6 +1152,12 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
                 },
                 level: function () {
                     return $scope.currentLevel;
+                },
+                selectedFactory: function () {
+                    return $scope.selected.Factory;
+                },
+                id: function () {
+                    return $scope.selected.Dealer.DealerId;
                 }
             }
 
@@ -1184,7 +1187,7 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
                     return $scope.products;
                 },
                 orderItem: function () {
-                    return orderItem;
+                    return clone(orderItem);
                 },
                 index: function () {
                     return idx;
@@ -1194,6 +1197,12 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
                 },
                 level: function () {
                     return $scope.currentLevel;
+                },
+                selectedFactory: function () {
+                    return $scope.selected.Factory;
+                },
+                id: function () {
+                    return $scope.selected.Dealer.DealerId;
                 }
             }
 

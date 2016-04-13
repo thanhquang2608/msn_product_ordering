@@ -107,7 +107,7 @@ app
         $modalInstance.dismiss('cancel');
     };
 })
-.controller('ModalInstanceNewItemCtrl', function ($scope, $modalInstance, AuthService, CommonService, products, roleId, level) {
+.controller('ModalInstanceNewItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, products, roleId, level, selectedFactory, id) {
     Number.prototype.formatMoney = function (c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -143,7 +143,7 @@ app
         specifies: [],
         selectedProduct: undefined,
         selectedSpecify: undefined,
-        numOrder: 1,
+        numOrder: null,
         totalQuantity: 0,
         totalPrice: 0
     }
@@ -151,11 +151,14 @@ app
     $scope.isLabelLoading = false;
 
     $scope.loadSpecify = function (order) {
+        $('#numOrder').focus();
         $scope.isLabelLoading = true;
-        CommonService.getSpecify(order.selectedProduct.ProductName, AuthService.user().Id, roleId, level).then(function (data) {
+        CommonService.getSpecify(order.selectedProduct.ProductName, id, roleId, level, selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
             console.log(data)
-            $scope.order.specifies = data;
+            //$scope.order.specifies = data;
+            $scope.order.selectedSpecify = data;
             $scope.isLabelLoading = false;
+            $scope.calculator($scope.order);
         }, function (error) {
             $scope.isLabelLoading = false;
             console.log(error)
@@ -183,7 +186,7 @@ app
     }
 })
 
-.controller('ModalInstanceEditItemCtrl', function ($scope, $modalInstance, AuthService, CommonService, orderItem, products, roleId, level, index) {
+.controller('ModalInstanceEditItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, orderItem, products, roleId, level, index, selectedFactory, id) {
     Number.prototype.formatMoney = function (c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -220,11 +223,14 @@ app
     $scope.isLabelLoading = false;
 
     $scope.loadSpecify = function (order) {
+        $('#numOrder').focus();
         $scope.isLabelLoading = true;
-        CommonService.getSpecify(order.selectedProduct.ProductName, AuthService.user().Id, roleId, level).then(function (data) {
+        CommonService.getSpecify(order.selectedProduct.ProductName, id, roleId, level, selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
             console.log(data)
-            $scope.order.specifies = data;
+            //$scope.order.specifies = data;
+            $scope.order.selectedSpecify = data;
             $scope.isLabelLoading = false;
+            $scope.calculator($scope.order);
         }, function (error) {
             $scope.isLabelLoading = false;
             console.log(error)
@@ -696,7 +702,8 @@ app
     /////// BEGIN ORDER
     $scope.recommend = undefined;
     $scope.submited = false;
-    $scope.selected = {}
+    $scope.selected = {};
+    $scope.info = {};
     $scope.selectDeliveryDate = function () {
         var date = new Date();
         date.setDate(date.getDate() + $scope.selected.Day);
@@ -756,6 +763,12 @@ app
                 },
                 level: function () {
                     return $scope.currentLevel;
+                },
+                selectedFactory: function () {
+                    return $scope.selected.Factory;
+                },
+                id: function () {
+                    return AuthService.user().Id;
                 }
             }
 
@@ -915,8 +928,8 @@ app
         CommonService.getRecommendDriver(null, $scope.currentRole, $scope.currentLevel).then(function (data) {
             console.log(data);
             $scope.recommend = data;
-            $scope.recipient = data.Recipient;
-            $scope.licensePlate = data.LicensePlate;
+            $scope.info.recipient = data.Recipient;
+            $scope.info.licensePlate = data.LicensePlate;
         }, function (err) {
             console.log(err);
             $rootScope.processRequestError(err);
@@ -943,7 +956,7 @@ app
     $scope.loadSpecify = function (order) {
         console.log(order);
         console.log($scope.orderList);
-        CommonService.getSpecify(order.selectedProduct.ProductName, AuthService.user().Id, $scope.currentRole, $scope.currentLevel).then(function (data) {
+        CommonService.getSpecify(order.selectedProduct.ProductName, AuthService.user().Id, $scope.currentRole, $scope.currentLevel, $scope.selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
             //console.log(data)
             order.specifies = data.slice();
 
@@ -1053,10 +1066,7 @@ app
                 if ($scope.models[item] && !modelsBack[item]) { // Add data
                     for (var idx in $scope.labels) {
                         if ($scope.labels[idx].BrandName == item) {
-                            $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName).then(function () {
-                                console.log($scope.labels[idx].BrandName);
-                                //if (idx == $scope.labels.length - 1) $scope.modalProgress.dismiss('close');                                
-                            });
+                            $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
 
                         }
                     }
@@ -1140,10 +1150,10 @@ app
             Total: $scope.total,
             Factory: $scope.selected.Factory,
             Days: $scope.selected.Day,
-            Note: $scope.note,
+            Note: $scope.info.note,
             ExtendInfo: {
-                recipient: $scope.recipient,
-                licensePlate: $scope.licensePlate
+                recipient: $scope.info.recipient,
+                licensePlate: $scope.info.licensePlate
             }
         };
         $state.go('tabs.dealer-order-review', { Data: data }).then(function () {
@@ -1163,7 +1173,7 @@ app
                     return $scope.products;
                 },
                 orderItem: function () {
-                    return orderItem;
+                    return clone(orderItem);
                 },
                 index: function () {
                     return idx;
@@ -1173,6 +1183,12 @@ app
                 },
                 level: function () {
                     return $scope.currentLevel;
+                },
+                selectedFactory: function () {
+                    return $scope.selected.Factory;
+                },
+                id: function () {
+                    return AuthService.user().Id;
                 }
             }
 

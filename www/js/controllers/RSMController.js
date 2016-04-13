@@ -273,6 +273,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     $scope.dealer = {};
     $scope.factory = {};
     $scope.selected = {};
+    $scope.info = {};
     $scope.filter = {};
     $scope.filter.Status = 0;
     $scope.filter.Year = currentYear();
@@ -757,8 +758,8 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         CommonService.getRecommendDriver($scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel).then(function (data) {
             console.log(data);
             $scope.recommend = data;
-            $scope.recipient = data.Recipient;
-            $scope.licensePlate = data.LicensePlate;
+            $scope.info.recipient = data.Recipient;
+            $scope.info.licensePlate = data.LicensePlate;
         }, function (err) {
             console.log(err);
             $rootScope.processRequestError(err);
@@ -944,7 +945,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     }
 
     $scope.loadSpecify = function (order) {
-        CommonService.getSpecify(order.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel).then(function (data) {
+        CommonService.getSpecify(order.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel, $scope.selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
             //console.log(data)
             order.specifies = data.slice();
 
@@ -1130,11 +1131,11 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
             Total: $scope.total,
             Factory: $scope.selected.Factory,
             Days: $scope.selected.Day,
-            Note: $scope.note,
+            Note: $scope.info.note,
             ProvinceId: $stateParams.ProvinceId,
             ExtendInfo: {
-                recipient: $scope.recipient,
-                licensePlate: $scope.licensePlate
+                recipient: $scope.info.recipient,
+                licensePlate: $scope.info.licensePlate
             }
         };
         $state.go('tabs.rsm-order-review', { Data: data }).then(function () {
@@ -1158,6 +1159,12 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                 },
                 level: function () {
                     return $scope.currentLevel;
+                },
+                selectedFactory: function () {
+                    return $scope.selected.Factory;
+                },
+                id: function () {
+                    return $scope.selected.Dealer.DealerId;
                 }
             }
 
@@ -1187,7 +1194,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                     return $scope.products;
                 },
                 orderItem: function () {
-                    return orderItem;
+                    return clone(orderItem);
                 },
                 index: function () {
                     return idx;
@@ -1197,6 +1204,12 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                 },
                 level: function () {
                     return $scope.currentLevel;
+                },
+                selectedFactory: function () {
+                    return $scope.selected.Factory;
+                },
+                id: function () {
+                    return $scope.selected.Dealer.DealerId;
                 }
             }
 

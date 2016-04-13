@@ -41,19 +41,19 @@
                 <tr>
                     <td>Tên người nhận hàng</td>
                     <td>
-                        <input type="text" class="form-control" ng-model="recipient" />
+                        <input type="text" class="form-control" ng-model="info.recipient" />
                     </td>
                 </tr>
                 <tr>
                     <td>Biển số xe</td>
                     <td>
-                        <input type="text" class="form-control" ng-model="licensePlate" />
+                        <input type="text" class="form-control" ng-model="info.licensePlate" />
                     </td>
                 </tr>
                 <tr>
                     <td>Ghi chú</td>
                     <td>
-                        <textarea class="form-control" ng-model="note"></textarea>
+                        <textarea class="form-control" ng-model="info.note"></textarea>
 
                     </td>
                 </tr>
@@ -116,8 +116,8 @@
             <div class="panel-heading panel-body">
                 <div class="row">
                     <span class="col-xs-8" style="padding-top: 8px"><strong>Danh sách sản phẩm</strong></span>
-                    <div class="col-xs-3">
-                        <button class="btn btn-primary btn-lg" ng-click="orderNewItem()">Thêm  <i class="glyphicon glyphicon-plus"></i></button>
+                    <div class="col-xs-4 pull-right">
+                        <button class="btn btn-primary btn-lg pull-right" ng-click="orderNewItem()">Thêm  <i class="glyphicon glyphicon-plus"></i></button>
                     </div>
                 </div>
             </div>
