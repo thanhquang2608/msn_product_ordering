@@ -83,7 +83,6 @@
       <!-- <gap:splash src="resources/ios/splash/screen-ipad-landscape-2x.png" gap:platform="ios" width="2048" height="1496" /> -->
       <gap:splash src="resources/ios/splash/Default-568h@2x~iphone.png" gap:platform="ios" width="640"  height="1136" />
      </platform>
-  <preference name="AndroidPersistentFileLocation" value="Compatibility" />
   <preference name="Fullscreen" value="True" />
   <preference name="KeepRunning" value="True" />
   <preference name="ShowTitle" value="False" />
@@ -93,5 +92,4 @@
   <preference name="StatusBarOverlaysWebView" value="false" />
   <preference name="StatusBarBackgroundColor" value="#000000" />
   <preference name="StatusBarStyle" value="lightcontent" />
-  <preference name="KeyboardDisplayRequiresUserAction" value="false" />
 </widget>
