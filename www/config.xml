@@ -10,8 +10,8 @@
   <preference name="windows-target-version" value="8.1" />
   <preference name="android-minSdkVersion" value="16" />
   <!-- Support for Cordova 5.0.0 plugin system -->
-  <plugin name="cordova-plugin-whitelist" version="1" />
-  <plugin name="cordova-plugin-statusbar" version="2.1.2"/>
+  <plugin name="cordova-plugin-whitelist" source="npm" />
+  <plugin name="cordova-plugin-statusbar" source="npm"/>
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
   <allow-intent href="tel:*" />
