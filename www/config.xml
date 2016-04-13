@@ -11,7 +11,7 @@
   <preference name="android-minSdkVersion" value="16" />
   <!-- Support for Cordova 5.0.0 plugin system -->
   <plugin name="cordova-plugin-whitelist" version="1" />
-  <plugin name="cordova-plugin-statusbar" version="1.0.4"/>
+  <plugin name="cordova-plugin-statusbar" version="2.1.2"/>
   <allow-intent href="http://*/*" />
   <allow-intent href="https://*/*" />
   <allow-intent href="tel:*" />
