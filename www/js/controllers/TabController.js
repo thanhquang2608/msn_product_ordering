@@ -39,7 +39,7 @@
 
         CommonService.checkResetPassword().then(function (data) {
             if (data.ChangedPassword == 0) {
-                $state.go('change-password', {}, {reload: true});
+                $state.go('change-password', {}, { reload: true });
             }
         }, function () {
         });
@@ -69,7 +69,7 @@
     });
 
     //$rootScope.$on('$stateChangeSuccess', function () {
-        
+
     //    if ($state.current.name != ('tabs.' + $scope.role + '-list')) {
     //        console.log($state.current.name);
     //        $("html, body").animate({ scrollTop: 0 }, 200);
@@ -121,28 +121,30 @@
     });
 
     $scope.open = function (msg) {
-
-        $scope.modal = $modal.open({
-            animation: true,
-            templateUrl: 'errorModalContent.html',
-            controller: 'ModalInstanceCtrl',
-            size: 'sm',
-            resolve: {
-                message: function () {
-                    return msg;
-                },
-                mode: function () {
-                    return 0;
+        if (!$scope.modal) {
+            $scope.modal = $modal.open({
+                animation: true,
+                templateUrl: 'errorModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: 'sm',
+                resolve: {
+                    message: function () {
+                        return msg;
+                    },
+                    mode: function () {
+                        return 0;
+                    }
                 }
-            }
-        });
+            });
 
-        $scope.modal.result.then(function (from) {
+            $scope.modal.result.then(function (from) {
 
-        }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
-            //alert('Modal dismissed at: ' + new Date());
-        });
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+                //alert('Modal dismissed at: ' + new Date());
+                $scope.modal = null;
+            });
+        }
     };
     $rootScope.processRequestError = function (response) {
         if (response.status == 403) {

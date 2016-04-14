@@ -215,16 +215,16 @@
                             <tr>
                                 <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
-                                    <strong>{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
-                                    <!--<p ng-if="isLabelLoading">Đang tải...</p>
-                                <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
+                                    <strong ng-if="!isLabelLoading">{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
+                                    <strong ng-if="isLabelLoading">Đang tải...</strong>
+                                <!--<strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
                                 <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn quy cách</p>-->
                                 </td>
                             </tr>
                             <tr>
                                 <td class="col-md-2 col-sm-2 col-xs-2">Đơn giá</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
-                                    <strong>{{format(order.selectedSpecify.UnitPrice, 0)}} vnd</strong>
+                                    <strong ng-if="!isLabelLoading">{{format(order.selectedSpecify.UnitPrice, 0)}} vnd</strong>
                                 </td>
                             </tr>
 
@@ -294,7 +294,8 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong>{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
+                                <strong ng-if="!isLabelLoading">{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
+                                <strong ng-if="isLabelLoading">Đang tải...</strong>
                                 <!--<p ng-if="isLabelLoading">Đang tải...</p>
                                 <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
                                 <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>-->
@@ -303,7 +304,7 @@
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">Đơn giá</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong>{{format(order.selectedSpecify.UnitPrice, 0)}} vnd</strong>
+                                <strong ng-if="!isLabelLoading">{{format(order.selectedSpecify.UnitPrice, 0)}} vnd</strong>
                             </td>
                         </tr>
 
