@@ -1,0 +1,123 @@
+﻿<div ng-init="init()">
+    <header class="cd-main-header">
+        <a href="" class="cd-logo">Masan Nutri-Science</a><a href="" class="cd-nav-trigger">Menu<span></span></a>
+        <nav class="cd-nav">
+            <ul class="cd-top-nav">
+                <li class="has-children account">
+                    <a href="">
+                        <img src='logo-anco.jpg' alt='avatar' class="avatar" ng-if="user.AC_PC == 0">
+                        <img src='logo-conco.png' alt='avatar' class="avatar" ng-if="user.AC_PC == 1">
+                        {{username}}
+                    </a>
+                    <ul>
+                        <li ng-show="userRole.RoleId != currentRole || userRole.LevelId != currentLevel" ng-repeat="userRole in userRoles">
+                            <a class="" ng-click="gotoState(userRole.RoleId, userRole.LevelId)">{{role2name[userRole.RoleId][userRole.LevelId]}}</a>
+                        </li>
+                        <li><a class="" ng-click="logout()">Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main class="cd-main-content">
+        <nav class="cd-side-nav is-fixed">
+            <ul>
+                <li class="cd-label">Danh mục</li>
+                <li ng-show="$state.current.name.indexOf('home.admin') == -1" class="has-children overview active" ng-class="{'current': $state.current.name.indexOf(stateRef) > -1 && $state.current.name.indexOf(stateRef + '-download') == -1}">
+                    <a class="parent-item">Đơn hàng</a>
+                    <ul>
+                        <li><a class="child-item" ui-sref="{{stateRef}}" ng-click="loadOrderInMonth()">Trong tháng</a></li>
+                        <li><a class="child-item" ui-sref="{{stateRef}}" ng-click="loadOrderByStatus(status.PENDING)">Chờ xử lý</a></li>
+                        <li><a class="child-item" ui-sref="{{stateRef}}" ng-click="loadOrderByStatus(status.SUCCESS)">Đã xử lý</a></li>
+                    </ul>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.sc') > -1" class="has-children overview active" ng-class="{'current': $state.current.name.indexOf(stateRef + '-download') > -1}">
+                    <a class="parent-item">Báo cáo</a>
+                    <ul>
+                        <li><a class="child-item" ui-sref="{{stateRef + '-download-quantity'}}">Tổng sản lượng đặt hàng</a></li>
+                        <li><a class="child-item" ui-sref="{{stateRef + '-download-order'}}">Danh sách đơn hàng</a></li>
+                    </ul>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.admin') > -1" class="has-children" ng-class="{'current': $state.current.name.indexOf('home.admin-price') > -1}">
+                    <a class="parent-item" ui-sref="home.admin-price">Quản lý giá</a>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.admin') > -1" class="has-children" ng-class="{'current': $state.current.name.indexOf('home.admin-user') > -1}">
+                    <a class="parent-item" ui-sref="home.admin-user">Quản lý tài khoản</a>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.admin') > -1" class="has-children" ng-class="{'current': $state.current.name.indexOf('home.admin-dealer') > -1}">
+                    <a class="parent-item" ui-sref="home.admin-dealer">Quản lý đại lí</a>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.admin') > -1" class="has-children" ng-class="{'current': $state.current.name.indexOf('home.admin-sale') > -1}">
+                    <a class="parent-item" ui-sref="home.admin-sale">Quản lý sale</a>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.admin') > -1" class="has-children" ng-class="{'current': $state.current.name.indexOf('home.admin-sc') > -1}">
+                    <a class="parent-item" ui-sref="home.admin-sc">Quản lý SC</a>
+                </li>
+                <li ng-show="$state.current.name.indexOf('home.admin') > -1" class="has-children" ng-class="{'current': $state.current.name.indexOf('home.admin-admin') > -1}">
+                    <a class="parent-item" ui-sref="home.admin-admin">Quản lý Admin</a>
+                </li>
+                <!--<li ng-show="userRole != roles.ADMIN" class=" has-children notifications">
+                    <a class="parent-item"><strong>Thông báo</strong><span class="count">0</span></a>
+                    <ul>
+                        <li><a href="#">Đơn hàng</a></li>
+                        <li><a href="#">Khác</a></li>
+                    </ul>
+                </li>-->
+            </ul>
+        </nav>
+        <div ui-view></div>
+        <div ng-show="$state.includes('home.sc')" ui-view="sc"></div>
+        <div ng-show="$state.includes('home.sale-order')" ui-view="sale-order"></div>
+        <div ng-show="$state.includes('home.dealer-order')" ui-view="dealer-order"></div>
+        <!--<div ng-show="$state.includes('home.sale')" ui-view="sale"></div>
+        <div ng-show="$state.includes('home.sale-sup')" ui-view="sale-sup"></div>-->
+        <div ng-show="$state.includes('home.sale-sup-order')" ui-view="sale-sup-order"></div>
+    </main>
+    <script type="text/ng-template" id="errorModalContent.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Lỗi</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger no-margin-bot">
+                <!--<div><strong>Lỗi:</strong></div>-->
+                <div>{{message}}</div>
+            </div>
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Đóng</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="successModalContent.html">
+        <div class="modal-body">
+            <div class="alert alert-success no-margin-bot">
+                <div><strong>Success:</strong></div>
+                <div>{{error.message}}</div>
+            </div>
+        </div>
+    </script>
+    <!-- SCRIPTS-->
+    <!--<script type="text/javascript" src="/linker/js/jquery.js"></script>
+    <script type="text/javascript" src="/linker/js/angular.js"></script>
+    <script type="text/javascript" src="/linker/js/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="/linker/js/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="/linker/js/app.js"></script>
+    <script type="text/javascript" src="/linker/js/angular-sails.io.js"></script>
+    <script type="text/javascript" src="/linker/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/linker/js/controllers/sailssocketctrl.js"></script>
+    <script type="text/javascript" src="/linker/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="/linker/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/linker/js/jquery.datatables.min.js"></script>
+    <script type="text/javascript" src="/linker/js/jquery.menu-aim.js"></script>
+    <script type="text/javascript" src="/linker/js/main.js"></script>
+    <script type="text/javascript" src="/linker/js/masan-script.js"></script>
+    <script type="text/javascript" src="/linker/js/select2.min.js"></script>
+    <script type="text/javascript" src="/linker/js/services/sailssocket.js"></script>
+    <script type="text/javascript" src="/linker/js/timepicker.min.js"></script>-->
+    <!-- SCRIPTS END-->
+    <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript" src="scripts/select2.min.js"></script>
+    <script type="text/javascript" src="scripts/masan-script.js"></script>
+
+</div>

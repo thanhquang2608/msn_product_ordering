@@ -1,0 +1,43 @@
+﻿<!--<ul id="tab" class="nav nav-tabs navbar-fixed-top navbar-default" role="tablist">
+    <li data-toggle="tab" class="active col-xs-4 text-center"><a href="#/tabs/survey"><span class="glyphicon glyphicon-edit" style="margin-right:4px; font-size:larger"></span>Khảo Sát</a></li>
+    <li data-toggle="tab" class="col-xs-4 text-center"><a href="#/tabs/dealers"><span class="glyphicon glyphicon-list-alt" style="margin-right:4px; font-size:larger"></span>Danh Sách</a></li>
+    <li data-toggle="tab" class="col-xs-4 text-center"><a href="#/tabs/account"><span class="glyphicon glyphicon-user" style="margin-right:4px; font-size:larger"></span> Tài Khoản</a></li>
+</ul>-->
+<ul id="tab" class="nav nav-tabs navbar-fixed-top row text-center no-padding no-margin" role="tablist">
+    <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{'active': $state.current.name.indexOf('tabs.{{role}}-list') > -1}">
+        <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-list"><span class="glyphicon glyphicon-list-alt"></span><br />Đơn hàng</a>
+    </li>
+    <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{'active': $state.current.name.indexOf('tabs.{{role}}-order') > -1}">
+        <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-order"><span class="glyphicon glyphicon-edit"></span><br />Đặt hàng</a>
+    </li>
+    <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{'active': $state.current.name.indexOf('tabs.{{role}}-info') > -1}">
+        <a class="max-width-height no-padding" ui-sref="tabs.{{role}}-info"><span class="glyphicon glyphicon-user"></span><br />Thông tin cá nhân</a>
+    </li>
+</ul>
+<div id="bar" class="navbar-fixed-top" style="visibility: hidden">
+    <div>
+        <a class="btn" ng-click="backPage()" ng-show="prevState" style="position: absolute;">
+            <i class="glyphicon glyphicon-chevron-left" style="height: 100%; vertical-align:middle; font-size:20px; color: white"></i>
+        </a>
+    </div>
+    <div>
+        <h3 class="text-center" style="margin-top: 10px">{{title}}</h3>
+    </div>
+</div>
+
+<div class="tab-content" ui-view>
+</div>
+<div class="tab-content" ng-show="$state.includes('tabs.dealer-list')" ui-view="dealer-list"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.dealer-order')" ui-view="dealer-order"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.dealer-info')" ui-view="dealer-info"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.sale-list')" ui-view="sale-list"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.sale-order')" ui-view="sale-order"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.sale-sup-list')" ui-view="sale-sup-list"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.sale-sup-order')" ui-view="sale-sup-order"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.asm-list')" ui-view="asm-list"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.asm-order')" ui-view="asm-order"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.rsm-list')" ui-view="rsm-list"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.rsm-order')" ui-view="rsm-order"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.nsm-list')" ui-view="nsm-list"></div>
+<div class="tab-content" ng-show="$state.includes('tabs.nsm-order')" ui-view="nsm-order"></div>
+<div class="row footer"></div>

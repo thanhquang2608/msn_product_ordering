@@ -1,0 +1,171 @@
+﻿<div class="panel-body" ng-if="refreshFlag">
+    <div class="row col-xs-12 text-center">
+        <p class="label-error">Có lỗi xảy ra. Vui lòng <button class="btn btn-primary btn-lg" ng-click="init()">Tải lại</button></p>
+    </div>
+</div>
+<div class="tab-pane fade in active" ng-init="init()">
+
+    <accordion>
+        <accordion-group is-open="statusCollapse.flag">
+            <accordion-heading ng-click="statusCollapse.flag = !statusCollapse.flag">
+                <div>
+                    <strong>Thông tin đơn hàng</strong> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': statusCollapse.flag, 'glyphicon-chevron-right': !statusCollapse.flag}"></i>
+                </div>
+            </accordion-heading>
+            <table>
+                <tr>
+                    <td>Tỉnh</td>
+                    <td>
+                        <select class="form-control" ng-model="selected.Province" ng-change="loadDealersInOrderPage()" ng-options="item as item.ProvinceName for item in provinces"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Đại lí</td>
+                    <td>
+                        <select class="form-control" ng-change="loadFactoriesInOrderPage()" ng-model="selected.Dealer" ng-options="dealer as dealer.DealerName for dealer in dealers"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Kho</td>
+                    <td>
+                        <select class="form-control" ng-change="loadLabels()" ng-model="selected.Factory" ng-options="factory as factory.FactoryName for factory in factories"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ngày giao</td>
+                    <td>
+                        <select class="form-control" ng-model="selected.Day" ng-change="selectDeliveryDate()" ng-options="day as (day + ' ngày') for day in days"></select>
+                        <span><strong> {{deliveryDateView}}</strong></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tên người nhận hàng</td>
+                    <td>
+                        <input type="text" class="form-control" ng-model="info.recipient" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Biển số xe</td>
+                    <td>
+                        <input type="text" class="form-control" ng-model="info.licensePlate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ghi chú</td>
+                    <td>
+                        <textarea class="form-control" ng-model="info.note"></textarea>
+
+                    </td>
+                </tr>
+
+                <!--<tr>
+                    <td>Nhãn hiệu</td>
+                    <td>
+                        <div class="row" ng-if="labels.length > 1">
+                            <div ng-repeat="label in labels" class="col-sm-2 label-item">
+                                <label class="">
+                                    <input ng-disabled="confirmLabel" type="checkbox" id="{{label.BrandId}}" ng-model="models[label.BrandName]" class="ms-checkbox styled" ng-change="selectLabel(label.BrandName)">
+                                    <label for="{{label.BrandId}}"> <span></span>{{label.BrandName}}</label>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="labels.length == 1">
+                            <div ng-repeat="label in labels" class="col-sm-2">
+                                <label class="">{{label.BrandName}}</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>-->
+
+            </table>
+        </accordion-group>
+    </accordion>
+    <div class="order-info info">
+        <div class="panel panel-default">
+            <div style="text-transform: uppercase;" class="panel-heading"><span><strong>Chọn nhãn hiệu</strong></span></div>
+            <div class="panel-body panel-brands" ng-class="{'disable': confirmLabel}">
+                <div class="row" ng-if="labels.length > 1">
+                    <div ng-repeat="label in labels" class="label-item col-xs-4">
+                        <label class="">
+                            <input ng-disabled="confirmLabel" type="checkbox" id="{{label.BrandId}}" ng-model="models[label.BrandName]" class="ms-checkbox styled" ng-change="selectLabel(label.BrandName)">
+                            <label for="{{label.BrandId}}"> <span></span>{{label.BrandName}}</label>
+                        </label>
+                    </div>
+                </div>
+                <div class="row col-xs-12" ng-if="labels.length > 1">
+                    <button ng-if="!confirmLabel" type="button" class="btn btn-primary btn-lg new-order" ng-click="confirmLabels()">Xác nhận</button>
+                    <button ng-if="confirmLabel" type="button" class="btn btn-primary btn-lg new-order" ng-click="confirmLabels()">Chọn lại nhãn hiệu</button>
+                </div>
+                <div class="row" ng-if="labels.length == 1">
+                    <div ng-repeat="label in labels" class="col-md-2">
+                        <label class="">{{label.BrandName}}</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="panel-default">
+            <div class="text-center">
+                <h4 ng-if="!labelValid" class="label-error">Vui lòng chọn ít nhất 1 nhãn hiệu!</h4>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div ng-show="confirmLabel">
+        <div class="panel panel-default">
+            <div class="panel-heading panel-body">
+                <div class="row">
+                    <span class="col-xs-8" style="padding-top: 8px"><strong>Danh sách sản phẩm</strong></span>
+                    <div class="col-xs-4 pull-right">
+                        <button class="btn btn-primary btn-lg pull-right" ng-click="orderNewItem()">Thêm  <i class="glyphicon glyphicon-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="list-group order-list scrollable-menu">
+            <li class="item list-group-item row" ng-repeat="order in orderList" ng-click="orderEditItem($index, order)">
+                <div class="catalog-item">
+                    <div class="left">
+                        <div class="index">{{$index + 1}}</div>
+                        <div class="text">
+                            <span class="title">{{order.selectedProduct.ProductName}} ({{order.selectedProduct.ProductLineName}})</span><br />
+                            <span class="type">{{order.selectedSpecify.Specification}} {{order.selectedSpecify.Weight}}kg</span> <br />
+                            <span class="type">Số lượng: {{order.numOrder}}</span>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="price">{{format(order.totalPrice, 0)}} vnđ</div>
+                        <div class="button">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </li>
+            <li class="item list-group-item row">
+                <div class="catalog-item">
+                    <div class="left">
+                        <div class="index"></div>
+                        <div class="text">
+                            <span class="title">Tổng cộng</span><br />
+                            <span class="type">Số bao/túi: {{format(total.NumOrder, 0)}}</span><br />
+                            <span class="type">Số tấn: {{format(total.Quantity, 3)}} tấn</span><br />
+                            <span class="type">Thành tiền: {{format(total.Price, 0)}} vnđ</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="panel-default">
+            <div class="text-center">
+                <h4 ng-if="sumFlag" class="label-error">Đơn hàng không được quá 12 sản phẩm!</h4>
+            </div>
+        </div>
+
+        <div class="panel-default">
+            <div class="text-center">
+                <button class="btn btn-primary btn-lg" ng-disabled="!orderList || orderList.length == 0" ng-click="previewOrder()">Hoàn tất →</button>
+            </div>
+        </div>    
+    </div>
+</div>

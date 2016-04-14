@@ -1,0 +1,240 @@
+﻿<div class="content-wrapper">
+    <div ng-init="init()">
+        <div class="breadcrumb-line">
+            <ul class="breadcrumb">
+                <li><a ui-sref="home.sale">Trang chủ</a></li>
+                <li class="active">Đặt hàng</li>
+            </ul>
+        </div>
+        <div class="page-header">
+            <div class="page-title">
+                <h3>Đặt hàng</h3>
+            </div>
+        </div>
+        <div class="content ng-cloak">
+            <div class="order-list">
+                <div class="order-info info">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="text-transform: uppercase;"><span><strong>Thông tin đơn hàng</strong></span></div>
+                        <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-1">Đại lý</div>
+                                    <div class="col-md-4" style="text-transform: uppercase;"><strong>{{dealer.DealerName}}</strong></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">Kho</div>
+                                    <div class="col-md-4" style="text-transform: uppercase;">
+                                        <select class="select select-factory" ng-change="loadLabels()" ng-model="selectedFactory" ng-options="factory as factory.FactoryName for factory in factories"></select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        Tên người nhận hàng
+                                    </div>
+                                    <div class="col-md-3 input-group-lg">
+                                        <input type="text" class="form-control" ng-model="recipient" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-1">Ngày giao</div>
+                                    <div class="col-md-4">
+                                        <select class="select select-day" ng-model="selectedDay" ng-change="selectDeliveryDate()" ng-options="day as (day + ' ngày') for day in days"></select>
+                                        <span><strong> {{deliveryDateView}}</strong></span>
+                                    </div>
+                                    <div class="col-md-2">
+                                        Biển số xe nhận hàng
+                                    </div>
+                                    <div class="col-md-3 input-group-lg">
+                                        <input type="text" aria-describedby="sizing-addon2" class="form-control" ng-model="licensePlate" />
+                                    </div>
+                                </div>
+                            <div class="row">
+                                <div class="col-md-1 col-sm-1 col-xs-1" style="vertical-align: text-top">Ghi chú</div>
+                                <div colspan="4" class="col-md-11 col-sm-11 col-xs-11">
+                                    <textarea class="form-control" rows="4" ng-model="note"></textarea>
+                                </div>
+                            </div>
+                            <!--<table>
+                                <tr>
+                                    <td class="col-md-1">Đại lý</td>
+                                    <td style="text-transform: uppercase;"><strong>{{dealer.DealerName}}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-1">Kho</td>
+                                    <td style="text-transform: uppercase;">
+                                        <select select2="" class="select select-factory" ng-change="loadLabels()" ng-model="selectedFactory" ng-options="factory as factory.FactoryName for factory in factories">
+                                        </select>
+                                    </td>
+                                    <td class="col-md-2">
+                                        Tên người nhận hàng
+                                    </td>
+                                    <td class="col-md-3 input-group-lg">
+                                        <input type="text" class="form-control" ng-model="recipient" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-1">Ngày giao</td>
+                                    <td>
+                                        <select select2="" class="select select-day" ng-model="selectedDay" ng-change="selectDeliveryDate()" ng-options="day as (day + ' ngày') for day in days">
+                                        </select>
+                                        <span><strong> {{deliveryDateView}}</strong></span>
+                                    </td>
+                                    <td class="col-md-2">
+                                        Biển số xe nhận hàng
+                                    </td>
+                                    <td class="col-md-3 input-group-lg">
+                                        <input type="text" aria-describedby="sizing-addon2" class="form-control" ng-model="licensePlate" />
+                                    </td>
+                                </tr>
+                            </table>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="order-info info">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><span><strong>Chọn nhãn hiệu</strong></span></div>
+                        <div class="panel-body panel-brands" ng-class="{'disable': confirmLabel}">
+                            <div class="row" ng-if="labels.length > 1">
+                                <div ng-repeat="label in labels" class="col-md-2">
+                                    <label class="">
+                                        <input ng-disabled="confirmLabel" type="checkbox" id="{{label.BrandId}}" ng-model="models[label.BrandName]" class="ms-checkbox styled" ng-change="selectLabel(label.BrandName)">
+                                        <label for="{{label.BrandId}}"> <span></span>{{label.BrandName}}</label>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="labels.length == 1">
+                                <div ng-repeat="label in labels" class="col-md-2">
+                                    <label class="">{{label.BrandName}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6 text-center">
+                            <h4 ng-if="!labelValid" class="label-error">Vui lòng chọn ít nhất 1 nhãn hiệu!</h4>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div class="row container" ng-if="labels.length > 1">
+                        <button ng-if="!confirmLabel" type="button" class="btn btn-primary new-order" ng-click="confirmLabels()">Xác Nhận</button>
+                        <button ng-if="!confirmLabel" type="button" class="btn btn-primary new-order" style="float: right;" ng-click="backFromOrderToSaleHome()">← Quay lại</button>
+                        <button ng-if="confirmLabel" type="button" class="btn btn-primary new-order" ng-click="confirmLabels()">Chọn lại nhãn hiệu</button>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <form name="frmOrder" ng-submit="previewOrder(frmOrder.$valid)" novalidate>
+                    <div class="table-responsive">
+                        <table ng-if="confirmLabel" id="table-orders" cellspacing="0" width="100%" class="table table-striped table-bordered table-non-paging dataTable">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" class="text-center">STT</th>
+                                    <th rowspan="2" class="col-md-2 text-center">Mẫ số sp</th>
+                                    <th rowspan="2" class="col-md-2 text-center">Quy cách</th>
+                                    <th rowspan="2" class="col-md-1 text-center">Đơn giá(VNĐ)/ Bao(túi)</th>
+                                    <th class="col-md-1 text-center">SL tháng trước</th>
+                                    <th class="col-md-1 text-center">SL tháng này</th>
+                                    <th colspan="2" class="col-md-2 text-center">ĐẶT HÀNG</th>
+                                    <th rowspan="2" class="col-md-2 text-center">THÀNH TIỀN(VNĐ)</th>
+                                    <th rowspan="2" class="col-md-1"> </th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center">Tấn</th>
+                                    <th class="text-center">Tấn</th>
+                                    <th class="text-center" style="min-width: 70px">Bao</th>
+                                    <th class="col-md-1 text-center">Tấn</th>
+                                </tr>
+                            </thead>
+                            <tbody id="append">
+                                <tr ng-repeat="order in orderList">
+                                    <td class="text-center">{{$index + 1}}</td>
+                                    <td ng-class="{'error': submited && frmOrder.product{{$index}}.$error.required}" style="padding: 5px;">
+                                        <select name="product{{$index}}" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" tabindex="-1" title="" class="select-full" required>
+                                            <!--class="select2 select-full select2-offscreen">-->
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td ng-class="{'error': submited && frmOrder.specify{{$index}}.$error.required}" style="padding: 5px;">
+                                        <select name="specify{{$index}}" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" tabindex="-1" title="" class="select-full" required>
+                                            <!--class="select2 select-full select2-offscreen">-->
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                    <td class="text-right currency">{{format(order.selectedSpecify.UnitPrice, 0)}}</td>
+                                    <td class="text-right">{{format(order.selectedSpecify.QuantityLastMonth, 3)}}</td>
+                                    <td class="text-right">{{format(order.selectedSpecify.QuantityCurrentMonth, 3)}}</td>
+                                    <td ng-class="{'error': (submited && (frmOrder.numOrder{{$index}}.$error.required || frmOrder.numOrder{{$index}}.$error.pattern))}" style="padding: 5px;" class="col-md-1">
+                                        <input name="numOrder{{$index}}" pattern="[0-9]*" type="number" style="width: 100%; border: 1px solid #DDD; padding: 5px;" ng-model="order.numOrder" ng-change="calculator(order)" class="text-right" required>
+                                    </td>
+                                    <td class="text-right">{{format(order.totalQuantity, 3)}}</td>
+                                    <td class="text-right">{{format(order.totalPrice, 0)}}</td>
+                                    <td class="text-center">
+                                        <button ng-click="removeOrder(order)" class="btn btn-icon btn-danger">Xóa</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">
+                                        <button id="addProduct" type="button" class="btn btn-primary new-order" ng-click="addOrder()">Thêm</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th colspan="6" class="col-md-5 text-center">
+                                        <label>Tổng cộng</label>
+                                    </th>
+                                    <th class="col-md-1 text-right">
+                                        <label> {{format(total.NumOrder, 0)}}</label>
+                                    </th>
+                                    <th class="col-md-1 text-right">
+                                        <label> {{format(total.Quantity, 3)}}</label>
+                                    </th>
+                                    <th class="col-md-2 text-right">
+                                        <label> {{format(total.Price, 0)}}</label>
+                                    </th>
+                                    <th class="col-md-1"></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--<div ng-if="confirmLabel">
+                        <button id="addProduct" type="button" class="btn btn-primary new-order" ng-click="addOrder()">Thêm</button>
+                    </div>
+                    <table ng-if="confirmLabel" id="table-total" cellspacing="0" width="100%" class="table table-striped table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="col-md-5 text-center">
+                                    <label>Tổng cộng</label>
+                                </th>
+                                <th class="col-md-1"></th>
+                                <th class="col-md-1"></th>
+                                <th class="col-md-1 text-right">
+                                    <label> {{format(total.NumOrder, 0)}}</label>
+                                </th>
+                                <th class="col-md-1 text-right">
+                                    <label> {{format(total.Quantity, 3)}}</label>
+                                </th>
+                                <th class="col-md-2 text-right">
+                                    <label> {{format(total.Price, 0)}}</label>
+                                </th>
+                                <th class="col-md-1"></th>
+                            </tr>
+                        </tbody>
+                    </table>-->
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6 text-center">
+                            <h4 ng-if="submited && !frmOrder.$valid" class="label-error">Dữ liệu nhập vào chưa đúng!</h4>
+                            <h4 ng-if="sumFlag" class="label-error">Đơn hàng không được quá 12 sản phẩm!</h4>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div ng-if="confirmLabel">
+                        <button type="submit" style="float:right; margin-top: 20px;" class="btn btn-primary new-order">Hoàn tất →</button>
+                        <button type="button" style="float:right; margin-top: 20px; margin-right: 5px;" ng-click="cancelOrder1()" class="btn btn-danger new-order">← Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="line-footer">
+        <div class="pull-left">© 2015. Masan Product Ordering Website by <a href="http://tintm.com">TinTM</a></div>
+    </div>
+</div>

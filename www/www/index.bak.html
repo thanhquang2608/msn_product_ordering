@@ -1,0 +1,494 @@
+﻿<!DOCTYPE html>
+<html ng-app="OrderApp">
+<head>
+    <meta charset="utf-8" />
+    <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+        Customize the content security policy in the meta tag below as needed. Add 'unsafe-inline' to default-src to enable inline JavaScript.
+        For details, see http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <title>MasanSurvey</title>
+
+    <!-- STYLES-->
+    <link href="css/index.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+    <!--<link href="css/mobile-angular-ui-base.css" rel="stylesheet"/>-->
+
+    <script src="scripts/jquery-2.1.4.min.js"></script>
+    <script src="scripts/angular-1.3.16.js"></script>
+    <script src="scripts/angular-ui-router-0.2.15.js"></script>
+    <script src="scripts/ct-ui-router-extras.js"></script>
+    <script src="scripts/angular-local-storage.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="scripts/iscroll.js"></script>
+    <script src="scripts/ui-bootstrap-tpls-0.13.4.min.js"></script>
+    <!-- STYLES END-->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-74784844-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+<body>
+    <div class="" ui-view></div>
+    
+    <!-- Cordova reference, this is added to your app when it's built. -->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+
+    <script src="scripts/index.js"></script>
+
+    <script src="js/app.js"></script>
+    
+    <!-------------------Load controllers ----------------- -->
+    <script src="js/controllers/TabController.js"></script>
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/homeController.js"></script>
+    <script src="js/controllers/dealerController.js"></script>
+    <script src="js/controllers/SaleController.js"></script>
+    <script src="js/controllers/saleSupController.js"></script>
+    <!------------------Load services ------------------------>
+    <script src="js/services/authService.js"></script>
+    <script src="js/services/authInterceptorService.js"></script>
+    <script src="js/services/commonService.js"></script>
+    <script src="js/services/dataService.js"></script>
+    <script src="js/services/constant.js"></script>
+    <script src="js/services/scService.js"></script>
+    <script type="text/ng-template" id="loading.html">
+        <div style="">
+            <div class="modal-body">
+                <div class="" style="width: 100%; text-align: center">
+                    <img src="img/loading20.gif" style="display: inline-block;" />
+                </div>
+                <div class="" style="width: 100%; text-align: center">
+                    <h4 style="display: inline-block;">Đang xử lí...</h4>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="errorModalContent.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Thông báo</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-danger no-margin-bot">
+                <!--<div><strong>Lỗi:</strong></div>-->
+                <div>{{message}}</div>
+            </div>
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Đóng</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="confirm-done.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Thông báo</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <h6>{{message}}</h6>
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Hủy bỏ</button>
+            <button type="button" class="btn btn-primary" ng-click="ok()">Đồng ý</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="progress.html">
+        <div style="background-color: transparent">
+            <div class="modal-body">
+                <div class="" style="width: 100%; text-align: center">
+                    <img src="img/loading20.gif" style="display: inline-block;" />
+                </div>
+                <div class="" style="width: 100%; text-align: center">
+                    <h4 style=" display: inline-block;">
+                        Đang tải...
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="confirm-message-norequire.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">{{message}}</h4>
+            </div>
+        </div>
+        <div class="modal-body col-xs-12">
+            <textarea style="min-width: 280px" class="form-control" rows="4" ng-model="reason"></textarea>
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Hủy bỏ</button>
+            <button type="button" class="btn btn-primary btn-lg" ng-click="ok()">Đồng ý</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="confirm-message-require.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">{{message}}</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <textarea style="resize: none;" class="form-control" rows="4" ng-model="reason"></textarea>
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Hủy bỏ</button>
+            <button type="button" class="btn btn-primary btn-lg" ng-disabled="!reason" ng-click="ok()">Đồng ý</button>
+        </div>
+    </script>
+    <script type="text/ng-template" id="change-factory.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Chuyển kho</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <table>
+                    <tr>
+                        <td class="col-md-2">Từ kho</td>
+                        <td class="col-md-4">
+                            <strong>{{currentFactory.FactoryName}}</strong>
+                        </td>
+                        <td class="col-md-2">
+                            Sang kho
+                        </td>
+                        <td>
+                            <select select ng-model="selectedFactory" ng-options="factory as factory.FactoryName for factory in factories"></select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Hủy bỏ</button>
+            <button type="button" class="btn btn-primary" ng-click="ok()">Đồng ý</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="order-item.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Thêm sản phẩm</h4>
+            </div>
+        </div>
+        <form name="frmOrder" ng-submit="ok(frmOrder.$valid)" novalidate>
+            <div class="modal-body">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Mã số SP</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong><select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required></select></strong>
+                                <p ng-if="submited && frmOrder.productName.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <p ng-if="isLabelLoading">Đang tải...</p>
+                                <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
+                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn quy cách</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Đơn giá</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.selectedSpecify.UnitPrice, 0)}} vnd</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong><input name="numOrder" class="form-control" pattern="[0-9]*" min="1" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Tấn</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.totalQuantity, 3)}} tấn</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Thành tiền</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.totalPrice, 0)}} vnd</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-3 col-sm-3 col-xs-3">SL tháng trước</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.selectedSpecify.QuantityLastMonth, 3)}} tấn</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 col-sm-3 col-xs-3">SL tháng này</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} tấn</strong>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="modal-footer no-margin-bot">
+                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Hủy bỏ</button>
+                <button type="submit" class="btn btn-primary btn-lg">Đồng ý</button>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="order-edit-item.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Sản phẩm thứ {{index+1}}</h4>
+            </div>
+        </div>
+        <form name="frmOrder" ng-submit="ok(1, frmOrder.$valid)" novalidate>
+            <div class="modal-body">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Mã số SP</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong><select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required></select></strong>
+                                <p ng-if="submited && frmOrder.productName.$error.required" class="label-error">Vui lòng chọn quy cách</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <p ng-if="isLabelLoading">Đang tải...</p>
+                                <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
+                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Đơn giá</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.selectedSpecify.UnitPrice, 0)}} vnd</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong><input name="numOrder" class="form-control" min="1" pattern="[0-9]*" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Tấn</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.totalQuantity, 3)}} tấn</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Thành tiền</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.totalPrice, 0)}} vnd</strong>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-3 col-sm-3 col-xs-3">SL tháng trước</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.selectedSpecify.QuantityLastMonth, 3)}} tấn</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 col-sm-3 col-xs-3">SL tháng này</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} tấn</strong>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer no-margin-bot">
+                <button type="button" class="btn btn-danger btn-lg" ng-click="ok(2, true)" style="float:left">Xóa</button>
+                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Đóng</button>
+                <button type="submit" class="btn btn-primary btn-lg">Cập nhật</button>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="order-view-item.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Sản phẩm thứ {{index+1}}</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <table>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Mã SP</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{item.ProductCode}}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Tên SP</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{item.ProductName}} ({{item.ProductLineName}})</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{item.Specification}} {{item.Weight}}Kg</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Đơn giá</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{ format(item.UnitPrice, 0)}} vnd</strong>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{format(item.Count, 0)}}</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Tấn</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{format(item.Quantity, 3)}} tấn</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Thành tiền</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{format(item.Count * item.UnitPrice, 0)}} vnd</strong>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-3 col-sm-3 col-xs-3">SL tháng trước</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{format(item.QuantityLastMonth, 3)}} tấn</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 col-sm-3 col-xs-3">SL tháng này</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            <strong>{{format(item.QuantityCurrentMonth, 3)}} tấn</strong>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Đóng</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="order-view-item-preview.html">
+        <div class="modal-header no-margin-bot">
+            <div>
+                <h4 class="no-margin-bot">Sản phẩm thứ {{index+1}}</h4>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <table>
+                    <!--<tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Mã SP</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{order.selectedProduct.ProductCode}}
+                        </td>
+                    </tr>-->
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Tên SP</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{order.selectedProduct.ProductName}} ({{order.selectedProduct.ProductLineName}})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Quy cách</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{order.selectedSpecify.Specification}} {{order.selectedSpecify.Weight}}Kg
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Đơn giá</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{format(order.selectedSpecify.UnitPrice, 0)}} vnd
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{format(order.numOrder, 0)}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Tấn</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{format(order.totalQuantity, 3)}} tấn
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Thành tiền</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{format(order.totalPrice, 0)}} vnd
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-3 col-sm-3 col-xs-3">SL tháng trước</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{format(order.selectedSpecify.QuantityLastMonth, 3)}} tấn
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 col-sm-3 col-xs-3">SL tháng này</td>
+                        <td class="col-md-4 col-sm-4 col-xs-4">
+                            {{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} tấn
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="modal-footer no-margin-bot">
+            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Đóng</button>
+        </div>
+    </script>
+    <!--prevent tiny screen-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+            var msViewportStyle = document.createElement("style");
+            msViewportStyle.appendChild(
+                document.createTextNode("@-ms-viewport{width:auto!important}")
+            );
+            document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+            //}
+        });
+    </script>
+</body>
+</html>
