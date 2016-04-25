@@ -359,8 +359,11 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
             params += "&search=" + $scope.keyword;
         }
 
+        if ($scope.selected.Province) {
+            params += '&provinceid=' + $scope.selected.Province.ProvinceId;
+        }
         console.log(params);
-        CommonService.getListOrderByParam(params).then(function (data) {
+        CommonService.getListOrderBySale(params).then(function (data) {
             $scope.orders = data;
 
         }, function (err) {

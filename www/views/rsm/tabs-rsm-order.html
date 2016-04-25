@@ -22,7 +22,7 @@
                 <tr>
                     <td>Đại lí</td>
                     <td>
-                        <select class="form-control" ng-change="loadFactoriesInOrderPage()" ng-model="selected.Dealer" ng-options="dealer as dealer.DealerName for dealer in dealers"></select>
+                        <select class="form-control" ng-change="loadFactoriesInOrderPage()" ng-model="selected.Dealer" ng-options="dealer as dealer.DealerName + ' (' + dealer.DealerCode + ')' for dealer in dealers"></select>
                     </td>
                 </tr>
                 <tr>

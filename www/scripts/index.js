@@ -30,8 +30,20 @@
         // TODO: This application has been reactivated. Restore application state here.
     };
 
+    var countExit = 0;
     function backKeyDown(e) {
         e.preventDefault();
+        countExit++;
+        if (countExit == 1) {
+            $('#UIContent').append('<div id="alertDiv" class="alert alert-danger text-center" style="position: fixed; bottom: 0px; width: 90%; z-index: 9999; margin-left: 5%; margin-right: 5%"><h4><strong>Nhấn nút <i class="glyphicon glyphicon-arrow-left"></i> lần nữa để thoát</strong></h4></div>');
+            setTimeout(function () {
+                countExit = 0;
+                $('#alertDiv').remove();
+            }, 2000);
+        }
+        else if (countExit == 2) {
+            navigator.app.exitApp();
+        }             
         // do something here if you wish
         //alert('go back!');
     }

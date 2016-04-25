@@ -370,8 +370,11 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
                 params += "&search=" + $scope.keyword;
             }
 
+            if ($scope.selected.Province) {
+                params += '&provinceid=' + $scope.selected.Province.ProvinceId;
+            }
             console.log(params);
-            CommonService.getListOrderByParam(params).then(function (data) {
+            CommonService.getListOrderBySale(params).then(function (data) {
                 $scope.orders = data;
                 //console.log(data);
                 //console.log(table);

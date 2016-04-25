@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="com.tintm.mnseorder" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="com.tintm.mnseorder" version="1.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
   <name>MNS eOrder</name>
   <description>Masan Nutri-Science Product Ordering</description>
   <author href="http://cordova.io" email="dev@cordova.apache.org">TinTM</author>
@@ -72,16 +72,16 @@
     <icon src="resources/ios/icon/icon-50.png" width="50" height="50" />
     <icon src="resources/ios/icon/icon-50@2x.png" width="100" height="100" />
     
-    <gap:splash src="resources/ios/splash/Default~iphone.png" gap:platform="ios" width="320" height="480" />
-      <gap:splash src="resources/ios/splash/Default@2x~iphone.png" gap:platform="ios" width="640" height="960" />
-      <gap:splash src="resources/ios/splash/Default~iphone-Landscape.png" gap:platform="ios" width="480" height="320" />
-      <gap:splash src="resources/ios/splash/Default@2x~iphone-Landscape.png" gap:platform="ios" width="960" height="640" />
-      <gap:splash src="resources/ios/splash/Default-Portrait~ipad.png" gap:platform="ios" width="768" height="1024" />
-      <gap:splash src="resources/ios/splash/Default-Portrait@2x~ipad" gap:platform="ios" width="1536" height="2008" />
-      <gap:splash src="resources/ios/splash/Default-Landscape~ipad.png" gap:platform="ios" width="1024" height="768" />
-      <!-- <gap:splash src="resources/ios/splash/screen-ipad-landscape-2x.png" gap:platform="ios" width="2048" height="1496" /> -->
-      <gap:splash src="resources/ios/splash/Default-568h@2x~iphone.png" gap:platform="ios" width="640"  height="1136" />
-     </platform>
+  <gap:splash src="resources/ios/splash/Default~iphone.png" gap:platform="ios" width="320" height="480" />
+  <gap:splash src="resources/ios/splash/Default@2x~iphone.png" gap:platform="ios" width="640" height="960" />
+  <gap:splash src="resources/ios/splash/Default~iphone-Landscape.png" gap:platform="ios" width="480" height="320" />
+  <gap:splash src="resources/ios/splash/Default@2x~iphone-Landscape.png" gap:platform="ios" width="960" height="640" />
+  <gap:splash src="resources/ios/splash/Default-Portrait~ipad.png" gap:platform="ios" width="768" height="1024" />
+  <gap:splash src="resources/ios/splash/Default-Portrait@2x~ipad" gap:platform="ios" width="1536" height="2008" />
+  <gap:splash src="resources/ios/splash/Default-Landscape~ipad.png" gap:platform="ios" width="1024" height="768" />
+    <!-- <gap:splash src="resources/ios/splash/screen-ipad-landscape-2x.png" gap:platform="ios" width="2048" height="1496" /> -->
+  <gap:splash src="resources/ios/splash/Default-568h@2x~iphone.png" gap:platform="ios" width="640"  height="1136" />
+   </platform>
   <preference name="AndroidPersistentFileLocation" value="Compatibility" />
   
   <preference name="Fullscreen" value="True" />
