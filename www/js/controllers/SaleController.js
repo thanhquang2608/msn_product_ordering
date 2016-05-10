@@ -791,7 +791,18 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         CommonService.getProvincesBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel).then(function (data) {
             $scope.provinces = data;
             if ($scope.provinces) {
-                $scope.selected.Province = $scope.provinces[0];
+                //If duplicate -> auto load data
+                if ($stateParams.AutoFillData) {
+                    for (var idx in $scope.provinces) {
+                        if ($scope.provinces[idx].ProvinceId == $stateParams.AutoFillData.ProvinceId)
+                            $scope.selected.Province = $scope.provinces[idx];
+                    }
+                    if(!$scope.selected.Province)
+                        $scope.selected.Province = $scope.provinces[0];
+                }
+                //Else get first ele
+                else
+                    $scope.selected.Province = $scope.provinces[0];
                 console.log($scope.selected.Province);
                 $scope.loadDealersInOrderPage();
             }
@@ -1219,7 +1230,7 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         modal.result.then(function (data) {
             if (data) {
                 if (data.isRemove == 1) {
-                    $scope.orderList.splice(data.index);
+                    $scope.orderList.splice(data.index, 1);
                 }
                 else {
                     $scope.orderList[data.index] = data.orderItem;
@@ -1519,6 +1530,10 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
 
     $scope.orderViewItem = function (idx, item) {
         openViewItem(idx, item);
+    }
+
+    $scope.duplicateOrder = function (order) {
+        $state.go('tabs.sale-order', { AutoFillData: order }, { reload: true });
     }
     /////// END ORDER DETAIL
 

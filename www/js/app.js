@@ -64,7 +64,10 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
                 views: {
                     'dealer-order': {
                         templateUrl: 'views/dealer/tabs-dealer-order.html',
-                        controller: 'DealerController'
+                        controller: 'DealerController',
+                        params: {
+                            'AutoFillData': null
+                        }
                     }
                 }
             })
@@ -116,7 +119,10 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
                 views: {
                     'sale-order': {
                         templateUrl: 'views/sale/tabs-sale-order.html',
-                        controller: 'SaleController'
+                        controller: 'SaleController',
+                        params: {
+                            'AutoFillData': null
+                        }
                     }
                 }
             })
@@ -204,10 +210,13 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             .state('tabs.asm-order', {
                 url: '/asm-order',
                 sticky: true,
+                params: {
+                    'AutoFillData': null
+                },
                 views: {
                     'asm-order': {
                         templateUrl: 'views/asm/tabs-asm-order.html',
-                        controller: 'ASMController'
+                        controller: 'ASMController'                       
                     }
                 }
             })

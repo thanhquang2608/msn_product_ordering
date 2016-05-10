@@ -107,7 +107,7 @@ app
         $modalInstance.dismiss('cancel');
     };
 })
-.controller('ModalInstanceNewItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, products, roleId, level, selectedFactory, id) {
+.controller('ModalInstanceNewItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, products, roleId, level, selectedFactory, id, $modal, $log) {
     Number.prototype.formatMoney = function (c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -150,24 +150,31 @@ app
     $scope.submited = false;
     $scope.isLabelLoading = false;
 
-    $scope.loadSpecify = function (order) {
-        $('#numOrder').focus();
+    $scope.loadSpecify = function (order) {       
         $scope.isLabelLoading = true;
-        CommonService.getSpecify(order.selectedProduct.ProductName, id, roleId, level, selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
-            console.log(data)
-            //$scope.order.specifies = data;
-            $scope.order.selectedSpecify = data;
+        if (order.selectedProduct) {
+            $('#numOrder').focus();
+            CommonService.getSpecify(order.selectedProduct.ProductName, id, roleId, level, selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
+                console.log(data)
+                //$scope.order.specifies = data;
+                $scope.order.selectedSpecify = data;
+                $scope.isLabelLoading = false;
+                $scope.calculator($scope.order);            
+            }, function (error) {
+                $scope.isLabelLoading = false;
+                console.log(error)
+                $rootScope.processRequestError(error);
+            });
+        }
+        else {
+            $scope.order.selectedSpecify = null;
             $scope.isLabelLoading = false;
             $scope.calculator($scope.order);
-        }, function (error) {
-            $scope.isLabelLoading = false;
-            console.log(error)
-            $rootScope.processRequestError(error);
-        });
+        }
     }
     $scope.ok = function (isValid) {
         $scope.submited = true;
-        if (!isValid)
+        if (!isValid || $scope.order.selectedSpecify == null || $scope.order.selectedSpecify == undefined)
             return;
         $modalInstance.close($scope.order);
     };
@@ -184,6 +191,24 @@ app
             order.totalPrice = order.selectedSpecify.UnitPrice * order.numOrder;
         }
     }
+
+    $scope.openPopup = function () {
+
+        $scope.modalProgress = $modal.open({
+            animation: true,
+            templateUrl: 'order-item.html',
+            size: 'sm',
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        $scope.modalProgress.result.then(function (from) {
+
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+            //alert('Modal dismissed at: ' + new Date());
+        });
+    };
 })
 
 .controller('ModalInstanceEditItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, orderItem, products, roleId, level, index, selectedFactory, id) {
@@ -1202,7 +1227,7 @@ app
         modal.result.then(function (data) {
             if (data) {
                 if (data.isRemove == 1) {
-                    $scope.orderList.splice(data.index);
+                    $scope.orderList.splice(data.index, 1);
                 }
                 else {
                     $scope.orderList[data.index] = data.orderItem;
@@ -1551,6 +1576,10 @@ app
 
     $scope.backFromDetail = function () {
         $state.go('home.dealer', { Year: $stateParams.Year, Month: $stateParams.Month }, {});
+    }
+
+    $scope.duplicateOrder = function (order) {
+        $state.go('tabs.dealer-order', {AutoFillData: order}, { reload: true });
     }
     /////// END SC ORDER REVIEW
 

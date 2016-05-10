@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.controller('ASMController', function ($scope, $rootScope, $timeout, $stateParams, $state, $modal, $log, $interval,
+app.controller('ASMController', function ($scope, $rootScope, $timeout, $stateParams, $state, $modal, $log, $interval, $q,
     AuthService, CommonService, DataService,
     ORDER_STATUS, PRODUCT_LINE_ID, TIMER, ROLE_FUNCTIONS, USER_ROLES, USER_LEVELS, ROLE_LEVEL_2_NAME) {
 
@@ -752,9 +752,25 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
             console.log(data);
             $scope.dealers = data;
             if ($scope.dealers) {
-                $scope.selected.Dealer = $scope.dealers[0];
+                //If duplicate -> auto load data
+                if ($stateParams.AutoFillData) {
+                    for (var idx in $scope.dealers) {
+                        if ($scope.dealers[idx].DealerId == $stateParams.AutoFillData.DealerId)
+                            $scope.selected.Dealer = $scope.dealers[idx];
+                    }
+                    if (!$scope.selected.Dealer)
+                        $scope.selected.Dealer = $scope.dealers[0];
+                }
+                //Else get first ele
+                else
+                    $scope.selected.Dealer = $scope.dealers[0];
                 $scope.loadFactoriesInOrderPage();
-                $scope.loadRecomendDriver();
+                if ($stateParams.AutoFillData) {
+                    $scope.info.recipient = $stateParams.AutoFillData.Recipient;
+                    $scope.info.licensePlate = $stateParams.AutoFillData.LicensePlate;
+                }
+                else
+                    $scope.loadRecomendDriver();
             }
         }, function (err) {
             $scope.refreshFlag = true;
@@ -786,7 +802,18 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
                     }
                 }
 
-                $scope.selected.Factory = $scope.factories[0];
+                //If duplicate -> auto load data
+                if ($stateParams.AutoFillData) {
+                    for (var idx in $scope.factories) {
+                        if ($scope.factories[idx].FactoryId == $stateParams.AutoFillData.FactoryId)
+                            $scope.selected.Factory = $scope.factories[idx];
+                    }
+                    if (!$scope.selected.Factory)
+                        $scope.selected.Factory = $scope.factories[0];
+                }
+                //Else get first ele
+                else
+                    $scope.selected.Factory = $scope.factories[0];
                 $scope.loadLabels();
             }, function (error) {
                 console.log(error);
@@ -809,8 +836,20 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
         $scope.selectDeliveryDate();
         CommonService.getProvincesBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel).then(function (data) {
             $scope.provinces = data;
+            console.log($stateParams.AutoFillData);
             if ($scope.provinces) {
-                $scope.selected.Province = $scope.provinces[0];
+                //If duplicate -> auto load data
+                if ($stateParams.AutoFillData) {
+                    for (var idx in $scope.provinces) {
+                        if ($scope.provinces[idx].ProvinceId == $stateParams.AutoFillData.ProvinceId)
+                            $scope.selected.Province = $scope.provinces[idx];
+                    }
+                    if (!$scope.selected.Province)
+                        $scope.selected.Province = $scope.provinces[0];
+                }
+                //Else get first ele
+                else
+                    $scope.selected.Province = $scope.provinces[0];
                 console.log($scope.selected.Province);
                 $scope.loadDealersInOrderPage();
             }
@@ -1039,6 +1078,52 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
         //$scope.addOrder();
         $scope.confirmLabel = false;
     }
+    // Synchronous load label list
+    function loadBatchLabel(labelList) {
+        var retVal = [];
+        var deferred = $q.defer();
+        var urlCalls = [];
+        angular.forEach(labelList, function (value, key) {
+            urlCalls.push(CommonService.getProducts($scope.selected.Dealer.DealerId, value.BrandId, $scope.currentRole, $scope.currentLevel, $scope.selected.Factory.FactoryId).then(function (data) {
+                retVal = retVal.concat(modelsData[key]);
+            }));
+        });
+        // they may, in fact, all be done, but this
+        // executes the callbacks in then, once they are
+        // completely finished.
+        $q.all(urlCalls)
+        .then(
+          function(results) {
+              deferred.resolve(retVal)
+          },
+        function(errors) {
+            deferred.reject(errors);
+        },
+        function(updates) {
+            deferred.update(updates);
+        });
+        return deferred.promise;
+    
+        //return function () {
+            //var defer = $q.defer();
+            //var retVal = [], count = 1;
+            //angular.forEach(labelList, function (value, key) {
+            //    CommonService.getProducts($scope.selected.Dealer.DealerId, value.BrandId, $scope.currentRole, $scope.currentLevel, $scope.selected.Factory.FactoryId).then(function (data) {
+            //        retVal = retVal.concat(modelsData[key]);
+                    
+            //        //if(count == 1){
+            //            defer.resolve(retVal);
+            //            return defer.promise;
+            //        //}
+                    
+            //    }, function (error) {
+            //        console.log(error);
+            //        defer.reject('Load product by label err');
+            //        return deferred.promise;
+            //    });
+            //});
+    }
+
     $scope.confirmLabels = function () {
         $scope.labelValid = isLabelValid();
         if (!$scope.labelValid)
@@ -1046,17 +1131,21 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
         $scope.confirmLabel = !$scope.confirmLabel;
         //console.log("Confirm Label");
 
+        //Experimental - auto add selected product list
+        var loadList = {};
+
         if ($scope.confirmLabel) {
             console.log("START");
             console.log(modelsBack);
 
             // Load Data
             for (var item in $scope.models) {
-
-                if ($scope.models[item] && !modelsBack[item]) { // Add data
+                // Add data
+                if ($scope.models[item] && !modelsBack[item]) { 
                     for (var idx in $scope.labels) {
                         if ($scope.labels[idx].BrandName == item) {
                             $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
+                            loadList[item] = $scope.labels[idx];
                         }
                     }
                 }
@@ -1092,6 +1181,12 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
             console.log("END");
             //console.log($scope.products);
             //$('.select2').select2();
+            console.log("Load List", loadList);
+            loadBatchLabel(loadList).then(function (data) {
+                console.log(data);
+            }, function (err) {
+                console.log(err);
+            });
         }
     }
 
@@ -1230,7 +1325,7 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
         modal.result.then(function (data) {
             if (data) {
                 if (data.isRemove == 1) {
-                    $scope.orderList.splice(data.index);
+                    $scope.orderList.splice(data.index, 1);
                 }
                 else {
                     $scope.orderList[data.index] = data.orderItem;
@@ -1503,6 +1598,9 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
 
     $scope.orderViewItem = function (idx, item) {
         openViewItem(idx, item);
+    }
+    $scope.duplicateOrder = function (order) {
+        $state.go('tabs.asm-order', { AutoFillData: order }, { reload: true });
     }
     /////// END ORDER DETAIL
     ////////// BEGIN SALE INFO

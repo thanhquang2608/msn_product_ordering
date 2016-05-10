@@ -1230,7 +1230,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
         modal.result.then(function (data) {
             if (data) {
                 if (data.isRemove == 1) {
-                    $scope.orderList.splice(data.index);
+                    $scope.orderList.splice(data.index, 1);
                 }
                 else {
                     $scope.orderList[data.index] = data.orderItem;

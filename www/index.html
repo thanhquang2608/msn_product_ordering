@@ -201,6 +201,8 @@
                     <h4 class="no-margin-bot">Thêm sản phẩm</h4>
                 </div>
             </div>
+            
+
             <form name="frmOrder" ng-submit="ok(frmOrder.$valid)" novalidate stop-event="touchend">
                 <div class="modal-body">
                     <div class="row">
@@ -208,7 +210,11 @@
                             <tr>
                                 <td class="col-md-2 col-sm-2 col-xs-2">Mã số SP</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
-                                    <strong><select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required></select></strong>
+                                    <strong>
+                                    <select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required>
+                                        <option></option>
+                                    </select>
+                                    </strong>
                                     <p ng-if="submited && frmOrder.productName.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>
                                 </td>
                             </tr>
@@ -229,7 +235,7 @@
                             </tr>
 
                             <tr>
-                                <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                                <td class="col-md-2 col-sm-2 col-xs-2">Số lượng</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
                                     <strong><input id="numOrder" name="numOrder" class="form-control" pattern="[0-9]*" min="1" max="1000000" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
                                     <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
@@ -268,7 +274,7 @@
                 </div>
                 <div class="modal-footer no-margin-bot">
                     <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Hủy bỏ</button>
-                    <button type="submit" class="btn btn-primary btn-lg">Đồng ý</button>
+                    <button type="submit" class="btn btn-primary btn-lg" ng-disabled="isLabelLoading == true">Đồng ý</button>
                 </div>
             </form>
         </div>
@@ -288,7 +294,7 @@
                             <td class="col-md-2 col-sm-2 col-xs-2">Mã số SP</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
                                 <strong><select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required></select></strong>
-                                <p ng-if="submited && frmOrder.productName.$error.required" class="label-error">Vui lòng chọn quy cách</p>
+                                <p ng-if="submited && frmOrder.productName.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>
                             </td>
                         </tr>
                         <tr>
@@ -309,7 +315,7 @@
                         </tr>
 
                         <tr>
-                            <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Số lượng</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
                                 <strong><input id="numOrder" name="numOrder" class="form-control" min="1" max="1000000" pattern="[0-9]*" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
                                 <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">Vui lòng nhập số bao</p>
@@ -348,7 +354,7 @@
             <div class="modal-footer no-margin-bot">
                 <button type="button" class="btn btn-danger btn-lg" ng-click="ok(2, true)" style="float:left">Xóa</button>
                 <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">Đóng</button>
-                <button type="submit" class="btn btn-primary btn-lg">Cập nhật</button>
+                <button type="submit" class="btn btn-primary btn-lg" ng-disabled="isLabelLoading == true">Cập nhật</button>
             </div>
         </form>
     </script>
@@ -388,7 +394,7 @@
                     </tr>
 
                     <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Số lượng</td>
                         <td class="col-md-4 col-sm-4 col-xs-4">
                             <strong>{{format(item.Count, 0)}}</strong>
                         </td>
@@ -462,7 +468,7 @@
                     </tr>
 
                     <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">Bao</td>
+                        <td class="col-md-2 col-sm-2 col-xs-2">Số lượng</td>
                         <td class="col-md-4 col-sm-4 col-xs-4">
                             {{format(order.numOrder, 0)}}
                         </td>
