@@ -42,8 +42,11 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
 })
 .controller('LoginController', function ($scope, $rootScope, $state, $modal, $log,
     AuthService, USER_ROLES, USER_LEVELS) {
-        $scope.user = {};
-        function getUser() {
+    $scope.user = {};
+    $scope.rememberMe = false;
+    function getUser() {
+        $scope.rememberMe = AuthService.rememberMe();
+        $scope.rememberMe ? $scope.user.id = AuthService.userName() : $scope.user.id = null;
             if (AuthService.user()) {
 
                 if (AuthService.user().ChangedPassword == 0) {
@@ -69,8 +72,14 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
                     default: $state.go('login');
                 }
             }
-        }
+    }
+    $scope.init = function () {
         getUser();
+    }
+    
+    $scope.remember = function () {
+        $scope.rememberMe = !$scope.rememberMe;
+        }
 
         $scope.openLoading = function () {
 
@@ -140,7 +149,7 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
 
         $scope.login = function () {
             $scope.openLoading();
-            AuthService.login($scope.user).then(
+            AuthService.login($scope.user, $scope.rememberMe).then(
                function (response) {
                    $scope.user.password = null;
                    console.log("SUCCESS")

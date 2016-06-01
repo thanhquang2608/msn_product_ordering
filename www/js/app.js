@@ -10,7 +10,8 @@ var app = angular.module('OrderApp', ['LocalStorageModule', 'ct.ui.router.extras
 app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$httpProvider',
     function ($stateProvider, $stickyStateProvider, $urlRouterProvider, $httpProvider) {
         //$stickyStateProvider.enableDebug(true);
-        //$urlRouterProvider.otherwise("tabs.dealer-list");
+        //$urlRouterProvider.otherwise("tabs.dealer-list");        
+
         $stateProvider
             .state('auth', {
                 url: '/auth',
@@ -61,13 +62,13 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             .state('tabs.dealer-order', {
                 url: '/dealer-order',
                 sticky: true,
+                params: {
+                    'AutoFillData': null
+                },
                 views: {
                     'dealer-order': {
                         templateUrl: 'views/dealer/tabs-dealer-order.html',
-                        controller: 'DealerController',
-                        params: {
-                            'AutoFillData': null
-                        }
+                        controller: 'DealerController'
                     }
                 }
             })
@@ -116,13 +117,13 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             .state('tabs.sale-order', {
                 url: '/sale-order',
                 sticky: true,
+                params: {
+                    'AutoFillData': null
+                },
                 views: {
                     'sale-order': {
                         templateUrl: 'views/sale/tabs-sale-order.html',
-                        controller: 'SaleController',
-                        params: {
-                            'AutoFillData': null
-                        }
+                        controller: 'SaleController'
                     }
                 }
             })
@@ -165,6 +166,9 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             .state('tabs.sale-sup-order', {
                 url: '/sale-sup-order',
                 sticky: true,
+                params: {
+                    'AutoFillData': null
+                },
                 views: {
                     'sale-sup-order': {
                         templateUrl: 'views/sale_sup/tabs-sale-sup-order.html',
@@ -258,6 +262,9 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             .state('tabs.rsm-order', {
                 url: '/rsm-order',
                 sticky: true,
+                params: {
+                    'AutoFillData': null
+                },
                 views: {
                     'rsm-order': {
                         templateUrl: 'views/rsm/tabs-rsm-order.html',
@@ -296,6 +303,9 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
                 templateUrl: 'views/nsm/tabs-nsm-order-detail.html',
                 controller: 'NSMController',
                 params: {
+                    'AutoFillData': null
+                },
+                params: {
                     'OrderId': null
                 }
             })
@@ -333,6 +343,12 @@ app.config(function ($httpProvider) {
 });
 
 app.run(function ($rootScope, $state, AuthService, USER_ROLES, USER_LEVELS) {
+
+    // add translation tables
+    //$translate.translations('en', TranslateService.getLanguagePack('en'));
+    //$translate.translations('vi', TranslateService.getLanguagePack('vi'));
+    //$translate.preferredLanguage(TranslateService.getDefaultLangueKey());
+    //$translate.fallbackLanguage(TranslateService.getDefaultLangueKey());
 
     $rootScope.$state = $state;
 

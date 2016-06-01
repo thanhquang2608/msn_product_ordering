@@ -5,6 +5,7 @@ app.service('DataService', function () {
     var labels = {};
     var listFunction = null;
     var listRole = null;
+    var duplicateData = null;
 
     var dataServiceFactory = {};
 
@@ -63,6 +64,14 @@ app.service('DataService', function () {
         listRole = data;
     }
 
+    var _getDuplicateData = function () {
+        return duplicateData;
+    }
+
+    var _setDuplicateData = function (data) {
+        duplicateData = data;
+    }
+
     dataServiceFactory.getFactories = _getFactories;
     dataServiceFactory.setFactories = _setFactories;
     dataServiceFactory.getLabels = _getLabels;
@@ -75,6 +84,8 @@ app.service('DataService', function () {
     dataServiceFactory.setListFunction = _setListFunction;
     dataServiceFactory.getListRole = _getListRole;
     dataServiceFactory.setListRole = _setListRole;
+    dataServiceFactory.setDuplicateData = _setDuplicateData;
+    dataServiceFactory.getDuplicateData = _getDuplicateData;
 
     return dataServiceFactory;
 });

@@ -49,6 +49,7 @@
                             <option value="2">Đã xử lý</option>
                             <option value="5">Đã hoàn tất</option>
                             <option value="6">Quá hạn</option>
+                            <option value="4">Đã hủy</option>
                         </select>
                     </div>
                     <div class="default-padding col-xs-4">
@@ -102,6 +103,9 @@
                                     </span>
                                     <span class="label-status label-delivered" ng-if="status.EXPIRED == order.Status">
                                         Quá hạn
+                                    </span>
+                                    <span class="label-status label-delivered" ng-if="status.CANCEL == order.Status">
+                                        Đã hủy
                                     </span>
                                 </span>
                             </div>

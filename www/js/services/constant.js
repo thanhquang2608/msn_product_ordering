@@ -1,5 +1,8 @@
 ﻿'use strict';
-app.constant('AUTH_EVENTS', {
+app.constant('APP', {
+    VERSION: '1.0.8'
+})
+    .constant('AUTH_EVENTS', {
     authenticated: 'authenticated',
     logout: 'logout',
     notAuthenticated: 'auth-not-authenticated',
@@ -16,7 +19,9 @@ app.constant('AUTH_EVENTS', {
     token_key: 'AncoTokenKey',
     user_key: 'AncoUserKey',
     appversion_key: 'AppVersionKey',
-    last_provinceid_selected: 'LastIdProvinceSelected'
+    last_provinceid_selected: 'LastIdProvinceSelected',
+    username_key: 'AncoUserNameKey',
+    remember_me_key: 'AncoRememberMeKey'
 })
 
 .constant('USER_ROLES', {
@@ -241,7 +246,8 @@ app.constant('AUTH_EVENTS', {
     SUCCESS: 2,
     REJECT: 3,
     DELIVERED: 5,
-    EXPIRED: 6
+    EXPIRED: 6,
+    CANCEL: 4
 
 })
 
@@ -253,7 +259,8 @@ app.constant('AUTH_EVENTS', {
 })
 
 .constant('NETWORK', {
-    BASE_URL: 'http://masan.nhaben.com',
+    BASE_URL: 'http://server-masanbak.rhcloud.com',
+    //BASE_URL: 'http://masan.nhaben.com',
     //BASE_URL: 'http://order-anco.rhcloud.com'
     //BASE_URL: 'http://server-masan.rhcloud.com'
 })

@@ -4,17 +4,24 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
     var LOCAL_TOKEN_KEY = STORAGE_KEYS.token_key;
     var LOCAL_USER_KEY = STORAGE_KEYS.user_key;
     var APP_VERSION_KEY = STORAGE_KEYS.appversion_dealers;
+    var LOCAL_USERNAME_KEY = STORAGE_KEYS.username_key;
+    var LOCAL_REMEMBER_ME_KEY = STORAGE_KEYS.remember_me_key;
 
     var isAuthenticated = false;
     var role = '';
     var authToken;
     var user;
     var appVersion = '';
+    var username = undefined;
+    var remember = true;
 
     function loadUserCredentials() {
         var token = $localstorage.get(LOCAL_TOKEN_KEY);
         var appVersion = $localstorage.get(APP_VERSION_KEY);
         var retrievedUser = $localstorage.get(LOCAL_USER_KEY);
+        username = $localstorage.get(LOCAL_USERNAME_KEY);
+        remember = $localstorage.getObject(LOCAL_REMEMBER_ME_KEY);
+
         //console.log(retrievedUser);
         if (token && retrievedUser) {
             useCredentials(token);
@@ -23,11 +30,19 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
 
     }
 
-    function storeUserCredentials(u, token) {
+    function storeUserCredentials(u, token, username, rememberme) {
         $localstorage.set(LOCAL_TOKEN_KEY, token);
         $localstorage.set(LOCAL_USER_KEY, JSON.stringify(u));
+        $localstorage.setObject(LOCAL_REMEMBER_ME_KEY, rememberme);
+
+        if (rememberme)
+            $localstorage.set(LOCAL_USERNAME_KEY, username);
+        else
+            $localstorage.deleteObject(LOCAL_USERNAME_KEY);
+        
         useCredentials(token);
         user = u;
+        remember = rememberme;
         $rootScope.$broadcast(AUTH_EVENTS.authenticated);
     }
 
@@ -56,13 +71,12 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
         $localstorage.deleteObject(LOCAL_USER_KEY);
     }
 
-    var login = function (userdata) {
+    var login = function (userdata, rememberme) {
         //console.log("login");
         return $q(function (resolve, reject) {
             var id = userdata.id;
             var pass = userdata.password;
-
-
+            console.log(rememberme);
             var param = {
                 username: id,
                 password: pass
@@ -78,7 +92,7 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
                 var user = response.data.user;
                 var token = response.data.token;
 
-                storeUserCredentials(user, token);
+                storeUserCredentials(user, token, id, rememberme);
                 resolve('Login success.');
             }, function errorCallback(response) {              
                 //if (response.status != 0 && response.status != 408) {
@@ -151,7 +165,15 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
         isAuthenticated: function () { return isAuthenticated; },
         user: function () { return user; },
         changePassword: changePassword,
-        updateUser: updateUser
+        updateUser: updateUser,
+        userName: function () {
+            username = $localstorage.get(LOCAL_USERNAME_KEY);
+            return username;
+        },
+        rememberMe: function () {
+            remember = $localstorage.getObject(LOCAL_REMEMBER_ME_KEY);
+            return remember;
+        }
     };
 })
 

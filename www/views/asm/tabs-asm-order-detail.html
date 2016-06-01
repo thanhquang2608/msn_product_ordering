@@ -54,6 +54,9 @@
                         <span class=" label-delivered" ng-if="status.EXPIRED == order.Status">
                             <strong>Quá hạn</strong>
                         </span>
+                        <span class=" label-delivered" ng-if="status.CANCEL == order.Status">
+                            <strong>Đã hủy</strong>
+                        </span>
                     </div>
                 </div>
                 <div class="row">
@@ -109,8 +112,8 @@
     </ul>
     <div class="panel-default">
         <div class="text-center">
-            <button class="btn btn-danger btn-lg" ng-if="order.Status == 1" ng-click="cancelOrder(order)">Hủy</button>
-            <!--<button class="btn btn-primary btn-lg" ng-click="duplicateOrder(order)">Sao chép</button>-->
+            <button class="btn btn-danger btn-lg" style="margin-right: 20px" ng-if="order.Status == 1" ng-click="cancelOrder(order)">Hủy</button>
+            <button class="btn btn-primary btn-lg" ng-click="duplicateOrder(order)">Sao chép</button>
         </div>
     </div>
 </div>

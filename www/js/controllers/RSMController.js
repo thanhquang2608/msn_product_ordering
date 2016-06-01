@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-app.controller('RSMController', function ($scope, $rootScope, $timeout, $stateParams, $state, $modal, $log, $interval,
+app.controller('RSMController', function ($scope, $rootScope, $timeout, $stateParams, $state, $modal, $log, $interval, $q, $stickyState,
     AuthService, CommonService, DataService,
-    ORDER_STATUS, PRODUCT_LINE_ID, TIMER, ROLE_FUNCTIONS, USER_ROLES, USER_LEVELS, ROLE_LEVEL_2_NAME) {
+    ORDER_STATUS, PRODUCT_LINE_ID, TIMER, ROLE_FUNCTIONS, USER_ROLES, USER_LEVELS, ROLE_LEVEL_2_NAME, APP) {
 
     /////////// COMMON
     $scope.days = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -20,7 +20,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
             s = n < 0 ? "-" : "",
             i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
             j = (j = i.length) > 3 ? j % 3 : 0;
-        
+
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + (parseFloat(Math.abs(n - i).toFixed(c)) ? (parseFloat(Math.abs(n - i).toFixed(c))).toString().slice(2) : "0") : "");
     };
 
@@ -93,16 +93,19 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
 
     $scope.openLoading = function () {
 
-        $scope.modal = $modal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'loading.html',
-            size: 'sm'
-        });
+        if ($scope.modal == null) {
+            $scope.modal = $modal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'loading.html',
+                size: 'sm'
+            });
+        }
 
         $scope.modal.result.then(function (from) {
-
+            $scope.modal = null;
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
+            $scope.modal = null;
             //alert('Modal dismissed at: ' + new Date());
         });
     };
@@ -126,7 +129,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                     dealerId = $scope.selected.Dealer.DealerId;
                 var provinceId = null;
                 if ($scope.selected.Province != null)
-                    provinceId = $scope.selected.Province .ProvinceId;
+                    provinceId = $scope.selected.Province.ProvinceId;
 
                 $state.go('home.rsm', {
                     DealerId: dealerId,
@@ -136,7 +139,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         }
         else {
             console.log('done');
-            if ($scope.functions.indexOf($scope.roleFunction.SALE_SUP.LIST_ORDER) > -1) {
+            if ($scope.functions.indexOf($scope.roleFunction.RSM.LIST_ORDER) > -1) {
                 $scope.lock = true;
                 $scope.filter.Status = 0;
                 $scope.filter.Year = y;
@@ -197,13 +200,13 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                 if ($scope.selected.Dealer != null)
                     dealerId = $scope.selected.Dealer.DealerId;
                 if ($scope.selected.Province != null)
-                    data.ProvinceId = $scope.selected.Province .ProvinceId;
+                    data.ProvinceId = $scope.selected.Province.ProvinceId;
 
                 $state.go('home.rsm', {
                     DealerId: dealerId,
                     Data: data
                 }, { reload: true });
-            }           
+            }
         } else {
             console.log(statusId);
             $scope.filter.Status = statusId;
@@ -289,7 +292,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
             statusid = null;
         loadOrder($scope.selected.Dealer.DealerId, statusid, parseInt($scope.filter.Year), parseInt($scope.filter.Month));
     }
-    
+
     function loadOrder(dealerId, status, year, month) {
         // show progress
         $scope.openProgress();
@@ -348,56 +351,56 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
 
     function autoUpdate() {
         //if ($state.indexOf('home.asm') > -1) {
-            var statusid = parseInt($scope.filter.Status);
-            if ($scope.filter.Status == ORDER_STATUS.ALL)
-                statusid = null;
-            var dealerId = $scope.selected.Dealer.DealerId;
-            var year = parseInt($scope.filter.Year);
-            var month = parseInt($scope.filter.Month);
+        var statusid = parseInt($scope.filter.Status);
+        if ($scope.filter.Status == ORDER_STATUS.ALL)
+            statusid = null;
+        var dealerId = $scope.selected.Dealer.DealerId;
+        var year = parseInt($scope.filter.Year);
+        var month = parseInt($scope.filter.Month);
 
-            var params = "dealerid=" + dealerId;
-            params += "&roleid=" + $scope.currentRole + "&level=" + $scope.currentLevel;
-            if (statusid) {
-                params += ("&status=" + statusid);
-            }
-            if (month) {
-                params += ("&year=" + year + "&month=" + month);
-            }
-            else if (year) {
-                params += ("&year=" + year);
-            }
-            if ($scope.keyword) {
-                params += "&search=" + $scope.keyword;
-            }
+        var params = "dealerid=" + dealerId;
+        params += "&roleid=" + $scope.currentRole + "&level=" + $scope.currentLevel;
+        if (statusid) {
+            params += ("&status=" + statusid);
+        }
+        if (month) {
+            params += ("&year=" + year + "&month=" + month);
+        }
+        else if (year) {
+            params += ("&year=" + year);
+        }
+        if ($scope.keyword) {
+            params += "&search=" + $scope.keyword;
+        }
 
-            if ($scope.selected.Province) {
-                params += '&provinceid=' + $scope.selected.Province.ProvinceId;
-            }
-            console.log(params);
-            CommonService.getListOrderBySale(params).then(function (data) {
-                $scope.orders = data;
-                //console.log(data);
-                //console.log(table);
-                //if (table != undefined) {
-                //    table.clear();
-                //    table.destroy();
-                //}
+        if ($scope.selected.Province) {
+            params += '&provinceid=' + $scope.selected.Province.ProvinceId;
+        }
+        console.log(params);
+        CommonService.getListOrderBySale(params).then(function (data) {
+            $scope.orders = data;
+            //console.log(data);
+            //console.log(table);
+            //if (table != undefined) {
+            //    table.clear();
+            //    table.destroy();
+            //}
 
-                //$timeout(function () {
-                //    $scope.orders = data;
-                //    $scope.$apply();
-                //    $timeout(function () {
-                //        table = dataTablePaging($('.table-paging'));
-                //    }, 0, false);
-                //}, 0, false);
+            //$timeout(function () {
+            //    $scope.orders = data;
+            //    $scope.$apply();
+            //    $timeout(function () {
+            //        table = dataTablePaging($('.table-paging'));
+            //    }, 0, false);
+            //}, 0, false);
 
-            }, function (err) {
-                console.log(err);
-            });
+        }, function (err) {
+            console.log(err);
+        });
         //}
     }
 
-    $scope.backFromOrderToSaleHome = function() {
+    $scope.backFromOrderToSaleHome = function () {
         //$state.go('home.asm', {
         //    DealerId: $scope.dealer == null? null : $scope.dealer.DealerId,
         //    Data: { ProvinceId: DataService.getProvinceForSaleSup() == null ? null : DataService.getProvinceForSaleSup().ProvinceId }
@@ -421,8 +424,14 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         CommonService.getDealerBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel, $scope.selected.Province.ProvinceId).then(function (data) {
             console.log(data);
             $scope.dealers = data;
-            $scope.selected.Dealer = $scope.dealers[0];
-            $scope.reloadOrder($scope.selected.Dealer);
+            $scope.dealers.unshift({
+                DealerId: 0,
+                DealerName: 'Tất Cả'
+            });
+            if ($scope.dealers) {
+                $scope.selected.Dealer = $scope.dealers[0];
+                $scope.reloadOrder($scope.selected.Dealer);
+            }
         }, function (err) {
             $rootScope.processRequestError(err);
         });
@@ -430,6 +439,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
 
     var myScroll = null;
     function initHomeData() {
+        $scope.refreshFlag = false;
         if (myScroll == null)
             myScroll = new iScroll('wrapper');
         CommonService.getProvincesBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel).then(function (data) {
@@ -451,6 +461,10 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                 CommonService.getDealerBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel, $scope.selected.Province.ProvinceId).then(function (data) {
                     console.log(data);
                     $scope.dealers = data;
+                    $scope.dealers.unshift({
+                        DealerId: 0,
+                        DealerName: 'Tất Cả'
+                    });
                     console.log($stateParams);
                     console.log(parseInt($stateParams.DealerId));
                     if ($stateParams.DealerId != null) {
@@ -475,11 +489,13 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                     $scope.autoUpdate = $interval(autoUpdate, TIMER.AUTO_UPDATE);
                 }, function (err) {
                     $scope.autoUpdate = $interval(autoUpdate, TIMER.AUTO_UPDATE);
+                    $scope.refreshFlag = true;
                     $rootScope.processRequestError(err);
                 });
 
             }
         }, function (err) {
+            $scope.refreshFlag = true;
             $rootScope.processRequestError(err);
         })
     }
@@ -535,7 +551,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         //    $rootScope.processRequestError(err);
         //    $scope.autoUpdate = $interval(autoUpdate, TIMER.AUTO_UPDATE);
         //});
-       
+
     }
 
     $scope.$on('$destroy', function () {
@@ -550,7 +566,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         //    $scope.filter.Status = $stateParams.Data.StatusId;
         //}
         //else
-            loadOrder($scope.selected.Dealer.DealerId, null, $scope.filter.Year, $scope.filter.Month);
+        loadOrder($scope.selected.Dealer.DealerId, null, $scope.filter.Year, $scope.filter.Month);
 
         //CommonService.getRecommendFactory($scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel).then(function (data) {
         //    console.log(data);
@@ -601,26 +617,26 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         var modalConfirm = openConfirmReason();
         modalConfirm.result.then(function (result) {
             //if (result) {
-                $scope.openProgress();
-                document.body.style.cursor = 'wait';
-                CommonService.removeOrder(order.OrderId, $scope.currentRole, $scope.currentLevel, result).then(function (data) {
-                    var index = $scope.orders.indexOf(order);
-                    if (index > -1) {
-                        $scope.orders.splice(index, 1);
-                        $scope.modalProgress.dismiss('close');
-                        document.body.style.cursor = 'auto';
-                        $scope.filter();
-                    }
-                    else {
-                        $scope.modalProgress.dismiss('close');
-                        document.body.style.cursor = 'auto';
-                    }
-                }, function (err) {
+            $scope.openProgress();
+            document.body.style.cursor = 'wait';
+            CommonService.removeOrder(order.OrderId, $scope.currentRole, $scope.currentLevel, result).then(function (data) {
+                var index = $scope.orders.indexOf(order);
+                if (index > -1) {
+                    $scope.orders.splice(index, 1);
                     $scope.modalProgress.dismiss('close');
                     document.body.style.cursor = 'auto';
-                    console.log(err);
-                    $rootScope.processRequestError(err);
-                });
+                    $scope.filter();
+                }
+                else {
+                    $scope.modalProgress.dismiss('close');
+                    document.body.style.cursor = 'auto';
+                }
+            }, function (err) {
+                $scope.modalProgress.dismiss('close');
+                document.body.style.cursor = 'auto';
+                console.log(err);
+                $rootScope.processRequestError(err);
+            });
             //}
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
@@ -629,8 +645,8 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
 
     $scope.orderPage = function () {
         DataService.setDealerForSale($scope.selected.Dealer);
-        DataService.setProvinceForSaleSup($scope.selected.Province );
-        $state.go('home.rsm-order', {DealerId: $scope.selected.Dealer.DealerId, ProvinceId: $scope.selected.Province .ProvinceId }, { reload: true });
+        DataService.setProvinceForSaleSup($scope.selected.Province);
+        $state.go('home.rsm-order', { DealerId: $scope.selected.Dealer.DealerId, ProvinceId: $scope.selected.Province.ProvinceId }, { reload: true });
     }
 
     $scope.orderDetail = function (orderId) {
@@ -652,6 +668,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     $scope.total.Quantity = 0;
     $scope.total.Price = 0;
     $scope.refreshFlag = false;
+    var duplicateData = null;
 
     $scope.selectDeliveryDate = function () {
         var date = new Date();
@@ -686,7 +703,6 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         $scope.clearData();
         if (DataService.getLabels()) {
             CommonService.getLabels($scope.selected.Dealer.AC_PC, $scope.currentRole, $scope.currentLevel).then(function (data) {
-
                 console.log(data);
                 $scope.labels = [];
                 CommonService.getRecommendLabels($scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel, $scope.selected.Factory.FactoryId).then(function (data2) {
@@ -702,7 +718,6 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                     for (var idx in $scope.labels) {
                         $scope.models[$scope.labels[idx].BrandName] = false;
                         //console.log(data[idx]);
-
                         for (var item in $scope.labels) {
                             modelsBack[$scope.labels[item].BrandName] = false;
                             modelsData[$scope.labels[item].BrandName] = null;
@@ -710,29 +725,55 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                     }
 
                     DataService.setLabels($scope.labels);
-
-                    if ($scope.labels.length == 1) {
-                        //$scope.confirmLabel = true;
-                        //$scope.labelValid = true;
-                        $scope.models[$scope.labels[0].BrandName] = true;
+                    // If duplicate order
+                    if (duplicateData) {
+                        //Detect labels in order list
+                        for (var idx in duplicateData.OrderDetail) {
+                            var orderItem = duplicateData.OrderDetail[idx];
+                            for (var idxLabel in $scope.labels) {
+                                if (!$scope.models[$scope.labels[idxLabel].BrandName]
+                                    && orderItem.BrandId == $scope.labels[idxLabel].BrandId) {
+                                    $scope.models[$scope.labels[idxLabel].BrandName] = true;
+                                    break;
+                                }
+                            }
+                        }
+                        //Auto load product list
                         $scope.confirmLabels();
                     }
-                    else
-                        $scope.confirmLabel = false;
+                        // If new order
+                    else {
+                        if ($scope.labels.length == 1) {
+                            //$scope.confirmLabel = true;
+                            //$scope.labelValid = true;
+                            $scope.models[$scope.labels[0].BrandName] = true;
+                            $scope.confirmLabels();
+                        }
+                        else {
+                            $scope.confirmLabel = false;
+                            // Test duplicate order
+                            //$scope.models[$scope.labels[0].BrandName] = true;
+                            //$scope.models[$scope.labels[1].BrandName] = true;
+                            //$scope.confirmLabels();
+                        }
+                    }
+
                     $scope.modalProgress.dismiss('close');
                     document.body.style.cursor = 'auto';
                 }, function (error) {
+                    $scope.refreshFlag = true;
                     $scope.modalProgress.dismiss('close');
                     document.body.style.cursor = 'auto';
                     $rootScope.processRequestError(error);
                 });
             }, function (error) {
+                $scope.refreshFlag = true;
                 $scope.modalProgress.dismiss('close');
                 document.body.style.cursor = 'auto';
                 console.log(error)
                 $rootScope.processRequestError(error);
             });
-            
+
         }
         else {
             $scope.labels = DataService.getLabels();
@@ -748,9 +789,25 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
             console.log(data);
             $scope.dealers = data;
             if ($scope.dealers) {
-                $scope.selected.Dealer = $scope.dealers[0];
+                //If duplicate -> auto load data
+                if (duplicateData) {
+                    for (var idx in $scope.dealers) {
+                        if ($scope.dealers[idx].DealerId == duplicateData.DealerId)
+                            $scope.selected.Dealer = $scope.dealers[idx];
+                    }
+                    if (!$scope.selected.Dealer)
+                        $scope.selected.Dealer = $scope.dealers[0];
+                }
+                    //Else get first ele
+                else
+                    $scope.selected.Dealer = $scope.dealers[0];
                 $scope.loadFactoriesInOrderPage();
-                $scope.loadRecomendDriver();
+                if (duplicateData) {
+                    $scope.info.recipient = duplicateData.Recipient;
+                    $scope.info.licensePlate = duplicateData.LicensePlate;
+                }
+                else
+                    $scope.loadRecomendDriver();
             }
         }, function (err) {
             $scope.refreshFlag = true;
@@ -782,7 +839,18 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
                     }
                 }
 
-                $scope.selected.Factory = $scope.factories[0];
+                //If duplicate -> auto load data
+                if (duplicateData) {
+                    for (var idx in $scope.factories) {
+                        if ($scope.factories[idx].FactoryId == duplicateData.FactoryId)
+                            $scope.selected.Factory = $scope.factories[idx];
+                    }
+                    if (!$scope.selected.Factory)
+                        $scope.selected.Factory = $scope.factories[0];
+                }
+                    //Else get first ele
+                else
+                    $scope.selected.Factory = $scope.factories[0];
                 $scope.loadLabels();
             }, function (error) {
                 console.log(error);
@@ -797,16 +865,46 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         });
     }
     $scope.init = function () {
+        if (DataService.getDuplicateData()) {
+            duplicateData = DataService.getDuplicateData();
+            DataService.setDuplicateData(null);
+        }
+
         $scope.refreshFlag = false;
         $scope.openProgress();
         document.body.style.cursor = 'auto';
 
-        $scope.selected.Day = 0;
+        // Checking delivery date        
+        var toDay = new Date();
+        // In weekend
+        if (toDay.getDay() == 0)
+            $scope.selected.Day = 1;
+        else if (toDay.getDay() == 6)
+            $scope.selected.Day = 2;
+            // Out of SC service
+        else if (toDay.getHours() >= 18)
+            $scope.selected.Day = 1;
+        else
+            $scope.selected.Day = 0;
         $scope.selectDeliveryDate();
+
+        // Get data
         CommonService.getProvincesBySale(AuthService.user().Id, $scope.currentRole, $scope.currentLevel).then(function (data) {
             $scope.provinces = data;
+            console.log(duplicateData);
             if ($scope.provinces) {
-                $scope.selected.Province = $scope.provinces[0];
+                //If duplicate -> auto load data
+                if (duplicateData) {
+                    for (var idx in $scope.provinces) {
+                        if ($scope.provinces[idx].ProvinceId == duplicateData.ProvinceId)
+                            $scope.selected.Province = $scope.provinces[idx];
+                    }
+                    if (!$scope.selected.Province)
+                        $scope.selected.Province = $scope.provinces[0];
+                }
+                    //Else get first ele
+                else
+                    $scope.selected.Province = $scope.provinces[0];
                 console.log($scope.selected.Province);
                 $scope.loadDealersInOrderPage();
             }
@@ -948,10 +1046,13 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     }
 
     $scope.loadSpecify = function (order) {
-        CommonService.getSpecify(order.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel, $scope.selectedFactory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
+        CommonService.getSpecify(order.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel, $scope.selected.Factory.FactoryId, order.selectedProduct.BrandId).then(function (data) {
             //console.log(data)
-            order.specifies = data.slice();
-
+            //order.specifies = data.slice();
+            order.selectedSpecify = data;
+            order.totalPrice = order.selectedSpecify.UnitPrice * order.numOrder;
+            order.totalQuantity = (order.selectedSpecify.Weight * order.numOrder) / 1000;
+            $scope.calculator();
         }, function (error) {
             console.log(error)
             $rootScope.processRequestError(error);
@@ -1035,50 +1136,112 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         //$scope.addOrder();
         $scope.confirmLabel = false;
     }
+    // Synchronous load label list
+    var retVal = [];
+    function loadBatchLabel(labelList) {
+        retVal = [];
+        var deferred = $q.defer();
+        var urlCalls = [];
+        angular.forEach(labelList, function (value, labelName) {
+            urlCalls.push(CommonService.getProducts($scope.selected.Dealer.DealerId, value.BrandId, $scope.currentRole, $scope.currentLevel, $scope.selected.Factory.FactoryId).then(function (data) {
+                if (modelsData[labelName] == null) {
+                    modelsData[labelName] = data;
+                }
+                retVal = retVal.concat(modelsData[labelName]);
+            }));
+        });
+        // they may, in fact, all be done, but this
+        // executes the callbacks in then, once they are
+        // completely finished.
+        $q.all(urlCalls)
+        .then(
+          function (results) {
+              deferred.resolve(retVal)
+          },
+        function (errors) {
+            deferred.reject(errors);
+        },
+        function (updates) {
+            deferred.update(updates);
+        });
+        return deferred.promise;
+    }
+
     $scope.confirmLabels = function () {
         $scope.labelValid = isLabelValid();
         if (!$scope.labelValid)
             return;
+        $scope.refreshFlag = false;
         $scope.confirmLabel = !$scope.confirmLabel;
         //console.log("Confirm Label");
+
+        //Experimental - auto add selected product list
+        var loadList = {};
 
         if ($scope.confirmLabel) {
             console.log("START");
             console.log(modelsBack);
-
-            // Load Data
-            for (var item in $scope.models) {
-
-                if ($scope.models[item] && !modelsBack[item]) { // Add data
-                    for (var idx in $scope.labels) {
-                        if ($scope.labels[idx].BrandName == item) {
-                            $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
+            // Autofill data when user click duplicate
+            if (duplicateData) {
+                // Each model detect brand need to load
+                for (var item in $scope.models) {
+                    // Brand value change & true
+                    if ($scope.models[item] && !modelsBack[item]) {
+                        for (var idx in $scope.labels) {
+                            if ($scope.labels[idx].BrandName == item) {
+                                //$scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
+                                loadList[item] = $scope.labels[idx];
+                            }
                         }
                     }
                 }
-
-                // Remove data
-                if (!$scope.models[item] && modelsBack[item]) {
-                    console.log('remove');
-                    console.log(modelsData);
-                    for (var idx2 in modelsData[item]) {
-                        var itemIdx = $scope.products.indexOf(modelsData[item][idx2]);
-                        if (itemIdx > -1)
-                            $scope.products.splice(itemIdx, 1);
-                        //console.log();
+                console.log("Load List", loadList);
+                loadBatchLabel(loadList).then(function (data) {
+                    console.log("load batch labels", data);
+                    $scope.products = data;
+                    $scope.duplicateProductList();
+                    console.log(duplicateData);
+                }, function (err) {
+                    $scope.refreshFlag = true;
+                    console.log(err);
+                });
+            }
+            else {
+                // Load Data
+                for (var item in $scope.models) {
+                    // Add data
+                    if ($scope.models[item] && !modelsBack[item]) {
+                        for (var idx in $scope.labels) {
+                            if ($scope.labels[idx].BrandName == item) {
+                                $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
+                                loadList[item] = $scope.labels[idx];
+                            }
+                        }
                     }
 
-                    for (var idx3 in $scope.orderList) {
-                        var itemIdx = modelsData[item].indexOf($scope.orderList[idx3].selectedProduct);
-                        if (itemIdx > -1) {
-                            $scope.orderList[idx3].specifies = [];
-                            $scope.orderList[idx3].selectedProduct = undefined;
-                            $scope.orderList[idx3].selectedSpecify = undefined;
-                            $scope.orderList[idx3].numOrder = 1;
-                            $scope.orderList[idx3].totalQuantity = 0;
-                            $scope.orderList[idx3].totalPrice = 0;
+                    // Remove data
+                    if (!$scope.models[item] && modelsBack[item]) {
+                        console.log('remove');
+                        console.log(modelsData);
+                        for (var idx2 in modelsData[item]) {
+                            var itemIdx = $scope.products.indexOf(modelsData[item][idx2]);
+                            if (itemIdx > -1)
+                                $scope.products.splice(itemIdx, 1);
+                            //console.log();
+                        }
 
-                            $scope.calculator();
+                        for (var idx3 in $scope.orderList) {
+                            var itemIdx = modelsData[item].indexOf($scope.orderList[idx3].selectedProduct);
+                            if (itemIdx > -1) {
+                                $scope.orderList[idx3].specifies = [];
+                                $scope.orderList[idx3].selectedProduct = undefined;
+                                $scope.orderList[idx3].selectedSpecify = undefined;
+                                $scope.orderList[idx3].numOrder = 1;
+                                $scope.orderList[idx3].totalQuantity = 0;
+                                $scope.orderList[idx3].totalPrice = 0;
+
+                                $scope.calculator();
+                            }
                         }
                     }
                 }
@@ -1087,8 +1250,47 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
             console.log(modelsBack);
             console.log("END");
             //console.log($scope.products);
-            //$('.select2').select2();
+            //$('.select2').select2();           
         }
+    }
+    // Duplicate product list from order detail
+    $scope.duplicateProductList = function () {
+        // Each product in duplicate list
+        for (var idx in duplicateData.OrderDetail) {
+            var orgItem = duplicateData.OrderDetail[idx];
+
+            var orderItem = {
+                products: [],
+                specifies: [],
+                selectedProduct: undefined,
+                selectedSpecify: undefined,
+                numOrder: 1,
+                totalQuantity: 0,
+                totalPrice: 0
+            }
+
+            // Copy product info
+            orderItem.numOrder = orgItem.Count;
+
+            // Compare in current product list
+            $scope.products.forEach(function (element, index, array) {
+                if (element.ProductLineId == orgItem.ProductLineId && element.BrandId == orgItem.BrandId
+                    && element.ProductName == orgItem.ProductName) {
+                    //if (element.ProductName == orgItem.ProductName){
+                    orderItem.selectedProduct = element;
+                    return true;
+                }
+                return false;
+            });
+
+            // Get new specify
+            if (orderItem.selectedProduct)
+                $scope.loadSpecify(orderItem);
+
+            // Add to order list
+            $scope.orderList.push(orderItem);
+        }
+        $scope.calculator();
     }
 
     $scope.selectLabel = function (brandName) {
@@ -1406,6 +1608,29 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     $scope.changeLegacy = function () {
         $scope.legacyConfirm = !$scope.legacyConfirm;
     }
+
+    function openViewPreviewItem(idx, order) {
+        var modal = $modal.open({
+            animation: true,
+            size: 'lg',
+            templateUrl: 'order-view-item-preview.html',
+            controller: 'ModalInstanceViewItemPreviewCtrl',
+            resolve: {
+                index: function () {
+                    return idx;
+                },
+                order: function () {
+                    return order;
+                }
+            }
+
+        });
+        return modal;
+    }
+
+    $scope.orderViewPreviewItem = function (idx, order) {
+        openViewPreviewItem(idx, order);
+    }
     /////// END ORDER PREVIEW
 
     /////// BEGIN ORDER DETAIL
@@ -1461,20 +1686,20 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         var modalConfirm = openConfirmReason("Lý do hủy đơn hàng");
         modalConfirm.result.then(function (result) {
             //if (result) {
-                $scope.openProgress();
-                document.body.style.cursor = 'wait';
+            $scope.openProgress();
+            document.body.style.cursor = 'wait';
 
-                CommonService.removeOrder(order.OrderId, $scope.currentRole, $scope.currentLevel, result).then(function (data) {
-                    $scope.modalProgress.dismiss('close');
-                    document.body.style.cursor = 'auto';
-                    $state.go('tabs.rsm-list', { DealerId: $scope.order.DealerId }, { reload: true }).then(function () {                  
-                    });
-                }, function (err) {
-                    $scope.modalProgress.dismiss('close');
-                    document.body.style.cursor = 'auto';
-                    console.log(err);
-                    $rootScope.processRequestError(err);
+            CommonService.removeOrder(order.OrderId, $scope.currentRole, $scope.currentLevel, result).then(function (data) {
+                $scope.modalProgress.dismiss('close');
+                document.body.style.cursor = 'auto';
+                $state.go('tabs.rsm-list', { DealerId: $scope.order.DealerId }, { reload: true }).then(function () {
                 });
+            }, function (err) {
+                $scope.modalProgress.dismiss('close');
+                document.body.style.cursor = 'auto';
+                console.log(err);
+                $rootScope.processRequestError(err);
+            });
             //}
         });
     }
@@ -1500,6 +1725,11 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
     $scope.orderViewItem = function (idx, item) {
         openViewItem(idx, item);
     }
+    $scope.duplicateOrder = function (order) {
+        DataService.setDuplicateData(order);
+        $stickyState.reset('tabs.rsm-order');
+        $state.go('tabs.rsm-order', {}, { reload: true });
+    }
     /////// END ORDER DETAIL
     ////////// BEGIN SALE INFO
     $scope.roleLevel2Name = ROLE_LEVEL_2_NAME;
@@ -1509,5 +1739,6 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         $state.go('login', {}, { reload: true }).then(function () {
         });
     }
+    $scope.appversion = APP.VERSION;
     /////// END SALE INFO
 });

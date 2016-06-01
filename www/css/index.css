@@ -357,7 +357,7 @@ a > i {
 }
 
 .modal-lg {
-    min-width: 85%;
+    width: 90% !important;
 }
 
 .nav-tabs>li>a:hover {
@@ -380,4 +380,29 @@ a > i {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 10px;
     border-radius: 10px;
+}
+
+.no-margin-top {
+    margin-top: 0px;
+}
+
+.filter-height {
+    overflow-y: auto;
+    height: 400px;
+}
+
+@media (min-height: 480px) {
+    .filter-height {
+        height: 280px;
+    }
+}
+
+@media (min-height: 640px) {
+    .filter-height {
+        height: 400px;
+    }
+}
+
+.filter-height .list-group-item:active {
+    background: #ddd;
 }
