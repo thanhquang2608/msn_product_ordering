@@ -1,6 +1,6 @@
 ﻿<div class="clearfix" ng-if="refreshFlag">
     <div class="panel-default text-center">
-        <p class="label-error">Có lỗi xảy ra. Vui lòng <button class="btn btn-primary btn-lg" ng-click="init()">Tải lại</button></p>
+        <p class="label-error">{{'ERROR_OCCURRED' | translate}} <button class="btn btn-primary btn-lg" ng-click="init()">{{'RELOAD' | translate}}</button></p>
     </div>
 </div>
 <div class="panel-default" ng-init="init()">
@@ -9,38 +9,38 @@
         <accordion-group is-open="statusCollapse.flag">
             <accordion-heading>
                 <div>
-                    <strong>Thông tin đơn hàng</strong> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': statusCollapse.flag, 'glyphicon-chevron-right': !statusCollapse.flag}"></i>
+                    <strong>{{'ORDER_INFO' | translate}}</strong> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': statusCollapse.flag, 'glyphicon-chevron-right': !statusCollapse.flag}"></i>
 
                 </div>
             </accordion-heading>
             <table width="100%" class="info">
                 <tr class="row">
-                    <td class="col-xs-4 col-md-4 col-lg-4">Kho</td>
+                    <td class="col-xs-4 col-md-4 col-lg-4">{{'FACTORY' | translate}}</td>
                     <td class="col-xs-8 col-md-8 col-lg-8">
                         <select class="form-control" ng-change="loadLabels()" ng-model="selected.Factory" ng-options="factory as factory.FactoryName for factory in factories"></select>
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-xs-4 col-md-4 col-lg-4">Ngày giao</td>
+                    <td class="col-xs-4 col-md-4 col-lg-4">{{'DELIVERY_DAY' | translate}}</td>
                     <td class="col-xs-8 col-md-8 col-lg-8">
-                        <select class="form-control" ng-model="selected.Day" ng-change="selectDeliveryDate()" ng-options="day as (day + ' ngày') for day in days"></select>
+                        <select class="form-control" ng-model="selected.Day" ng-change="selectDeliveryDate()" ng-options="day as (day + ' ' + ('DAY' | translate)) for day in days"></select>
                         <span><strong> {{deliveryDateView}}</strong></span>
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-xs-4 col-md-4 col-lg-4">Tên người nhận hàng</td>
+                    <td class="col-xs-4 col-md-4 col-lg-4">{{'RECIPIENT' | translate}}</td>
                     <td class="col-xs-8 col-md-8 col-lg-8">
                         <input type="text" class="form-control" ng-model="info.recipient" />
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-xs-4 col-md-4 col-lg-4">Biển số xe</td>
+                    <td class="col-xs-4 col-md-4 col-lg-4">{{'LICENSE_PLATE' | translate}}</td>
                     <td class="col-xs-8 col-md-8 col-lg-8">
                         <input type="text" class="form-control" ng-model="info.licensePlate" />
                     </td>
                 </tr>
                 <tr class="row">
-                    <td class="col-xs-4 col-md-4 col-lg-4">Ghi chú</td>
+                    <td class="col-xs-4 col-md-4 col-lg-4">{{'NOTE' | translate}}</td>
                     <td class="col-xs-8 col-md-8 col-lg-8">
                         <textarea class="form-control" ng-model="info.note"></textarea>
 
@@ -71,7 +71,7 @@
     </accordion>
     <div class="order-info info">
         <div class="panel panel-default">
-            <div style="text-transform: uppercase;" class="panel-heading"><span><strong>Nhãn hiệu</strong></span></div>
+            <div style="text-transform: uppercase;" class="panel-heading"><span><strong>{{'CHOOSE_BRANDS' | translate}}</strong></span></div>
             <div class="panel-body panel-brands" ng-class="{'disable': confirmLabel}">
                 <div class="row" ng-if="labels.length > 1">
                     <div ng-repeat="label in labels" class="label-item col-xs-4">
@@ -82,8 +82,8 @@
                     </div>
                     </div>
                 <div class="row" ng-if="labels.length > 1">
-                    <button ng-if="!confirmLabel" type="button" class="btn btn-primary btn-lg new-order" ng-click="confirmLabels()">Xác nhận</button>
-                    <button ng-if="confirmLabel" type="button" class="btn btn-primary btn-lg new-order" ng-click="confirmLabels()">Chọn lại nhãn hiệu</button>
+                    <button ng-if="!confirmLabel" type="button" class="btn btn-primary btn-lg new-order" ng-click="confirmLabels()">{{'CONFIRM' | translate}}</button>
+                    <button ng-if="confirmLabel" type="button" class="btn btn-primary btn-lg new-order" ng-click="confirmLabels()">{{'RESELECT' | translate}}</button>
                 </div>
                 <div class="row" ng-if="labels.length == 1">
                     <div ng-repeat="label in labels" class="col-md-2">
@@ -95,7 +95,7 @@
         </div>
         <div class="panel-default">
             <div class="text-center">
-                <h4 ng-if="!labelValid" class="label-error">Vui lòng chọn ít nhất 1 nhãn hiệu!</h4>
+                <h4 ng-if="!labelValid" class="label-error">{{'MESSAGE_ONE_BRAND' | translate}}</h4>
             </div>
         </div>
     </div>
@@ -104,9 +104,9 @@
         <div class="panel panel-default">
             <div class="panel-heading panel-body">
                 <div class="row">
-                    <span class="col-xs-8" style="padding-top: 8px"><strong>Danh sách sản phẩm</strong></span>
+                    <span class="col-xs-8" style="padding-top: 8px"><strong>{{'LIST_PRODUCT' | translate}}</strong></span>
                     <div class="col-xs-4 pull-right">
-                        <button class="btn btn-primary btn-lg pull-right" ng-click="orderNewItem()">Thêm  <i class="glyphicon glyphicon-plus"></i></button>
+                        <button class="btn btn-primary btn-lg pull-right" ng-click="orderNewItem()">{{'ADD' | translate}}  <i class="glyphicon glyphicon-plus"></i></button>
                     </div>
                 </div>
             </div>
@@ -119,11 +119,11 @@
                         <div class="text">
                             <span class="title">{{order.selectedProduct.ProductName}} ({{order.selectedProduct.ProductLineName}})</span><br />
                             <span class="type">{{order.selectedSpecify.Specification}} {{order.selectedSpecify.Weight}}kg</span> <br />
-                            <span class="type">Số lượng: {{order.numOrder}}</span>
+                            <span class="type">{{'QUANTITY' | translate}}: {{order.numOrder}}</span>
                         </div>
                     </div>
                     <div class="right">
-                        <div class="price">{{format(order.totalPrice, 0)}} vnđ</div>
+                        <div class="price">{{format(order.totalPrice, 0)}} {{'VND_ITEM' | translate}}</div>
                         <div class="button">
                             <i class="glyphicon glyphicon-chevron-right"></i>
                         </div>
@@ -136,10 +136,10 @@
                     <div class="left">
                         <div class="index"></div>
                         <div class="text">
-                            <span class="title">Tổng cộng</span><br />
-                            <span class="type">Số lượng: {{format(total.NumOrder, 0)}}</span><br />
-                            <span class="type">Số tấn: {{format(total.Quantity, 3)}} tấn</span><br />
-                            <span class="type">Thành tiền: {{format(total.Price, 0)}} vnđ</span>
+                            <span class="title">{{'TOTAL' | translate}}</span><br />
+                            <span class="type">{{'QUANTITY' | translate}}: {{format(total.NumOrder, 0)}}</span><br />
+                            <span class="type">{{'WEIGHT' | translate}}: {{format(total.Quantity, 3)}} {{'TON' | translate}}</span><br />
+                            <span class="type">{{'CASH' | translate}}: {{format(total.Price, 0)}} {{'VND' | translate}}</span>
                         </div>
                     </div>
                 </div>
@@ -147,13 +147,13 @@
         </ul>
         <div class="panel-default">
             <div class="text-center">
-                <h4 ng-if="sumFlag" class="label-error">Đơn hàng không được quá 12 sản phẩm!</h4>
+                <h4 ng-if="sumFlag" class="label-error">{{'MESSAGE_LIMIT_ORDER' | translate}}</h4>
             </div>
         </div>
 
         <div class="panel-default">
             <div class="text-center">
-                <button class="btn btn-primary btn-lg" ng-disabled="!orderList || orderList.length == 0" ng-click="previewOrder()">Hoàn tất →</button>
+                <button class="btn btn-primary btn-lg" ng-disabled="!orderList || orderList.length == 0" ng-click="previewOrder()">{{'FINISH' | translate}} →</button>
             </div>
         </div>        
     </div>

@@ -41,7 +41,7 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
     getUser();
 })
 .controller('LoginController', function ($scope, $rootScope, $state, $modal, $log,
-    AuthService, USER_ROLES, USER_LEVELS) {
+    AuthService, USER_ROLES, USER_LEVELS, $localstorage) {
     $scope.user = {};
     $scope.rememberMe = false;
     function getUser() {
@@ -149,7 +149,7 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
 
         $scope.login = function () {
             $scope.openLoading();
-            AuthService.login($scope.user, $scope.rememberMe).then(
+            AuthService.login($scope.user, true).then(
                function (response) {
                    $scope.user.password = null;
                    console.log("SUCCESS")
@@ -234,6 +234,71 @@ app.controller('AuthController', function ($scope, $state, AuthService, USER_ROL
                    $rootScope.processRequestError(err);
                    console.log("error")
                });
+        }
+
+        var errorHandler = function (fileName, e) {
+            var msg = '';
+
+            switch (e.code) {
+                case FileError.QUOTA_EXCEEDED_ERR:
+                    msg = 'Storage quota exceeded';
+                    break;
+                case FileError.NOT_FOUND_ERR:
+                    msg = 'File not found';
+                    break;
+                case FileError.SECURITY_ERR:
+                    msg = 'Security error';
+                    break;
+                case FileError.INVALID_MODIFICATION_ERR:
+                    msg = 'Invalid modification';
+                    break;
+                case FileError.INVALID_STATE_ERR:
+                    msg = 'Invalid state';
+                    break;
+                default:
+                    msg = 'Unknown error';
+                    break;
+            };
+
+            alert('Error (' + fileName + '): ' + msg);
+        }
+
+        function writeToFile(fileName, data) {
+            data = JSON.stringify(data, null, '\t');
+            //alert(cordova.file.dataDirectory);
+            window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
+                directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
+                    fileEntry.createWriter(function (fileWriter) {
+                        fileWriter.onwriteend = function (e) {
+                            // for real-world usage, you might consider passing a success callback
+                            alert('Write of file "' + fileName + '"" completed.');
+                        };
+
+                        fileWriter.onerror = function (e) {
+                            // you could hook this up with our global error handler, or pass in an error callback
+                            console.log('Write failed: ' + e.toString());
+                        };
+
+                        var blob = new Blob([data], { type: 'text/plain' });
+                        fileWriter.write(blob);
+                    }, errorHandler.bind(null, fileName));
+                }, errorHandler.bind(null, fileName));
+            }, errorHandler.bind(null, fileName));
+        }
+
+        $scope.writeFile = function () {
+            $localstorage.writeObjectInFile('name', 'trangle')
+            //writeToFile('example.json', { foo: 'bar' });
+        }
+        $scope.readFile = function () {
+            $localstorage.getObjectInFile('name').then(function (data) {
+                alert('readfile ' + data);
+            });
+            //var pathToFile = cordova.file.dataDirectory + 'example.json';
+            //alert(pathToFile);
+            //$.get(pathToFile, function (data) {
+            //    alert(JSON.stringify(data));
+            //});
         }
 
     });

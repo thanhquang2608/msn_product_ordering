@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $stateParams, $state, $modal, $log, $interval, $q, $stickyState,
+app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $stateParams, $state, $modal, $log, $interval, $q, $stickyState, $translate,
     AuthService, CommonService, DataService,
     ORDER_STATUS, PRODUCT_LINE_ID, TIMER, ROLE_FUNCTIONS, USER_ROLES, USER_LEVELS, ROLE_LEVEL_2_NAME, APP) {
 
@@ -1167,6 +1167,18 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
         return deferred.promise;
     }
 
+    function getCategories(products) {
+        var catList = [];
+        angular.forEach(products, function (value, key) {
+            if (catList.indexOf(value.ProductLineName) === -1) {
+                catList.push(value.ProductLineName);
+            }
+        });
+        console.log('Categories', catList);
+        return catList;
+    }
+
+    var curLoadList = {};
     $scope.confirmLabels = function () {
         $scope.labelValid = isLabelValid();
         if (!$scope.labelValid)
@@ -1197,10 +1209,10 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                 }
                 console.log("Load List", loadList);
                 loadBatchLabel(loadList).then(function (data) {
-                    console.log("load batch labels", data);
+                    //console.log("load batch labels", data);
                     $scope.products = data;
                     $scope.duplicateProductList();
-                    console.log(duplicateData);
+                    $scope.catList = getCategories($scope.products);
                 }, function (err) {
                     $scope.refreshFlag = true;
                     console.log(err);
@@ -1213,7 +1225,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                     if ($scope.models[item] && !modelsBack[item]) {
                         for (var idx in $scope.labels) {
                             if ($scope.labels[idx].BrandName == item) {
-                                $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
+                                //$scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
                                 loadList[item] = $scope.labels[idx];
                             }
                         }
@@ -1245,6 +1257,14 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                         }
                     }
                 }
+
+                loadBatchLabel(loadList).then(function (data) {
+                    $scope.products = data;
+                    $scope.catList = getCategories($scope.products);
+                }, function (err) {
+                    $scope.refreshFlag = true;
+                    console.log(err);
+                });
             }
             modelsBack = clone($scope.models);
             console.log(modelsBack);
@@ -1252,6 +1272,8 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
             //console.log($scope.products);
             //$('.select2').select2();           
         }
+
+        curLoadList = loadList;
     }
     // Duplicate product list from order detail
     $scope.duplicateProductList = function () {
@@ -1370,6 +1392,9 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                 },
                 id: function () {
                     return $scope.selected.Dealer.DealerId;
+                },
+                categories: function () {
+                    return $scope.catList;
                 }
             }
 
@@ -1415,6 +1440,9 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                 },
                 id: function () {
                     return $scope.selected.Dealer.DealerId;
+                },
+                categories: function () {
+                    return $scope.catList;
                 }
             }
 
@@ -1438,6 +1466,42 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
             }
         });
     }
+
+    function _reloadSpecify() {
+        $scope.orderList.forEach(function (orderItem) {
+            CommonService.getSpecify(orderItem.selectedProduct.ProductName, $scope.selected.Dealer.DealerId, $scope.currentRole, $scope.currentLevel,
+                $scope.selected.Factory.FactoryId, orderItem.selectedProduct.BrandId).then(function (data) {
+                    orderItem.selectedSpecify = data;
+                }, function (error) {
+                    console.log(error);
+                });
+        });
+    }
+
+    function _convertLanguage(orgList, newList) {
+        for (var idx1 in orgList) {
+            for (var idx2 in newList) {
+                if (orgList[idx1].ProductName === newList[idx2].ProductName) {
+                    orgList[idx1].ProductLineName = newList[idx2].ProductLineName;
+                }
+            }
+        }
+    }
+
+    $scope.$on('language-changed', function () {
+        _reloadSpecify();
+        modelsData = {};
+        modelsBack = {};
+        //$scope.openProgress();
+        loadBatchLabel(curLoadList).then(function (res) {
+            _convertLanguage($scope.products, res);
+            $scope.catList = getCategories($scope.products);
+            //$scope.modalProgress.dismiss('close');
+        }, function (err) {
+            console.log(err);
+            //$scope.modalProgress.dismiss('close');
+        });
+    });
     /////////// END SALE ORDER
 
     /////// BEGIN ORDER PREVIEW
@@ -1445,6 +1509,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
     $scope.receiptQuantities = {};
     $scope.receiptPrices = {};
     $scope.receiptView = {};
+    $scope.receiptNumOrder = {};
 
     $scope.quantities = {};
     $scope.totalQuantityInMonth = 0;
@@ -1513,6 +1578,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                 $scope.receiptPrices[$scope.productLines[idx].ProductLineId] = 0;
                 $scope.quantities[$scope.productLines[idx].ProductLineId] = 0;
                 $scope.prices[$scope.productLines[idx].ProductLineId] = 0;
+                $scope.receiptNumOrder[$scope.productLines[idx].ProductLineId] = 0;
             }
 
             $scope.QuantityLastMonth = 0;
@@ -1525,6 +1591,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
                 $scope.totalQuantityInMonth += $scope.orderList[idx].totalQuantity;
                 $scope.receiptPrices[$scope.orderList[idx].selectedProduct.ProductLineId] += $scope.orderList[idx].totalPrice;
                 $scope.totalPriceInMonth += $scope.orderList[idx].totalPrice;
+                $scope.receiptNumOrder[$scope.orderList[idx].selectedProduct.ProductLineId] += $scope.orderList[idx].numOrder;
             }
 
             for (var idx in $scope.productLines) {
@@ -1683,7 +1750,7 @@ app.controller('SaleSupController', function ($scope, $rootScope, $timeout, $sta
     }
 
     $scope.cancelOrder = function (order) {
-        var modalConfirm = openConfirmReason("Lý do hủy đơn hàng");
+        var modalConfirm = openConfirmReason($translate.instant('TITLE_REASON'));
         modalConfirm.result.then(function (result) {
             //if (result) {
             $scope.openProgress();

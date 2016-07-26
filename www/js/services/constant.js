@@ -21,7 +21,8 @@ app.constant('APP', {
     appversion_key: 'AppVersionKey',
     last_provinceid_selected: 'LastIdProvinceSelected',
     username_key: 'AncoUserNameKey',
-    remember_me_key: 'AncoRememberMeKey'
+    remember_me_key: 'AncoRememberMeKey',
+    language_key: 'AncoLanguageKey'
 })
 
 .constant('USER_ROLES', {
