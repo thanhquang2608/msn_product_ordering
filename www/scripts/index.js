@@ -26,7 +26,7 @@
         console.log('device ready');
         curLanguage = localStorage.getItem('AncoLanguageKey') || 'vi';
         $.get('http://server-masanbak.rhcloud.com/app/version/latest', function (data) {
-            if (currentVersion.localeCompare(data.AppVersionCode) === -1 || data.ForceUpdate === 1) {            
+            if (currentVersion.localeCompare(data.AppVersionCode) === -1 && data.ForceUpdate === 1) {            
                 var $content = $('<div class="login-background text-center" style="min-width: 100%; min-height: 100%;position: absolute;top: 0;left: 0;bottom: 0;vertical-align: middle;">' +
                     //'<img src="masan-nutri-transparent.png" style="max-width: 100%; max-height: 100%;position: absolute;top: 0;left: 0;" />' +
                     '<form class="form-signin" id="loginForm" style="padding-top: 100px;display: inline-block; width: 85%" ng-submit="login(user)">' +
