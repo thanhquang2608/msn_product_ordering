@@ -442,20 +442,6 @@ a > i {
     font-size:16px; 
     font-weight: bold;
     margin-top: 5px;
-
-    border: 1px #ddd solid;
-    vertical-align: middle;
-    border-bottom: 0px;
-}
-
-.nav-filter li a {
-    line-height: 24px;
-    border-left: 0px;
-}
-
-.nav-filter .list-group-item:first-child {
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
 }
 
 .no-border-top {

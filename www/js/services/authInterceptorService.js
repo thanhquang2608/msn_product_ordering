@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localstorage', 'STORAGE_KEYS', 'TranslateService', function ($q, $injector, $location, $localstorage, STORAGE_KEYS, TranslateService) {
+app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localstorage', 'STORAGE_KEYS', 'TranslateService' , 'APP', function ($q, $injector, $location, $localstorage, STORAGE_KEYS, TranslateService, APP) {
 
     var authInterceptorServiceFactory = {};
 
@@ -20,6 +20,7 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localst
             config.headers.Authorization = 'Bearer ' + token;
         }
         config.headers['Accept-Language'] = TranslateService.getDefaultLanguageKey();
+        config.headers['Version'] = APP.VERSION;
 
         return config;
     }

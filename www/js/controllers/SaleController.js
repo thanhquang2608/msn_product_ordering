@@ -877,13 +877,18 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         // Checking delivery date        
         var toDay = new Date();
         // In weekend
-        if (toDay.getDay() == 0)
-            $scope.selected.Day = 1;
-        else if (toDay.getDay() == 6)
-            $scope.selected.Day = 2;
-            // Out of SC service
-        else if (toDay.getHours() >= 18)
-            $scope.selected.Day = 1;
+        // if (toDay.getDay() == 0)
+        //     $scope.selected.Day = 1;
+        // else if (toDay.getDay() == 6)
+        //     $scope.selected.Day = 2;
+        // else
+
+        // Out of SC service
+        if (toDay.getHours() >= 16)
+            if (toDay.getDay() == 6)
+                $scope.selected.Day = 2;
+            else
+                $scope.selected.Day = 1;
         else
             $scope.selected.Day = 0;
         $scope.selectDeliveryDate();

@@ -260,10 +260,8 @@ app.constant('APP', {
 })
 
 .constant('NETWORK', {
-    BASE_URL: 'http://server-masanbak.rhcloud.com',
-    //BASE_URL: 'http://masan.nhaben.com',
-    //BASE_URL: 'http://order-anco.rhcloud.com'
-    //BASE_URL: 'http://server-masan.rhcloud.com'
+    //BASE_URL: 'http://server-masanbak.rhcloud.com',
+    BASE_URL: 'http://server-masan.rhcloud.com'
 })
 
 .constant('TIMER', {
