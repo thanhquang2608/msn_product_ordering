@@ -21,7 +21,7 @@ app.service('CommonService', function ($http, NETWORK, TIMER, AuthService) {
         var params = "brandid=" + labelId + "&roleid=" + roleId + "&level=" + level + "&factoryid=" + factoryId;
         if (dealerId)
             params += '&dealerid=' + dealerId;
-        return $http.get(serviceBase + "/product/list?" + params, { timeout: TIMER.TIME_OUT, cache: false }).then(function (response) {
+        return $http.get(serviceBase + "/product/list?" + params, { timeout: TIMER.TIME_OUT }).then(function (response) {
             return response.data;
         });
     }

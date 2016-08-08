@@ -192,11 +192,10 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
         },
 
         getObject: function (key) {
-            var item = window.localStorage.getItem(key);
-            if (item === null || item === undefined || item === "undefined") {
+            if (window.localStorage.getItem(key) === null || window.localStorage.getItem(key) === undefined) {
                 return undefined;
             } else {
-                return JSON.parse(item || '{}');
+                return JSON.parse(window.localStorage.getItem(key) || '{}');
             }
         },
 

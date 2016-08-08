@@ -1,37 +1,26 @@
 ﻿<div class="info" ng-init="initDealerInfo()">
-    <table>
-        <tr>
-            <td>{{'LANGUAGE' | translate}}</td>
-            <td>
-                <select class="form-control" ng-model="curLanguage" ng-change="changeLanguage(curLanguage)">
-                    <option value="vi">{{'VIETNAMESE' | translate}}</option>
-                    <option value="en">{{'ENGLISH' | translate}}</option>
-                 </select>
-            </td>
-        </tr>
-    </table>
     <div class="panel panel-default">
-        <div class="panel-heading"><span><strong>{{'USER_INFO' | translate}}</strong></span></div>
+        <div class="panel-heading"><span><strong>Thông tin người dùng</strong></span></div>
         <!--<h6>{{message}}</h6>-->
         <div class="panel-body">
             <table class="row">
                 <tr>
-                    <td class="col-xs-2">{{ 'FULLNAME' | translate }}</td>
+                    <td class="col-xs-2">Tên</td>
                     <td class=""><strong>{{user.Name}}</strong></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-2">{{ 'EMAIL' | translate }}</td>
+                    <td class="col-xs-2">Email</td>
                     <td class=""> <strong>{{user.Email}}</strong></td>
                 </tr>
                 <tr>
-                    <td class="col-xs-2">{{ 'AC_PC' | translate }}</td>
+                    <td class="col-xs-2">AC_PC</td>
                     <td class="">
                         <strong ng-if="user.AC_PC == 0">AC</strong>
                         <strong ng-if="user.AC_PC == 1">PC</strong>
                     </td>
                 </tr>
                 <tr>
-                    <td class="col-xs-4">{{ 'POSITION' | translate }}</td>
+                    <td class="col-xs-4">Chức vụ</td>
                     <td class=""><strong>{{roleLevel2Name[currentRole][currentLevel]}}</strong></td>
                 </tr>
             </table>
@@ -39,6 +28,99 @@
         </div>
         
     </div>
-    <button class="btn btn-default btn-lg" style="width: 100%" ng-click="logout()"><strong>{{ 'LOGOUT' | translate }}</strong></button>
-    <h5 class="text-center">{{ 'APP_VERSION' | translate }} {{appversion}}</h5>
+    <button class="btn btn-default btn-lg" style="width: 100%" ng-click="logout()"><strong>Đăng xuất</strong></button>
+    <h5 class="text-center">Phiên bản ứng dụng {{appversion}}</h5>
 </div> 
+<!--<div class="container">
+    <a href="" class="btn btn-default openall">open all</a> <a href="" class="btn btn-default closeall">close all</a>
+    <hr>
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                        Collapsible Group Item #1
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    ONe Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                        Collapsible Group Item #2
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Two Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                        Collapsible Group Item #3
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    Three Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.closeall').click(function () {
+
+        $('#collapseOne.panel-collapse.in')
+    .collapse('hide');
+});
+$('.openall').click(function(){
+    $('#collapseOne.panel-collapse:not(".in")')
+    .collapse('show');
+});
+</script>
+
+<div class="catalog-item">
+    <div class="left">
+        <div class="index">1</div>
+        <div class="text">
+            <span class="title">DN_FA_0054</span><br />
+            <span class="type">17:00 03/03/2016</span> <br />
+            <span class="type">Chờ xử lý</span>
+        </div>
+    </div>
+    <div class="right">
+        <div class="price">50,000,000 vnđ</div>
+        <div class="button">
+            <i class="glyphicon glyphicon-chevron-right"></i>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="catalog-item">
+    <div class="left">
+        <div class="index">11</div>
+        <div class="text">
+            <span class="title">{Title}</span><br />
+            <span class="type">{Product_type}</span> <br />
+            <span class="type">{Product_type}</span>
+        </div>
+    </div>
+    <div class="right">
+        <div class="price">{Price}</div>
+        <div class="button">
+            <button class="integrated-button">{PButton}</button>
+        </div>
+    </div>
+</div>-->

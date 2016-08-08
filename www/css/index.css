@@ -46,7 +46,7 @@
 
 .nav li a {
     font-size: smaller;
-    color: rgba(255, 253, 253, 0.6);
+    color: white;
     background-color: cornflowerblue;
     border-radius: 0 0 0 0 !important;
     border-right-color: white !important;
@@ -393,62 +393,16 @@ a > i {
 
 @media (min-height: 480px) {
     .filter-height {
-        height: 230px;
-    }
-
-    .modal-header {
-        padding-top: 7px !important;
-        padding-bottom: 7px !important;
-    }
-
-    .modal-body {
-        padding-top: 7px !important;
-        padding-bottom: 7px !important;
-
-    }
-    .modal-footer {
-        padding-top: 7px !important;
-        padding-bottom: 7px !important;
+        height: 280px;
     }
 }
 
 @media (min-height: 640px) {
     .filter-height {
-        height: 380px;
-    }
-
-    .modal-header {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-    }
-
-    .modal-body {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-
-    }
-    .modal-footer {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
+        height: 400px;
     }
 }
 
 .filter-height .list-group-item:active {
     background: #ddd;
-}
-
-.nav-filter {
-    height: auto; 
-    font-size:16px; 
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-.no-border-top {
-    border-top: none !important;
-}
-
-.receipt-data td, .receipt-data th  {
-    padding-left: 1px !important;
-    padding-right: 1px !important;
 }

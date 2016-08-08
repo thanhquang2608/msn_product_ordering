@@ -107,7 +107,7 @@ app
         $modalInstance.dismiss('cancel');
     };
 })
-.controller('ModalInstanceNewItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, products, roleId, level, selectedFactory, id, $modal, $log, categories) {
+.controller('ModalInstanceNewItemCtrl', function ($scope, $rootScope, $modalInstance, AuthService, CommonService, products, roleId, level, selectedFactory, id, $modal, $log) {
     Number.prototype.formatMoney = function (c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -224,9 +224,6 @@ app
                 resolve: {
                     products: function () {
                         return products;
-                    },
-                    categories: function () {
-                        return categories;
                     }
                 }
             });
@@ -240,7 +237,7 @@ app
     }
 })
 
-.controller('ModalInstanceEditItemCtrl', function ($scope, $rootScope, $modalInstance, $modal, AuthService, CommonService, orderItem, products, roleId, level, index, selectedFactory, id, categories) {
+.controller('ModalInstanceEditItemCtrl', function ($scope, $rootScope, $modalInstance, $modal, AuthService, CommonService, orderItem, products, roleId, level, index, selectedFactory, id) {
     Number.prototype.formatMoney = function (c, d, t) {
         var n = this,
             c = isNaN(c = Math.abs(c)) ? 2 : c,
@@ -332,9 +329,6 @@ app
             resolve: {
                 products: function () {
                     return products;
-                },
-                categories: function () {
-                    return categories;
                 }
             }
         });
@@ -348,37 +342,28 @@ app
     }
 })
 
-.controller('ModalInstanceFilterProductCtrl', function ($scope, $modalInstance, products, categories) {
+.controller('ModalInstanceFilterProductCtrl', function ($scope, $modalInstance, products) {
     $scope.products = products;
     $scope.key = '';
-    $scope.categories = categories;
-    $scope.cat = $scope.categories[0];
+
     $scope.select = function (product) {
         $modalInstance.close(product);
     }
 
-    $scope.setCat = function (item) {
-        $scope.cat = item;
-    }
-
-    $scope.filterCritial = function (keys, category) {
+    $scope.filterCritial = function (keys) {
         return function (item) {
             var orgStr = item.ProductName + ' ' + item.ProductLineName;
             var removeStr = $scope.removeDiacritics(item.ProductName + ' ' + item.ProductLineName);
-            
-            if (category) {
-                var keyList = [];
-                //split key by space
-                if (keys)
-                    keyList = keys.split(' ');
-                keyList.push(category);
-                //console.log(keyList);
+            //split key by space
+            if (keys) {
+                var keyList = keys.split(' ');
+                console.log(keyList);
                 for (var idx in keyList) {
                     //Build regexp by key
                     var reg = new RegExp(keyList[idx], "i");
                     //Key not match
                     if (reg.test(orgStr) || reg.test(removeStr)) {
-                        //console.log(orgStr, keyList[idx]);
+                        console.log(orgStr, keyList[idx]);
                     }
                     else
                         return false;
@@ -491,7 +476,7 @@ app
     }
 })
 
-.controller('DealerController', function ($scope, $state, $stateParams, $timeout, $interval, $rootScope, $modal, $log, $q, $stickyState, $translate,
+.controller('DealerController', function ($scope, $state, $stateParams, $timeout, $interval, $rootScope, $modal, $log, $q, $stickyState,
    DataService, AuthService, CommonService,
     ORDER_STATUS, PRODUCT_LINE_ID, TIMER, ROLE_FUNCTIONS, USER_ROLES, USER_LEVELS, APP) {
     // Common data
@@ -889,7 +874,7 @@ app
     }
 
     $scope.deleteOrder = function (order) {
-        var modalConfirm = openConfirmReason($translate.instant('TITLE_REASON'));
+        var modalConfirm = openConfirmReason("Lý do hủy đơn hàng");
         modalConfirm.result.then(function (result) {
             //if (result) {
             $scope.openProgress();
@@ -1001,9 +986,6 @@ app
                 },
                 id: function () {
                     return AuthService.user().Id;
-                },
-                categories: function () {
-                    return $scope.catList;
                 }
             }
 
@@ -1128,19 +1110,13 @@ app
         // Checking delivery date        
         var toDay = new Date();
         // In weekend
-        // if (toDay.getDay() == 0)
-        //     $scope.selected.Day = 1;
-        // else if (toDay.getDay() == 6)
-        //     $scope.selected.Day = 2;
-            
-        // else 
-
-        // Out of SC service
-        if (toDay.getHours() >= 16)
-            if (toDay.getDay() == 6)
-                $scope.selected.Day = 2;
-            else
-                $scope.selected.Day = 1;
+        if (toDay.getDay() == 0)
+            $scope.selected.Day = 1;
+        else if (toDay.getDay() == 6)
+            $scope.selected.Day = 2;
+            // Out of SC service
+        else if (toDay.getHours() >= 18)
+            $scope.selected.Day = 1;
         else
             $scope.selected.Day = 0;
         $scope.selectDeliveryDate();
@@ -1385,17 +1361,6 @@ app
         return deferred.promise;
     }
 
-    function getCategories(products) {
-        var catList = [];
-        angular.forEach(products, function (value, key) {
-            if (catList.indexOf(value.ProductLineName) === -1) {
-                catList.push(value.ProductLineName);
-            }
-        });
-        return catList;
-    }
-
-    var curLoadList = {};
     $scope.confirmLabels = function () {
         $scope.labelValid = isLabelValid();
         if (!$scope.labelValid)
@@ -1426,10 +1391,10 @@ app
                 }
                 console.log("Load List", loadList);
                 loadBatchLabel(loadList).then(function (data) {
-                    //console.log("load batch labels", data);
+                    console.log("load batch labels", data);
                     $scope.products = data;
                     $scope.duplicateProductList();
-                    $scope.catList = getCategories($scope.products);
+                    console.log(duplicateData);
                 }, function (err) {
                     $scope.refreshFlag = true;
                     console.log(err);
@@ -1442,7 +1407,7 @@ app
                     if ($scope.models[item] && !modelsBack[item]) {
                         for (var idx in $scope.labels) {
                             if ($scope.labels[idx].BrandName == item) {
-                                //$scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
+                                $scope.loadProducts($scope.labels[idx].BrandId, $scope.labels[idx].BrandName);
                                 loadList[item] = $scope.labels[idx];
                             }
                         }
@@ -1474,14 +1439,6 @@ app
                         }
                     }
                 }
-
-                loadBatchLabel(loadList).then(function (data) {
-                    $scope.products = data;
-                    $scope.catList = getCategories($scope.products);
-                }, function (err) {
-                    $scope.refreshFlag = true;
-                    console.log(err);
-                });
             }
             modelsBack = clone($scope.models);
             console.log(modelsBack);
@@ -1489,8 +1446,6 @@ app
             //console.log($scope.products);
             //$('.select2').select2();           
         }
-
-        curLoadList = loadList;
     }
 
     // Duplicate product list from order detail
@@ -1615,9 +1570,6 @@ app
                 },
                 id: function () {
                     return AuthService.user().Id;
-                },
-                categories: function () {
-                    return $scope.catList;
                 }
             }
 
@@ -1641,43 +1593,6 @@ app
             }
         });
     }
-
-    function _reloadSpecify() {
-        $scope.orderList.forEach(function (orderItem) {
-            CommonService.getSpecify(orderItem.selectedProduct.ProductName, AuthService.user().Id, $scope.currentRole, $scope.currentLevel, 
-                $scope.selected.Factory.FactoryId, orderItem.selectedProduct.BrandId).then(function (data) {
-                    orderItem.selectedSpecify = data;
-                }, function (error) {
-                    console.log(error);
-                });
-        });
-
-    }
-
-    function _convertLanguage(orgList, newList) {
-        for (var idx1 in orgList) {
-            for (var idx2 in newList) {
-                if (orgList[idx1].ProductName === newList[idx2].ProductName) {
-                    orgList[idx1].ProductLineName = newList[idx2].ProductLineName;
-                }
-            }
-        }
-    }
-
-    $scope.$on('language-changed', function () {
-        _reloadSpecify();
-        modelsData = {};
-        modelsBack = {};
-        //$scope.openProgress();
-        loadBatchLabel(curLoadList).then(function (res) {
-            _convertLanguage($scope.products, res);
-            $scope.catList = getCategories($scope.products);
-            //$scope.modalProgress.dismiss('close');
-        }, function (err) {
-            console.log(err);
-            //$scope.modalProgress.dismiss('close');
-        });
-    });
     /////// END ORDER
 
     /////// BEGIN ORDER PREVIEW
@@ -1688,7 +1603,6 @@ app
     $scope.receiptQuantities = {};
     $scope.receiptPrices = {};
     $scope.receiptView = {};
-    $scope.receiptNumOrder = {};
 
     $scope.quantities = {};
     $scope.totalQuantityInMonth = 0;
@@ -1758,7 +1672,6 @@ app
                 $scope.receiptPrices[$scope.productLines[idx].ProductLineId] = 0;
                 $scope.quantities[$scope.productLines[idx].ProductLineId] = 0;
                 $scope.prices[$scope.productLines[idx].ProductLineId] = 0;
-                $scope.receiptNumOrder[$scope.productLines[idx].ProductLineId] = 0;
             }
 
             $scope.QuantityLastMonth = 0;
@@ -1773,7 +1686,8 @@ app
                 $scope.receiptPrices[$scope.orderList[idx].selectedProduct.ProductLineId] += $scope.orderList[idx].totalPrice;
                 $scope.totalPriceInMonth += $scope.orderList[idx].totalPrice;
 
-                $scope.receiptNumOrder[$scope.orderList[idx].selectedProduct.ProductLineId] += $scope.orderList[idx].numOrder;
+                console.log($scope.receiptQuantities);
+                console.log($scope.receiptPrices);
             }
 
             for (var idx in $scope.productLines) {
@@ -1996,7 +1910,7 @@ app
     }
 
     $scope.cancelOrder = function (order) {
-        var modalConfirm = openConfirmReason($translate.instant('TITLE_REASON'));
+        var modalConfirm = openConfirmReason("Lý do hủy đơn hàng");
         modalConfirm.result.then(function (result) {
             //if (result) {
             $scope.openProgress();

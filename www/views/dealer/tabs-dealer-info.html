@@ -1,41 +1,30 @@
 ﻿<div class="info" ng-init="initDealerInfo()">
-    <table>
-        <tr>
-            <td>{{'LANGUAGE' | translate}}</td>
-            <td>
-                <select class="form-control" ng-model="curLanguage" ng-change="changeLanguage(curLanguage)">
-                    <option value="vi">{{'VIETNAMESE' | translate}}</option>
-                    <option value="en">{{'ENGLISH' | translate}}</option>
-                </select>
-            </td>
-        </tr>
-    </table>
     <div class="panel panel-default">
-        <div class="panel-heading"><span><strong>{{'USER_INFO' | translate}}</strong></span></div>
+        <div class="panel-heading"><span><strong>Thông tin người dùng</strong></span></div>
         <div class="panel-body">
             <table>
                 <tr>
-                    <td class="">{{ 'DEALER' | translate }}</td>
+                    <td class="">Đại lý</td>
                     <td class=""><strong>{{user.Name}}</strong></td>
                 </tr>
                 <tr>
-                    <td class="">{{ 'DEALER_CODE' | translate }}</td>
+                    <td class="">Mã</td>
                     <td class=""> <strong>{{user.Code}}</strong></td>
                 </tr>
                 <tr>
-                    <td class="">{{ 'FACTORY' | translate }}</td>
+                    <td class="">Kho</td>
                     <td class=""> <strong>{{factory.FactoryName}}</strong></td>
                 </tr>
                 <tr>
-                    <td class="">{{'ADDRESS' | translate }}</td>
+                    <td class="">Địa chỉ</td>
                     <td class=""> <strong>{{user.WardName}}, {{user.DistrictName}}, {{user.ProvinceName}}</strong></td>
                 </tr>
             </table>
            
         </div>        
     </div>
-    <button class="btn btn-default btn-lg" style="width: 100%" ng-click="logout()"><strong>{{ 'LOGOUT' | translate }}</strong></button>
-    <h5 class="text-center">{{ 'APP_VERSION' | translate }} {{appversion}}</h5>
+    <button class="btn btn-default btn-lg" style="width: 100%" ng-click="logout()"><strong>Đăng xuất</strong></button>
+    <h5 class="text-center">Phiên bản ứng dụng {{appversion}}</h5>
 </div> 
 
 

@@ -21,8 +21,7 @@ app.constant('APP', {
     appversion_key: 'AppVersionKey',
     last_provinceid_selected: 'LastIdProvinceSelected',
     username_key: 'AncoUserNameKey',
-    remember_me_key: 'AncoRememberMeKey',
-    language_key: 'AncoLanguageKey'
+    remember_me_key: 'AncoRememberMeKey'
 })
 
 .constant('USER_ROLES', {
@@ -260,8 +259,10 @@ app.constant('APP', {
 })
 
 .constant('NETWORK', {
-    //BASE_URL: 'http://server-masanbak.rhcloud.com',
-    BASE_URL: 'http://server-masan.rhcloud.com'
+    BASE_URL: 'http://server-masanbak.rhcloud.com',
+    //BASE_URL: 'http://masan.nhaben.com',
+    //BASE_URL: 'http://order-anco.rhcloud.com'
+    //BASE_URL: 'http://server-masan.rhcloud.com'
 })
 
 .constant('TIMER', {

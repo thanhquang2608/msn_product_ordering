@@ -1,70 +1,66 @@
 ﻿<div ng-init="initOrderReview()">
-    <h4 class="text-center">{{'ORDER' | translate}} {{order.OrderCode}}</h4>
+    <h4 class="text-center">Đơn hàng {{order.OrderCode}}</h4>
     <div class="panel-default">
         <accordion>
             <accordion-group is-open="statusCollapse.flag">
                 <accordion-heading>
                     <div>
-                        <strong>{{'ORDER_INFO' | translate}}</strong> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': statusCollapse.flag, 'glyphicon-chevron-right': !statusCollapse.flag}"></i>
+                        <strong>Thông tin đơn hàng</strong> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': statusCollapse.flag, 'glyphicon-chevron-right': !statusCollapse.flag}"></i>
                     </div>
                 </accordion-heading>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'DEALER' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Đại lí</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.DealerName}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'DEALER_CODE' | translate}}</div>
-                    <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.DealerCode}}</strong></div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'FACTORY' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Kho</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.FactoryName}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'ORDER_DAY' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Ngày đặt</div>
                     <div class="col-md-8 col-sm-8 col-xs-8 black-color"><strong>{{order.OrderDateView}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'DELIVERY_DAY' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Ngày giao</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.DeliverDateView}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'RECIPIENT' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Tên người nhận</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.Recipient}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'LICENSE_PLATE' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Biển số xe</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.LicensePlate}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'STATUS' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Trạng thái</div>
                     <div class="col-md-8 col-sm-8 col-xs-8">
                         <span class="label-pending" ng-if="status.PENDING == order.Status">
-                            <strong>{{'PENDING' | translate}}</strong>
+                            <strong>Chờ xử lý</strong>
                         </span>
                         <span class=" label-disapprove" ng-if="status.REJECT == order.Status">
-                            <strong>{{'REJECT' | translate}}</strong>
+                            <strong>Từ chối</strong>
                         </span>
                         <span class=" label-approve" ng-if="status.SUCCESS == order.Status">
-                            <strong>{{'ACCEPT' | translate}}</strong>
+                            <strong>Đã xử lý</strong>
                         </span>
                         <span class=" label-delivered" ng-if="status.DELIVERED == order.Status">
-                            <strong>{{'FINISHED' | translate}}</strong>
+                            <strong>Đã hoàn tất</strong>
                         </span>
                         <span class=" label-delivered" ng-if="status.EXPIRED == order.Status">
-                            <strong>{{'EXPIRED' | translate}}</strong>
+                            <strong>Quá hạn</strong>
                         </span>
                         <span class=" label-delivered" ng-if="status.CANCEL == order.Status">
-                            <strong>{{'CANCELED' | translate}}</strong>
+                            <strong>Đã hủy</strong>
                         </span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'REASON' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Lý do</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.Reason}}</strong></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-sm-4 col-xs-4">{{'NOTE' | translate}}</div>
+                    <div class="col-md-4 col-sm-4 col-xs-4">Ghi chú</div>
                     <div class="col-md-8 col-sm-8 col-xs-8"><strong>{{order.Note}}</strong></div>
                 </div>
             </accordion-group>
@@ -73,7 +69,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <span><strong>{{'LIST_PRODUCT' | translate}}</strong></span>
+            <span><strong>Danh sách sản phẩm</strong></span>
         </div>
     </div>
     <ul class="list-group order-list scrollable-menu">
@@ -84,11 +80,11 @@
                     <div class="text">
                         <span class="title">{{item.ProductName}} ({{item.ProductLineName}})</span><br />
                         <span class="type">{{item.Specification}} {{item.Weight}}Kg</span> <br />
-                        <span class="type">{{'QUANTITY' | translate}}: {{item.Count}}</span>
+                        <span class="type">Số lượng: {{item.Count}}</span>
                     </div>
                 </div>
                 <div class="right">
-                    <div class="price">{{format(item.Count * item.UnitPrice, 0)}} {{'VND_ITEM' | translate}}</div>
+                    <div class="price">{{format(item.Count * item.UnitPrice, 0)}} vnđ</div>
                     <div class="button">
                         <i class="glyphicon glyphicon-chevron-right"></i>
                     </div>
@@ -101,10 +97,10 @@
                 <div class="left">
                     <div class="index"></div>
                     <div class="text">
-                        <span class="title">{{'TOTAL' | translate}}</span><br />
-                        <span class="type">{{'QUANTITY' | translate}}: {{format(totalCount, 0)}}</span><br />
-                        <span class="type">{{'WEIGHT' | translate}}: {{format(totalQuantity, 3)}} {{'TON' | translate}}</span><br />
-                        <span class="type">{{'CASH' | translate}}: {{format(totalMoney, 0)}} {{'VND' | translate}}</span>
+                        <span class="title">Tổng cộng</span><br />
+                        <span class="type">Số lượng: {{format(totalCount, 0)}}</span><br />
+                        <span class="type">Số tấn: {{format(totalQuantity, 3)}} tấn</span><br />
+                        <span class="type">Thành tiền: {{format(totalMoney, 0)}} vnđ</span>
                     </div>
                 </div>
             </div>
@@ -112,8 +108,8 @@
     </ul>
     <div class="panel-default">
         <div class="text-center">
-            <button class="btn btn-danger btn-lg" style="margin-right: 20px" ng-if="order.Status == 1" ng-click="cancelOrder(order)">{{'CANCEL' | translate}}</button>
-            <button class="btn btn-primary btn-lg" ng-click="duplicateOrder(order)">{{'DUPLICATE' | translate}}</button>
+            <button class="btn btn-danger btn-lg" style="margin-right: 20px" ng-if="order.Status == 1" ng-click="cancelOrder(order)">Hủy</button>
+            <button class="btn btn-primary btn-lg" ng-click="duplicateOrder(order)">Sao chép</button>
         </div>
     </div>
 </div>

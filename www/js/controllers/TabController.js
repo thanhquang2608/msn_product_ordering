@@ -1,5 +1,4 @@
-﻿app.controller('TabController', function ($rootScope, $scope, $stickyState, $state, $modal, $log, $translate, $localstorage,
-    AuthService, CommonService, TranslateService,
+﻿app.controller('TabController', function ($rootScope, $scope, $stickyState, $state, $modal, $log, AuthService, CommonService,
     AUTH_EVENTS, NETWORK_EVENTS, USER_ROLES, USER_LEVELS) {
     $scope.setTabVisibility = function (flag1, flag2) {
         if (document.getElementById("tab"))
@@ -7,7 +6,7 @@
         if (document.getElementById("bar"))
             document.getElementById("bar").style.visibility = flag2;
     }
-    // $localstorage.writeFile();
+
     $scope.backPage = function () {
         $state.go($scope.prevState);
         //try {
@@ -48,13 +47,13 @@
 
     getUser();
 
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, $translate) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
         if (fromState.name == 'tabs.' + $scope.role + '-list' && toState.name == 'tabs.' + $scope.role + '-list-order-detail') {
-            $scope.title = "OrderDetail";
+            $scope.title = "Chi tiết đơn hàng"
             $scope.setTabVisibility('hidden', 'visible');
         }
         else if (fromState.name == 'tabs.' + $scope.role + '-order' && toState.name == 'tabs.' + $scope.role + '-order-review') {
-            $scope.title = "OrderReview";
+            $scope.title = "Xác nhận đơn hàng"
             $scope.setTabVisibility('hidden', 'visible');
         }
         else // if (toState.name == 'tabs.dealer-list' && fromState.name == 'tabs.dealer-list-order-detail')
@@ -149,7 +148,7 @@
     };
     $rootScope.processRequestError = function (response) {
         if (response.status == 403) {
-            $scope.open($translate.instant('MESSAGE_PERMISION'));
+            $scope.open("Bạn không có quyền thực hiện thao tác này!");
         }
         else if (response.status != 0 && response.status != 408) {
             //var alertPopup = $ionicPopup.alert({
@@ -158,16 +157,16 @@
             //});
             //alert(response.data.message);
             console.log(response);
-            var msg = $translate.instant('MESSAGE_PROCESS_ERR');
+            var msg = "Lỗi trong quá trình xử lý";
             if (response.data == null || response.data.message == null) {
-                msg = $translate.instant('MESSAGE_ACTION_FAIL');
+                msg = "Thao tác thất bại!";
             }
             else
                 msg = response.data.message;
             $scope.open(msg);
         }
         else {
-            $scope.open($translate.instant('MESSAGE_NETWORK_ERR'));
+            $scope.open("Kết nối thất bại. Kiểm tra lại đường truyền.");
         }
     }
 });

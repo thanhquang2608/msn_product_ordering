@@ -1,4 +1,4 @@
-﻿var app = angular.module('OrderApp', ['LocalStorageModule', 'ct.ui.router.extras', 'ui.bootstrap', 'ngTouch', 'pascalprecht.translate']);
+var app = angular.module('OrderApp', ['LocalStorageModule', 'ct.ui.router.extras', 'ui.bootstrap', 'ngTouch']);
 
 // Declare app level module which depends on filters, and services
 //angular.module('OrderApp', [
@@ -140,8 +140,7 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
             .state('tabs.sale-info', {
                 url: '/sale-info',
                 templateUrl: 'views/sale/tabs-sale-info.html',
-                controller: 'SaleController',
-                parent: 'tabs'
+                controller: 'SaleController'
             })
             ///////// TAB SALE SUP
             .state('tabs.sale-sup-list', {
@@ -338,24 +337,18 @@ app.config(['$stateProvider', '$stickyStateProvider', '$urlRouterProvider', '$ht
     }
 ]);
 
-app.config(function ($httpProvider, $translateProvider) {
+app.config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptorService');
     $httpProvider.defaults.withCredentials = true;
-
-    //if (!$httpProvider.defaults.headers.get) {
-    //    $httpProvider.defaults.headers.get = {};
-    //}
-    //$httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
-    //$httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-    //$httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
-
-    $translateProvider.translations('en', en);
-    $translateProvider.translations('vi', vi);
-    $translateProvider.preferredLanguage('en');
-    $translateProvider.fallbackLanguage('en');
 });
 
-app.run(function ($rootScope, $state, AuthService, USER_ROLES, USER_LEVELS) {  
+app.run(function ($rootScope, $state, AuthService, USER_ROLES, USER_LEVELS) {
+
+    // add translation tables
+    //$translate.translations('en', TranslateService.getLanguagePack('en'));
+    //$translate.translations('vi', TranslateService.getLanguagePack('vi'));
+    //$translate.preferredLanguage(TranslateService.getDefaultLangueKey());
+    //$translate.fallbackLanguage(TranslateService.getDefaultLangueKey());
 
     $rootScope.$state = $state;
 

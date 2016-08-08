@@ -2,28 +2,19 @@
     <img src='masan-nutri-transparent.png' style="max-width: 100%; max-height: 100%;position: absolute;top: 0;left: 0;" />
     <form class="form-signin" id="loginForm" style="padding-top: 50%;display: inline-block;" ng-submit="login(user)">
         <div class="login-main">
-            <h2 class="form-signin-heading">{{ 'LOGIN' | translate }}</h2>
-            <input style="margin-bottom: 10px;" type="text" id="inputUserName" class="form-control" placeholder="{{ 'USERNAME' | translate }}" required="" autofocus="" ng-model="user.id">
-            <input style="margin-bottom: 10px;" type="password" id="inputPassword" class="form-control" placeholder="{{ 'PASSWORD' | translate }}" required="" ng-model="user.password">           
-            <button style="width: 100%" class="btn btn-lg btn-primary" type="submit">{{ 'LOGIN' | translate }}</button>    
-            
-            <table>
-                <tr>
-                    <td>{{'LANGUAGE' | translate}}</td>
-                    <td>
-                        <select class="form-control" ng-model="curLanguage" ng-change="changeLanguage(curLanguage)">
-                            <option value="vi">{{'VIETNAMESE' | translate}}</option>
-                            <option value="en">{{'ENGLISH' | translate}}</option>
-                        </select>
-                    </td>
-                </tr>
-            </table>     
+            <h2 class="form-signin-heading">Đăng nhập</h2>
+
+            <input style="margin-bottom: 10px;" type="text" id="inputUserName" class="form-control" placeholder="Tên đăng nhập" required="" autofocus="" ng-model="user.id">
+
+            <input style="margin-bottom: 10px;" type="password" id="inputPassword" class="form-control" placeholder="Mật khẩu" required="" ng-model="user.password">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-checked="rememberMe == true" ng-click="remember()"> Nhớ tài khoản
+                </label>
+            </div>
+            <button style="width: 100%" class="btn btn-lg btn-primary" type="submit">Đăng nhập</button>         
         </div>
     </form>
-    <!--<button class="createFile" ng-click="writeFile()">create file</button>
-    <button class="readFile" ng-click="readFile()">read file</button>
-    <button class="getFile">get file</button>-->
-
 </div>
 
  <!--prevent tiny screen-->
