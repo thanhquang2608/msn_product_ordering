@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.service('TranslateService', [function () {
+app.service('TranslateService', ['$localstorage', function ($localstorage, STORAGE_KEYS) {
     var languageList = {
         'en': [{ Name: 'English', Key: 'en' }, { Name: 'VietNamese', Key: 'vi'}],
         'vi': [{ Name: 'Tiếng Anh', Key: 'en' }, { Name: 'Tiếng Việt', Key: 'vi' }]
@@ -23,13 +23,20 @@ app.service('TranslateService', [function () {
         return languageList[key];
     }
 
+    function _setDefaultLanguageKey(key) {
+        $localstorage.set('AncoLanguageKey', key);
+    }
+
+    //Currently we only use this function
     function _getDefaultLanguageKey() {
-        return defaultLanguage;
+        defaultLanguage = $localstorage.get('AncoLanguageKey');
+        return defaultLanguage || 'vi';
     }
 
     return {
         getLanguagePack: _getLanguagePack,
         getLanguageList: _getLanguageList,
-        getDefaultLanguageKey: _getDefaultLanguageKey
+        getDefaultLanguageKey: _getDefaultLanguageKey,
+        setDefaultLanguageKey: _setDefaultLanguageKey
     }
 }]);

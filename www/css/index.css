@@ -46,7 +46,7 @@
 
 .nav li a {
     font-size: smaller;
-    color: white;
+    color: rgba(255, 253, 253, 0.6);
     background-color: cornflowerblue;
     border-radius: 0 0 0 0 !important;
     border-right-color: white !important;
@@ -391,18 +391,69 @@ a > i {
     height: 400px;
 }
 
-@media (min-height: 480px) {
+@media screen and (max-height: 480px) {
     .filter-height {
-        height: 280px;
+        height: 230px;
+    }
+
+    .modal-header {
+        padding-top: 7px !important;
+        padding-bottom: 7px !important;
+    }
+
+    .modal-body {
+        padding-top: 7px !important;
+        padding-bottom: 7px !important;
+
+    }
+    .modal-footer {
+        padding-top: 7px !important;
+        padding-bottom: 7px !important;
     }
 }
 
-@media (min-height: 640px) {
+@media screen and  (max-height: 640px) {
     .filter-height {
-        height: 400px;
+        height: 380px;
+    }
+
+    .modal-header {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    .modal-body {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+
+    }
+    .modal-footer {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
     }
 }
 
 .filter-height .list-group-item:active {
     background: #ddd;
+}
+
+.nav-filter {
+    height: auto; 
+    font-size:16px; 
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.no-border-top {
+    border-top: none !important;
+}
+
+.receipt-data td, .receipt-data th  {
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+}
+
+.row {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
 }

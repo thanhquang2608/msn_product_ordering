@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_ROLES, AUTH_EVENTS, NETWORK, STORAGE_KEYS, TIMER) {
+app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqliteStorage, USER_ROLES, AUTH_EVENTS, NETWORK, STORAGE_KEYS, TIMER) {
     var serviceBase = NETWORK.BASE_URL;
     var LOCAL_TOKEN_KEY = STORAGE_KEYS.token_key;
     var LOCAL_USER_KEY = STORAGE_KEYS.user_key;
@@ -12,38 +12,54 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
     var authToken;
     var user;
     var appVersion = '';
-    var username = undefined;
+    var username;
     var remember = true;
 
     function loadUserCredentials() {
-        var token = $localstorage.get(LOCAL_TOKEN_KEY);
-        var appVersion = $localstorage.get(APP_VERSION_KEY);
-        var retrievedUser = $localstorage.get(LOCAL_USER_KEY);
-        username = $localstorage.get(LOCAL_USERNAME_KEY);
-        remember = $localstorage.getObject(LOCAL_REMEMBER_ME_KEY);
-
-        //console.log(retrievedUser);
-        if (token && retrievedUser) {
-            useCredentials(token);
-            user = JSON.parse(retrievedUser);
-        }
-
+        var deferred = $.Deferred();
+        var promises = [];
+        promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN));
+        promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USERNAME));
+        promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USER));
+        //var token = $localstorage.get(LOCAL_TOKEN_KEY);
+        //var appVersion = $localstorage.get(APP_VERSION_KEY);
+        //var retrievedUser = $localstorage.get(LOCAL_USER_KEY);
+        $.when.apply(null, promises).then(function () {
+            //alert('token ' + arguments[0] + ' ' + arguments[2]);
+            if (arguments[0] && arguments[2]) {
+                useCredentials(arguments[0]);
+                user = JSON.parse(arguments[2]);
+            }
+            username = arguments[1];
+            remember = true;
+            deferred.resolve();
+            
+        });
+        return deferred.promise();
     }
 
-    function storeUserCredentials(u, token, username, rememberme) {
-        $localstorage.set(LOCAL_TOKEN_KEY, token);
-        $localstorage.set(LOCAL_USER_KEY, JSON.stringify(u));
-        $localstorage.setObject(LOCAL_REMEMBER_ME_KEY, rememberme);
+    function storeUserCredentials(u, token, userName, rememberme) {
+        //$localstorage.set(LOCAL_TOKEN_KEY, token);
+        //$localstorage.set(LOCAL_USER_KEY, JSON.stringify(u));
+        //$localstorage.setObject(LOCAL_REMEMBER_ME_KEY, rememberme);
 
-        if (rememberme)
-            $localstorage.set(LOCAL_USERNAME_KEY, username);
-        else
-            $localstorage.deleteObject(LOCAL_USERNAME_KEY);
-        
-        useCredentials(token);
-        user = u;
-        remember = rememberme;
-        $rootScope.$broadcast(AUTH_EVENTS.authenticated);
+        //if (rememberme)
+        //    $localstorage.set(LOCAL_USERNAME_KEY, username);
+        //else
+        //    $localstorage.deleteObject(LOCAL_USERNAME_KEY);
+        var deferred = $.Deferred();
+        //$localstorage.set(LOCAL_USERNAME_KEY, username);
+        var keyList = [sqliteHelper.FEILD_NAME_TOKEN, sqliteHelper.FEILD_NAME_USER, sqliteHelper.FEILD_NAME_LANGUAGE, sqliteHelper.FEILD_NAME_USERNAME];
+        var valueList = [token, JSON.stringify(u), '', userName];
+        $sqliteStorage.set(keyList, valueList).then(function () {
+            useCredentials(token);
+            user = u;
+            username = userName;
+            remember = rememberme;
+            $rootScope.$broadcast(AUTH_EVENTS.authenticated);
+            deferred.resolve();
+        });
+        return deferred.promise();
     }
 
     function useCredentials(token) {
@@ -65,10 +81,19 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
     }
 
     function destroyUserCredentials() {
+        var deferred = $.Deferred();
         authToken = undefined;
         isAuthenticated = false;
-        $localstorage.deleteObject(LOCAL_TOKEN_KEY);
-        $localstorage.deleteObject(LOCAL_USER_KEY);
+        //$localstorage.deleteObject(LOCAL_TOKEN_KEY);
+        //$localstorage.deleteObject(LOCAL_USER_KEY);
+        var keyList = [sqliteHelper.FEILD_NAME_TOKEN, sqliteHelper.FEILD_NAME_USER, sqliteHelper.FEILD_NAME_LANGUAGE];
+        var valueList = ['', '', ''];
+        $sqliteStorage.set(keyList, valueList).then(function () {
+            deferred.resolve();
+        }, function () {
+            deferred.resolve();
+        });
+        return deferred.promise();
     }
 
     var login = function (userdata, rememberme) {
@@ -92,8 +117,9 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
                 var user = response.data.user;
                 var token = response.data.token;
 
-                storeUserCredentials(user, token, id, rememberme);
-                resolve('Login success.');
+                storeUserCredentials(user, token, id, rememberme).then(function () {
+                    resolve('Login success.');
+                });              
             }, function errorCallback(response) {              
                 //if (response.status != 0 && response.status != 408) {
                     console.log("login failed, statusCode: " + response.status);
@@ -118,13 +144,18 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
     };
 
     var logout = function () {
-        destroyUserCredentials();
+        return destroyUserCredentials();
     };
 
     var updateUser = function () {
-        loadUserCredentials();
-        user.ChangedPassword = 1;
-        $localstorage.set(LOCAL_USER_KEY, JSON.stringify(user));
+        var deferred = $.Deferred();
+        loadUserCredentials().then(function () {
+            user.ChangedPassword = 1;
+            $sqliteStorage.set([sqliteHelper.FEILD_NAME_USER], [JSON.stringify(user)]).then(function () {
+                deferred.resolve();
+            });
+        });
+        return deferred.promise();
     }
 
     var isAuthorized = function (authorizedRoles) {
@@ -134,7 +165,7 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
         return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
     };
 
-    loadUserCredentials();
+    //loadUserCredentials();
 
     var changePassword = function (newPassword) {
         return $q(function (resolve, reject) {
@@ -167,13 +198,14 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
         changePassword: changePassword,
         updateUser: updateUser,
         userName: function () {
-            username = $localstorage.get(LOCAL_USERNAME_KEY);
+            //username = $localstorage.get(LOCAL_USERNAME_KEY);
             return username;
         },
         rememberMe: function () {
             remember = $localstorage.getObject(LOCAL_REMEMBER_ME_KEY);
             return remember;
-        }
+        },
+        loadUserCredentials: loadUserCredentials
     };
 })
 
@@ -201,6 +233,71 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, USER_
 
         deleteObject: function (key) {
             window.localStorage.removeItem(key);
+        }
+    }
+})
+
+.factory('$sqliteStorage', function () {
+    
+    return {
+        set: function (keyList, valueList) {
+            var deferred = $.Deferred();
+            sqliteHelper.getFirstRow().then(function (data) {
+                // update current data with token
+                if (data) {
+                    sqliteHelper.updateItem(sqliteHelper.FEILD_NAME_TOKEN, data.token, keyList, valueList).then(function () {
+                        deferred.resolve();
+                    });
+                }
+                // insert new row
+                else {
+                    sqliteHelper.addItem(keyList, valueList).then(function () {
+                        deferred.resolve();
+                    });
+                }
+            });
+            return deferred.promise();
+        },
+
+        get: function (key, defaultValue) {
+            //alert('begin get');
+            var deferred = $.Deferred();
+            sqliteHelper.getFirstRow().then(function (data) {
+                var retVal;
+                if (data) {
+                    retVal = data[key] || defaultValue;
+                }         
+                //alert('get success');
+                deferred.resolve(retVal);
+            }, function () {
+                //alert('get fail');
+                deferred.resolve();
+            });
+            return deferred.promise();
+        },
+
+        setObject: function (key, value) {
+            window.localStorage.setItem(key, JSON.stringify(value));
+        },
+
+        getObject: function (key) {
+            var deferred = $.Deferred();
+            return sqliteHelper.getFirstRow().then(function (data) {
+                if (!data || data[key] === null || data[key] === undefined) {
+                    deferred.resolve(undefined);
+                } else {
+                    deferred.resolve(JSON.parse(data[key] || '{}'));
+                }
+            });
+            return deferred.promise();
+        },
+
+        deleteObject: function (key) {
+            window.localStorage.removeItem(key);
+        },
+
+        deleteAll: function () {
+            return sqliteHelper.removeAll();
         }
     }
 });

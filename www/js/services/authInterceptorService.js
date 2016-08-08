@@ -1,5 +1,6 @@
 ﻿'use strict';
-app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localstorage', 'STORAGE_KEYS', function ($q, $injector, $location, $localstorage, STORAGE_KEYS) {
+app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localstorage', 'STORAGE_KEYS', 'TranslateService', '$sqliteStorage',
+    function ($q, $injector, $location, $localstorage, STORAGE_KEYS, TranslateService, $sqliteStorage) {
 
     var authInterceptorServiceFactory = {};
 
@@ -7,23 +8,29 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localst
     var LOCAL_USER_KEY = STORAGE_KEYS.user_key;
 
     var _request = function (config) {
-
         config.headers = config.headers || {};
-       
+        var deferred = $q.defer();
         //var authData = $localstorage.get('authorizationData');
-        var token = $localstorage.get(LOCAL_TOKEN_KEY);
-
-        var currentRole = 0;
-        var currentLevel = 0;
+        $sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN).then(function (data) {
+            var token = data;
+            var currentRole = 0;
+            var currentLevel = 0;
         
-        if (token) {
-            config.headers.Authorization = 'Bearer ' + token;
-        }
-
-        return config;
+            if (token) {
+                config.headers.Authorization = 'Bearer ' + token;
+            }
+            config.headers['Accept-Language'] = TranslateService.getDefaultLanguageKey();
+			config.headers['Version'] = '1.0.9';
+            deferred.resolve(config);
+        }, function () {
+            deferred.resolve(config);
+        });
+        //var token = $localstorage.get(LOCAL_TOKEN_KEY);
+        return deferred.promise;
     }
 
     var _responseError = function (rejection) {
+        var deferred = $q.defer();
         if (rejection.status === 401) {
             var authService = $injector.get('AuthService');
             var authData = $localstorage.get('authorizationData');
@@ -35,10 +42,16 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localst
                 }
             }
 
-            authService.logout();
-            $location.path('/login');
+            authService.logout().then(function () {
+                $location.path('/login');
+                deferred.reject(rejection);
+            });
+            
         }
-        return $q.reject(rejection);
+        else {
+            deferred.reject(rejection);
+        }
+        return deferred.promise;
     }
 
     authInterceptorServiceFactory.request = _request;
