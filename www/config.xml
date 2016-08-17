@@ -103,5 +103,5 @@
 <feature name="File">
   <param name="android-package" value="org.apache.cordova.FileUtils" />
 </feature>
-<plugin name="cordova-sqlite-storage" spec="1.4.5" />
+<plugin name="cordova-sqlite-storage" spec="0.8.5" />
 </widget>
