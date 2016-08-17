@@ -10,12 +10,14 @@
     var languagePack = {
         'en': {
             'title': 'Please update latest version',
+            'errorMessage': 'An error occurred. Please try again.',
             'versionTitle': 'Current version: ',
             'back1': 'Press ',
             'back2': 'again to exit'
         },
         'vi': {
             'title': 'Vui lòng cập nhật phiên bản mới nhất để tiếp tục sử dụng ứng dụng',
+            'errorMessage': 'Có lỗi xảy ra. Vui lòng thử lại.',
             'versionTitle': 'Phiên bản hiện tại: ',
             'back1': 'Nhấn nút ',
             'back2': 'lần nữa để thoát'
@@ -25,26 +27,33 @@
     document.addEventListener('deviceready', onDeviceReady.bind(this), false);
 
     function onDeviceReady() {
+        var $content = $('#background');
         console.log('device ready');  
         curLanguage = localStorage.getItem('AncoLanguageKey') || 'vi';
         sqliteHelper.init().then(function () {
             $.get('http://server-masanbak.rhcloud.com/app/version/latest', function (data) {
                 if (currentVersion.localeCompare(data.AppVersionCode) === -1 && data.ForceUpdate === 1) {
-                    var $content = $('<div class="login-background text-center" style="min-width: 100%; min-height: 100%;position: absolute;top: 0;left: 0;bottom: 0;vertical-align: middle;">' +
-                        //'<img src="masan-nutri-transparent.png" style="max-width: 100%; max-height: 100%;position: absolute;top: 0;left: 0;" />' +
-                        '<form class="form-signin" id="loginForm" style="padding-top: 100px;display: inline-block; width: 85%" ng-submit="login(user)">' +
+                    var $form = $('<form class="form-signin" id="loginForm" style="padding-top: 100px;display: inline-block; width: 85%">' +
                             '<div class="login-main">' +
                                 '<h3 class="text-center">' + languagePack[curLanguage].title + '</h1>' +
                                 '<div class="text-center">' + languagePack[curLanguage].versionTitle + currentVersion + '</div>' +
                             '</div>' +
-                        '</form>' +
-                    '</div>');
-                    $('body').append($content);
+                        '</form>');
+                    $content.append($form);
                 }
                 else {
                     //alert('Boot angular');
-                    angular.bootstrap(document, ['OrderApp']);
+                    $('#background').remove();
+                    angular.bootstrap(document, ['OrderApp']);                    
                 }
+            }).fail(function () {
+                var $form = $('<form class="form-signin" id="loginForm" style="padding-top: 100px;display: inline-block; width: 85%">' +
+                            '<div class="login-main">' +
+                                '<h3 class="text-center">' + languagePack[curLanguage].errorMessage + '</h1>' +
+                                '<div class="text-center">' + languagePack[curLanguage].versionTitle + currentVersion + '</div>' +
+                            '</div>' +
+                        '</form>');
+                $content.append($form);
             });
         });       
 

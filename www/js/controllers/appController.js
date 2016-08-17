@@ -2,6 +2,7 @@
 
 app.controller('AppController', function ($scope, $translate,$log, $state, $modal, $rootScope,
     TranslateService, AuthService, USER_ROLES, USER_LEVELS) {
+    $('#background').remove();
     // Language
     $scope.curLanguage = TranslateService.getDefaultLanguageKey();
     $scope.changeLanguage = function (key) {

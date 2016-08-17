@@ -28,7 +28,7 @@
     <script src="scripts/bootstrap.min.js"></script>
     <script src="scripts/iscroll4.js"></script>
     <script src="scripts/ui-bootstrap-tpls-0.13.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-translate/2.8.1/angular-translate.js"></script>
+    <script src="scripts/angular-translate.js"></script>
     <script src="js/services/sqliteHelper.js"></script>
     <!-- STYLES END-->
     <script>
@@ -46,169 +46,241 @@
 </head>
 <body>
     <div id="UIContent" class="" ui-view ng-controller="AppController"></div>
-
-    <!-- Cordova reference, this is added to your app when it's built. -->
-    <script src="cordova.js"></script>
-    <script src="scripts/platformOverrides.js"></script>
-
-    <script src="scripts/index.js"></script>
-
-    <!-------------------Load language ------------------->
-    <script src="js/services/language_en.js"></script>
-    <script src="js/services/language_vi.js"></script>
-
-    <script src="js/app.js"></script>
-    <!-------------------Load controllers ----------------- -->
-    <script src="js/controllers/appController.js"></script>
-    <script src="js/controllers/TabController.js"></script>
-    <script src="js/controllers/loginController.js"></script>
-    <script src="js/controllers/homeController.js"></script>
-    <script src="js/controllers/dealerController.js"></script>
-    <script src="js/controllers/SaleController.js"></script>
-    <script src="js/controllers/saleSupController.js"></script>
-    <script src="js/controllers/ASMController.js"></script>
-    <script src="js/controllers/RSMController.js"></script>
-    <script src="js/controllers/NSMController.js"></script>
-    <script src="js/controllers/userController.js"></script>
-    <!------------------Load services ------------------------>
-    <script src="js/services/authService.js"></script>
-    <script src="js/services/authInterceptorService.js"></script>
-    <script src="js/services/commonService.js"></script>
-    <script src="js/services/dataService.js"></script>
-    <script src="js/services/constant.js"></script>
-    <script src="js/services/scService.js"></script>
-    <script src="js/services/translateService.js"></script>
-    <script src="js/services/filters.js"></script>
-
-    <script type="text/ng-template" id="loading.html">
-        <div style="">
-            <div class="modal-body">
-                <div class="" style="width: 100%; text-align: center">
-                    <img src="img/loading20.gif" style="display: inline-block;" />
-                </div>
-                <div class="" style="width: 100%; text-align: center">
-                    <h4 style="display: inline-block;">{{'PROCESSING' | translate}}...</h4>
+    <div id="background" class="login-background text-center" style="min-width: 100%; min-height: 100%;position: absolute;top: 0;left: 0;bottom: 0;vertical-align: middle;"></div>
+        <!-- Cordova reference, this is added to your app when it's built. -->
+        <script src="cordova.js"></script>
+        <script src="scripts/platformOverrides.js"></script>
+        <script src="scripts/index.js"></script>
+        <!-------------------Load language ------------------->
+        <script src="js/services/language_en.js"></script>
+        <script src="js/services/language_vi.js"></script>
+        <script src="js/app.js"></script>
+        <!-------------------Load controllers ----------------- -->
+        <script src="js/controllers/appController.js"></script>
+        <script src="js/controllers/TabController.js"></script>
+        <script src="js/controllers/loginController.js"></script>
+        <script src="js/controllers/homeController.js"></script>
+        <script src="js/controllers/dealerController.js"></script>
+        <script src="js/controllers/SaleController.js"></script>
+        <script src="js/controllers/saleSupController.js"></script>
+        <script src="js/controllers/ASMController.js"></script>
+        <script src="js/controllers/RSMController.js"></script>
+        <script src="js/controllers/NSMController.js"></script>
+        <script src="js/controllers/userController.js"></script>
+        <!------------------Load services ------------------------>
+        <script src="js/services/authService.js"></script>
+        <script src="js/services/authInterceptorService.js"></script>
+        <script src="js/services/commonService.js"></script>
+        <script src="js/services/dataService.js"></script>
+        <script src="js/services/constant.js"></script>
+        <script src="js/services/scService.js"></script>
+        <script src="js/services/translateService.js"></script>
+        <script src="js/services/filters.js"></script>
+        <script type="text/ng-template" id="loading.html">
+            <div style="">
+                <div class="modal-body">
+                    <div class="" style="width: 100%; text-align: center">
+                        <img src="img/loading20.gif" style="display: inline-block;" />
+                    </div>
+                    <div class="" style="width: 100%; text-align: center">
+                        <h4 style="display: inline-block;">{{'PROCESSING' | translate}}...</h4>
+                    </div>
                 </div>
             </div>
-        </div>
-    </script>
-    <script type="text/ng-template" id="errorModalContent.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">{{'ALERT' | translate}}</h4>
-            </div>
-        </div>
-        <div class="modal-body">
-            <div class="alert alert-danger no-margin-bot">
-                <!--<div><strong>Lỗi:</strong></div>-->
-                <div>{{message}}</div>
-            </div>
-        </div>
-        <div class="modal-footer no-margin-bot">
-            <button type="button" class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-        </div>
-    </script>
-    <script type="text/ng-template" id="confirm-done.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">{{'ALERT' | translate}}</h4>
-            </div>
-        </div>
-        <div class="modal-body">
-            <h6>{{message}}</h6>
-        </div>
-        <div class="modal-footer no-margin-bot">
-            <button type="button" class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-            <button type="button" class="btn btn-primary" ng-click="ok()">{{'OK' | translate}}</button>
-        </div>
-    </script>
-    <script type="text/ng-template" id="progress.html">
-        <div style="background-color: transparent">
-            <div class="modal-body">
-                <div class="" style="width: 100%; text-align: center">
-                    <img src="img/loading20.gif" style="display: inline-block;" />
-                </div>
-                <div class="" style="width: 100%; text-align: center">
-                    <h4 style=" display: inline-block;">
-                        {{'LOADING' | translate}}...
-                    </h4>
-                </div>
-            </div>
-        </div>
-    </script>
-    <script type="text/ng-template" id="confirm-message-norequire.html">
-        <div stop-event="touchend" class="lager-width">
+        </script>
+        <script type="text/ng-template" id="errorModalContent.html">
             <div class="modal-header no-margin-bot">
                 <div>
-                    <h4 class="no-margin-bot no-margin-top">{{message}}</h4>
+                    <h4 class="no-margin-bot no-margin-top">{{'ALERT' | translate}}</h4>
                 </div>
             </div>
-            <div class="modal-body col-xs-12">
-                <textarea class="form-control" rows="4" ng-model="reason"></textarea>
+            <div class="modal-body">
+                <div class="alert alert-danger no-margin-bot">
+                    <!--<div><strong>Lỗi:</strong></div>-->
+                    <div>{{message}}</div>
+                </div>
             </div>
             <div class="modal-footer no-margin-bot">
-                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-                <button type="button" class="btn btn-primary btn-lg" ng-click="ok()">{{'OK' | translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
             </div>
-        </div>
-    </script>
-    <script type="text/ng-template" id="confirm-message-require.html">
-        <div stop-event="touchend" class="lager-width">
+        </script>
+        <script type="text/ng-template" id="confirm-done.html">
             <div class="modal-header no-margin-bot">
                 <div>
-                    <h4 class="no-margin-bot no-margin-top">{{message}}</h4>
+                    <h4 class="no-margin-bot no-margin-top">{{'ALERT' | translate}}</h4>
                 </div>
             </div>
             <div class="modal-body">
-                <textarea style="resize: none;" class="form-control" rows="4" ng-model="reason"></textarea>
+                <h6>{{message}}</h6>
             </div>
             <div class="modal-footer no-margin-bot">
-                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-                <button type="button" class="btn btn-primary btn-lg" ng-disabled="!reason" ng-click="ok()">{{'OK' | translate}}</button>
+                <button type="button" class="btn btn-default" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                <button type="button" class="btn btn-primary" ng-click="ok()">{{'OK' | translate}}</button>
             </div>
-        </div>
-    </script>
-    <script type="text/ng-template" id="change-factory.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">Chuyển kho</h4>
-            </div>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <table>
-                    <tr>
-                        <td class="col-md-2">Từ kho</td>
-                        <td class="col-md-4">
-                            <strong>{{currentFactory.FactoryName}}</strong>
-                        </td>
-                        <td class="col-md-2">
-                            Sang kho
-                        </td>
-                        <td>
-                            <select select ng-model="selectedFactory" ng-options="factory as factory.FactoryName for factory in factories"></select>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-        <div class="modal-footer no-margin-bot">
-            <button type="button" class="btn btn-default" ng-click="cancel()">Hủy bỏ</button>
-            <button type="button" class="btn btn-primary" ng-click="ok()">Đồng ý</button>
-        </div>
-    </script>
-
-    <script type="text/ng-template" id="order-item.html">
-        <div ng-init="init()">
-            <div class="modal-header no-margin-bot">
-                <div>
-                    <h4 class="no-margin-bot no-margin-top">{{'TITLE_ADD_PRODUCT' | translate}}</h4>
+        </script>
+        <script type="text/ng-template" id="progress.html">
+            <div style="background-color: transparent">
+                <div class="modal-body">
+                    <div class="" style="width: 100%; text-align: center">
+                        <img src="img/loading20.gif" style="display: inline-block;" />
+                    </div>
+                    <div class="" style="width: 100%; text-align: center">
+                        <h4 style=" display: inline-block;">
+                            {{'LOADING' | translate}}...
+                        </h4>
+                    </div>
                 </div>
             </div>
-            
+        </script>
+        <script type="text/ng-template" id="confirm-message-norequire.html">
+            <div stop-event="touchend" class="lager-width">
+                <div class="modal-header no-margin-bot">
+                    <div>
+                        <h4 class="no-margin-bot no-margin-top">{{message}}</h4>
+                    </div>
+                </div>
+                <div class="modal-body col-xs-12">
+                    <textarea class="form-control" rows="4" ng-model="reason"></textarea>
+                </div>
+                <div class="modal-footer no-margin-bot">
+                    <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                    <button type="button" class="btn btn-primary btn-lg" ng-click="ok()">{{'OK' | translate}}</button>
+                </div>
+            </div>
+        </script>
+        <script type="text/ng-template" id="confirm-message-require.html">
+            <div stop-event="touchend" class="lager-width">
+                <div class="modal-header no-margin-bot">
+                    <div>
+                        <h4 class="no-margin-bot no-margin-top">{{message}}</h4>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <textarea style="resize: none;" class="form-control" rows="4" ng-model="reason"></textarea>
+                </div>
+                <div class="modal-footer no-margin-bot">
+                    <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                    <button type="button" class="btn btn-primary btn-lg" ng-disabled="!reason" ng-click="ok()">{{'OK' | translate}}</button>
+                </div>
+            </div>
+        </script>
+        <script type="text/ng-template" id="change-factory.html">
+            <div class="modal-header no-margin-bot">
+                <div>
+                    <h4 class="no-margin-bot no-margin-top">Chuyển kho</h4>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <table>
+                        <tr>
+                            <td class="col-md-2">Từ kho</td>
+                            <td class="col-md-4">
+                                <strong>{{currentFactory.FactoryName}}</strong>
+                            </td>
+                            <td class="col-md-2">
+                                Sang kho
+                            </td>
+                            <td>
+                                <select select ng-model="selectedFactory" ng-options="factory as factory.FactoryName for factory in factories"></select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer no-margin-bot">
+                <button type="button" class="btn btn-default" ng-click="cancel()">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" ng-click="ok()">Đồng ý</button>
+            </div>
+        </script>
+        <script type="text/ng-template" id="order-item.html">
+            <div ng-init="init()">
+                <div class="modal-header no-margin-bot">
+                    <div>
+                        <h4 class="no-margin-bot no-margin-top">{{'TITLE_ADD_PRODUCT' | translate}}</h4>
+                    </div>
+                </div>
 
-            <form name="frmOrder" ng-submit="ok(frmOrder.$valid)" novalidate stop-event="touchend">
+                <form name="frmOrder" ng-submit="ok(frmOrder.$valid)" novalidate stop-event="touchend">
+                    <div class="modal-body">
+                        <div class="row">
+                            <table>
+                                <tr>
+                                    <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <button type="button" class="btn btn-default" ng-click="openProductFilter()"><strong>{{order.selectedProduct ? order.selectedProduct.ProductName + ' (' + order.selectedProduct.ProductLineName +')' : 'CHOOSE_PRODUCT' | translate}}</strong></button>
+                                        <!--<strong>
+                                        <select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required>
+                                            <option></option>
+                                        </select>
+                                        </strong>-->
+                                        <p ng-if="submited && !order.selectedProduct" class="label-error">{{'MESSAGE_CHOOSE_PRODUTCT' | translate}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 col-sm-2 col-xs-2">{{'SPECIFICATION' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong ng-if="!isLabelLoading">{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
+                                        <strong ng-if="isLabelLoading">{{'LOADING' | translate}}...</strong>
+                                        <!--<strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
+                                        <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn quy cách</p>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 col-sm-2 col-xs-2">{{'PRICE' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong ng-if="!isLabelLoading">{{format(order.selectedSpecify.UnitPrice, 0)}} {{'VND_ITEM' | translate}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 col-sm-2 col-xs-2">{{'QUANTITY' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong><input id="numOrder" name="numOrder" class="form-control" pattern="[0-9]*" min="1" max="1000000" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                        <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">{{'MESSAGE_QUANTITY_REQUIRED' | translate}}</p>
+                                        <p ng-if="frmOrder.numOrder.$error.min || frmOrder.numOrder.$error.max" class="label-error">{{'MESSAGE_QUANTITY_NOTVALID' | translate}}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 col-sm-2 col-xs-2">{{'WEIGHT' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong>{{format(order.totalQuantity, 3)}} {{'TON' | translate}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 col-sm-2 col-xs-2">{{'CASH' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong>{{format(order.totalPrice, 0)}} {{'VND' | translate}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-3 col-sm-3 col-xs-3">{{'LAST_MONTH' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong>{{format(order.selectedSpecify.QuantityLastMonth, 3)}} {{'TON' | translate}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-3 col-sm-3 col-xs-3">{{'CURRENT_MONTH' | translate}}</td>
+                                    <td class="col-md-4 col-sm-4 col-xs-4">
+                                        <strong>{{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} {{'TON' | translate}}</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer no-margin-bot">
+                        <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                        <button type="submit" class="btn btn-primary btn-lg" ng-disabled="isLabelLoading == true">{{'OK' | translate}}</button>
+                    </div>
+                </form>
+            </div>
+        </script>
+        <script type="text/ng-template" id="order-edit-item.html">
+            <div class="modal-header no-margin-bot">
+                <div>
+                    <h4 class="no-margin-bot no-margin-top">{{'TITLE_PORDUCT' | translate}} {{index+1}}</h4>
+                </div>
+            </div>
+            <form name="frmOrder" ng-submit="ok(1, frmOrder.$valid)" novalidate stop-event="touchend">
                 <div class="modal-body">
                     <div class="row">
                         <table>
@@ -216,11 +288,7 @@
                                 <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
                                     <button type="button" class="btn btn-default" ng-click="openProductFilter()"><strong>{{order.selectedProduct ? order.selectedProduct.ProductName + ' (' + order.selectedProduct.ProductLineName +')' : 'CHOOSE_PRODUCT' | translate}}</strong></button>
-                                    <!--<strong>
-                                    <select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required>
-                                        <option></option>
-                                    </select>
-                                    </strong>-->
+                                    <!--<strong><select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required></select></strong>-->
                                     <p ng-if="submited && !order.selectedProduct" class="label-error">{{'MESSAGE_CHOOSE_PRODUTCT' | translate}}</p>
                                 </td>
                             </tr>
@@ -229,8 +297,9 @@
                                 <td class="col-md-4 col-sm-4 col-xs-4">
                                     <strong ng-if="!isLabelLoading">{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
                                     <strong ng-if="isLabelLoading">{{'LOADING' | translate}}...</strong>
-                                <!--<strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
-                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn quy cách</p>-->
+                                    <!--<p ng-if="isLabelLoading">Đang tải...</p>
+                                    <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
+                                    <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>-->
                                 </td>
                             </tr>
                             <tr>
@@ -239,11 +308,10 @@
                                     <strong ng-if="!isLabelLoading">{{format(order.selectedSpecify.UnitPrice, 0)}} {{'VND_ITEM' | translate}}</strong>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td class="col-md-2 col-sm-2 col-xs-2">{{'QUANTITY' | translate}}</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
-                                    <strong><input id="numOrder" name="numOrder" class="form-control" pattern="[0-9]*" min="1" max="1000000" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
+                                    <strong><input id="numOrder" name="numOrder" class="form-control" min="1" max="1000000" pattern="[0-9]*" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
                                     <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">{{'MESSAGE_QUANTITY_REQUIRED' | translate}}</p>
                                     <p ng-if="frmOrder.numOrder.$error.min || frmOrder.numOrder.$error.max" class="label-error">{{'MESSAGE_QUANTITY_NOTVALID' | translate}}</p>
                                 </td>
@@ -260,7 +328,6 @@
                                     <strong>{{format(order.totalPrice, 0)}} {{'VND' | translate}}</strong>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td class="col-md-3 col-sm-3 col-xs-3">{{'LAST_MONTH' | translate}}</td>
                                 <td class="col-md-4 col-sm-4 col-xs-4">
@@ -274,277 +341,190 @@
                                 </td>
                             </tr>
                         </table>
-
                     </div>
-
                 </div>
                 <div class="modal-footer no-margin-bot">
-                    <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-                    <button type="submit" class="btn btn-primary btn-lg" ng-disabled="isLabelLoading == true">{{'OK' | translate}}</button>
+                    <button type="button" class="btn btn-danger btn-md" ng-click="ok(2, true)" style="float:left">{{'REMOVE' | translate}}</button>
+                    <button type="button" class="btn btn-default btn-md" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                    <button type="submit" class="btn btn-primary btn-md" ng-disabled="isLabelLoading == true">{{'UPDATE' | translate}}</button>
                 </div>
             </form>
-        </div>
-    </script>
-
-    <script type="text/ng-template" id="order-edit-item.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">{{'TITLE_PORDUCT' | translate}} {{index+1}}</h4>
+        </script>
+        <script type="text/ng-template" id="order-view-item.html">
+            <div class="modal-header no-margin-bot">
+                <div>
+                    <h4 class="no-margin-bot no-margin-top">{{'TITLE_PORDUCT' | translate}} {{index+1}}</h4>
+                </div>
             </div>
-        </div>
-        <form name="frmOrder" ng-submit="ok(1, frmOrder.$valid)" novalidate stop-event="touchend">
             <div class="modal-body">
                 <div class="row">
                     <table>
+                        <!--<tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                <strong>{{item.ProductCode}}</strong>
+                            </td>
+                        </tr>-->
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <button type="button" class="btn btn-default" ng-click="openProductFilter()"><strong>{{order.selectedProduct ? order.selectedProduct.ProductName + ' (' + order.selectedProduct.ProductLineName +')' : 'CHOOSE_PRODUCT' | translate}}</strong></button>
-                                <!--<strong><select name="productName" class="form-control" ng-model="order.selectedProduct" ng-options="product as (product.ProductName + ' (' + product.ProductLineName +')') for product in products" ng-change="loadSpecify(order)" data-placeholder="Chọn sản phẩm" required></select></strong>-->
-                                <p ng-if="submited && !order.selectedProduct" class="label-error">{{'MESSAGE_CHOOSE_PRODUTCT' | translate}}</p>
+                                <strong>{{item.ProductName}} ({{item.ProductLineName}})</strong>
                             </td>
                         </tr>
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">{{'SPECIFICATION' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong ng-if="!isLabelLoading">{{order.selectedSpecify.Specification + ' '+ order.selectedSpecify.Weight +' kg'}}</strong>
-                                <strong ng-if="isLabelLoading">{{'LOADING' | translate}}...</strong>
-                                <!--<p ng-if="isLabelLoading">Đang tải...</p>
-                                <strong><select ng-if="isLabelLoading == false" name="productSpecify" class="form-control" ng-change="calculator(order)" ng-model="order.selectedSpecify" ng-options="specify as (specify.Specification + ' '+ specify.Weight +' kg' ) for specify in order.specifies" data-placeholder="Chọn quy cách" required></select></strong>
-                                <p ng-if="submited && frmOrder.productSpecify.$error.required" class="label-error">Vui lòng chọn sản phẩm</p>-->
+                                <strong>{{item.Specification}} {{item.Weight}}Kg</strong>
                             </td>
                         </tr>
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">{{'PRICE' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong ng-if="!isLabelLoading">{{format(order.selectedSpecify.UnitPrice, 0)}} {{'VND_ITEM' | translate}}</strong>
+                                <strong>{{ format(item.UnitPrice, 0)}} {{'VND_ITEM' | translate}}</strong>
                             </td>
                         </tr>
-
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">{{'QUANTITY' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong><input id="numOrder" name="numOrder" class="form-control" min="1" max="1000000" pattern="[0-9]*" type="number" ng-model="order.numOrder" ng-change="calculator(order)" required></strong>
-                                <p ng-if="submited && frmOrder.numOrder.$error.required" class="label-error">{{'MESSAGE_QUANTITY_REQUIRED' | translate}}</p>
-                                <p ng-if="frmOrder.numOrder.$error.min || frmOrder.numOrder.$error.max" class="label-error">{{'MESSAGE_QUANTITY_NOTVALID' | translate}}</p>
+                                <strong>{{format(item.Count, 0)}}</strong>
                             </td>
                         </tr>
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">{{'WEIGHT' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong>{{format(order.totalQuantity, 3)}} {{'TON' | translate}}</strong>
+                                <strong>{{format(item.Quantity, 3)}} {{'TON' | translate}}</strong>
                             </td>
                         </tr>
                         <tr>
                             <td class="col-md-2 col-sm-2 col-xs-2">{{'CASH' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong>{{format(order.totalPrice, 0)}} {{'VND' | translate}}</strong>
+                                <strong>{{format(item.Count * item.UnitPrice, 0)}} {{'VND' | translate}}</strong>
                             </td>
                         </tr>
-
                         <tr>
                             <td class="col-md-3 col-sm-3 col-xs-3">{{'LAST_MONTH' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong>{{format(order.selectedSpecify.QuantityLastMonth, 3)}} {{'TON' | translate}}</strong>
+                                <strong>{{format(item.QuantityLastMonth, 3)}} {{'TON' | translate}}</strong>
                             </td>
                         </tr>
                         <tr>
                             <td class="col-md-3 col-sm-3 col-xs-3">{{'CURRENT_MONTH' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
-                                <strong>{{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} {{'TON' | translate}}</strong>
+                                <strong>{{format(item.QuantityCurrentMonth, 3)}} {{'TON' | translate}}</strong>
                             </td>
                         </tr>
                     </table>
                 </div>
-
             </div>
             <div class="modal-footer no-margin-bot">
-                <button type="button" class="btn btn-danger btn-md" ng-click="ok(2, true)" style="float:left">{{'REMOVE' | translate}}</button>
-                <button type="button" class="btn btn-default btn-md" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-                <button type="submit" class="btn btn-primary btn-md" ng-disabled="isLabelLoading == true">{{'UPDATE' | translate}}</button>
+                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
             </div>
-        </form>
-    </script>
-
-    <script type="text/ng-template" id="order-view-item.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">{{'TITLE_PORDUCT' | translate}} {{index+1}}</h4>
+        </script>
+        <script type="text/ng-template" id="order-view-item-preview.html">
+            <div class="modal-header no-margin-bot">
+                <div>
+                    <h4 class="no-margin-bot no-margin-top">{{'TITLE_PORDUCT' | translate}} {{index+1}}</h4>
+                </div>
             </div>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <table>
-                    <!--<tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{item.ProductCode}}</strong>
-                        </td>
-                    </tr>-->
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{item.ProductName}} ({{item.ProductLineName}})</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'SPECIFICATION' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{item.Specification}} {{item.Weight}}Kg</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'PRICE' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{ format(item.UnitPrice, 0)}} {{'VND_ITEM' | translate}}</strong>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'QUANTITY' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{format(item.Count, 0)}}</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'WEIGHT' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{format(item.Quantity, 3)}} {{'TON' | translate}}</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'CASH' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{format(item.Count * item.UnitPrice, 0)}} {{'VND' | translate}}</strong>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="col-md-3 col-sm-3 col-xs-3">{{'LAST_MONTH' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{format(item.QuantityLastMonth, 3)}} {{'TON' | translate}}</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-3 col-sm-3 col-xs-3">{{'CURRENT_MONTH' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            <strong>{{format(item.QuantityCurrentMonth, 3)}} {{'TON' | translate}}</strong>
-                        </td>
-                    </tr>
-                </table>
+            <div class="modal-body">
+                <div class="row">
+                    <table>
+                        <!--<tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">Mã SP</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{order.selectedProduct.ProductCode}}
+                            </td>
+                        </tr>-->
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">co{{'PRODUCT_
+CODE' | translate}}</td>
+                            </td>
+                            T_
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{order.selectedProduct.ProductName}} ({{order.selectedProduct.ProductLineName}})
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">{{'SPECIFICATION' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{order.selectedSpecify.Specification}} {{order.selectedSpecify.Weight}}Kg
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">{{'PRICE' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{format(order.selectedSpecify.UnitPrice, 0)}} {{'VND_ITEM' | translate}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">{{'QUANTITY' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{format(order.numOrder, 0)}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">{{'WEIGHT' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{format(order.totalQuantity, 3)}} {{'TON' | translate}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 col-sm-2 col-xs-2">{{'CASH' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{format(order.totalPrice, 0)}} {{'VND' | translate}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 col-sm-3 col-xs-3">{{'LAST_MONTH' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{format(order.selectedSpecify.QuantityLastMonth, 3)}} {{'TON' | translate}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 col-sm-3 col-xs-3">{{'CURRENT_MONTH' | translate}}</td>
+                            <td class="col-md-4 col-sm-4 col-xs-4">
+                                {{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} {{'TON' | translate}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-
-        </div>
-        <div class="modal-footer no-margin-bot">
-            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-        </div>
-    </script>
-
-    <script type="text/ng-template" id="order-view-item-preview.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">{{'TITLE_PORDUCT' | translate}} {{index+1}}</h4>
+            <div class="modal-footer no-margin-bot">
+                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
             </div>
-        </div>
-        <div class="modal-body">
-            <div class="row">
-                <table>
-                    <!--<tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">Mã SP</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{order.selectedProduct.ProductCode}}
-                        </td>
-                    </tr>-->
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'PRODUCT_CODE' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{order.selectedProduct.ProductName}} ({{order.selectedProduct.ProductLineName}})
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'SPECIFICATION' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{order.selectedSpecify.Specification}} {{order.selectedSpecify.Weight}}Kg
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'PRICE' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{format(order.selectedSpecify.UnitPrice, 0)}} {{'VND_ITEM' | translate}}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'QUANTITY' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{format(order.numOrder, 0)}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'WEIGHT' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{format(order.totalQuantity, 3)}} {{'TON' | translate}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-2 col-sm-2 col-xs-2">{{'CASH' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{format(order.totalPrice, 0)}} {{'VND' | translate}}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="col-md-3 col-sm-3 col-xs-3">{{'LAST_MONTH' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{format(order.selectedSpecify.QuantityLastMonth, 3)}} {{'TON' | translate}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-3 col-sm-3 col-xs-3">{{'CURRENT_MONTH' | translate}}</td>
-                        <td class="col-md-4 col-sm-4 col-xs-4">
-                            {{format(order.selectedSpecify.QuantityCurrentMonth, 3)}} {{'TON' | translate}}
-                        </td>
-                    </tr>
-                </table>
+        </script>
+        <script type="text/ng-template" id="filter-product.html">
+            <div class="modal-header no-margin-bot">
+                <div>
+                    <h4 class="no-margin-bot no-margin-top">{{'CHOOSE_PRODUCT' | translate}}</h4>
+                </div>
             </div>
-
-        </div>
-        <div class="modal-footer no-margin-bot">
-            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-        </div>
-    </script>
-
-    <script type="text/ng-template" id="filter-product.html">
-        <div class="modal-header no-margin-bot">
-            <div>
-                <h4 class="no-margin-bot no-margin-top">{{'CHOOSE_PRODUCT' | translate}}</h4>
+            <div class="modal-body" stop-event="touchend">
+                <input type="text" class="form-control" ng-model="key" />
+                <ul class="nav nav-tabs row text-center no-padding no-margin nav-filter">
+                    <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{active:cat==item}" ng-repeat="item in categories">
+                        <a class="max-width-height no-padding no-border-top" ng-click="setCat(item)">{{item}}</a>
+                    </li>
+                </ul>
+                <ul class="list-group filter-height">
+                    <li class="list-group-item" ng-repeat="product in products | filter:filterCritial(key, cat)" ng-click="select(product)">
+                        {{product.ProductName}} {{product.ProductLineName}}
+                    </li>
+                </ul>
+                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
             </div>
-        </div>
-        <div class="modal-body" stop-event="touchend">
-            <input type="text" class="form-control" ng-model="key"/>
-            <ul class="nav nav-tabs row text-center no-padding no-margin nav-filter">
-                <li class="col-md-4 col-sm-4 col-xs-4 no-padding max-width-height" ng-class="{active:cat==item}" ng-repeat="item in categories">
-                    <a class="max-width-height no-padding no-border-top" ng-click="setCat(item)">{{item}}</a>
-                </li>
-            </ul>
-            <ul class="list-group filter-height">
-                <li class="list-group-item" ng-repeat="product in products | filter:filterCritial(key, cat)" ng-click="select(product)">
-                {{product.ProductName}} {{product.ProductLineName}}</li>
-            </ul>
-            <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
-        </div>
-    </script>
-    <!--prevent tiny screen-->
-    <!--<script type="text/javascript">
-        $(document).ready(function () {
-            //if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
-            var msViewportStyle = document.createElement("style");
-            msViewportStyle.appendChild(
-                document.createTextNode("@-ms-viewport{width:auto!important}")
-            );
-            document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
-            //}
-        });
-    </script>-->
+        </script>
+        <!--prevent tiny screen-->
+        <!--<script type="text/javascript">
+            $(document).ready(function () {
+                //if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+                var msViewportStyle = document.createElement("style");
+                msViewportStyle.appendChild(
+                    document.createTextNode("@-ms-viewport{width:auto!important}")
+                );
+                document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+                //}
+            });
+        </script>-->
 </body>
 </html>
