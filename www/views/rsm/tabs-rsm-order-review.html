@@ -172,7 +172,7 @@
     <div class="row text-center">
         <h4>
             {{'MESSAGE_ACCEPT_1' | translate}}
-            <button ng-disabled="success" type="button" ng-click="createOrder()" class="btn btn-primary btn-lg new-order">{{'CONFIRM' | translate}}</button>{{'MESSAGE_ACCEPT_2' | translate}}
+            <button ng-disabled="success || processing" type="button" ng-click="createOrder()" class="btn btn-primary btn-lg new-order">{{'CONFIRM' | translate}}</button>{{'MESSAGE_ACCEPT_2' | translate}}
         </h4>
     </div>
 </div>

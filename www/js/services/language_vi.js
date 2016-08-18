@@ -97,7 +97,7 @@
     'ORDER_DETAIL': 'Chi tiết đơn hàng',
     'ORDER_REVIEW': 'Xác nhận đơn hàng',
     'VIETNAMESE': 'Tiếng Việt',
-    'ENGLISH': 'English',
+    'ENGLISH': 'Tiếng Anh',
     'ALERT': 'Thông báo',
     'PROCESSING': 'Đang xử lý',
     'ADDRESS': 'Địa chỉ',

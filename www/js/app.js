@@ -356,53 +356,7 @@ app.config(function ($httpProvider, $translateProvider) {
 });
 
 app.run(function ($rootScope, $state, AuthService, USER_ROLES, USER_LEVELS) {  
-
     $rootScope.$state = $state;
-
-    if (!AuthService.isAuthenticated())
-        $state.go('login');
-    else {
-        switch (AuthService.user().RoleId) {
-            case USER_ROLES.DEALER: $state.go("tabs.dealer-list", {}, { reload: true })
-                break;
-            case USER_ROLES.SALE:
-                switch (AuthService.user().Level) {
-                    case USER_LEVELS.SALE_REP:
-                        $state.go("tabs.sale-list", {}, { reload: true }); break;
-                    case USER_LEVELS.SALE_SUP:
-                        $state.go("tabs.sale-sup-list", {}, { reload: true }); break;
-                    case USER_LEVELS.ASM:
-                        $state.go("tabs.asm-list", {}, { reload: true }); break;
-                    case USER_LEVELS.RSM:
-                        $state.go("tabs.rsm-list", {}, { reload: true }); break;
-                    case USER_LEVELS.NSM:
-                        $state.go("tabs.nsm-list", {}, { reload: true }); break;
-                }
-                break;
-            default: $state.go('login');
-        }
-    }
-    //else {
-    //    switch (AuthService.user().RoleId) {
-    //        case USER_ROLES.DEALER: $state.go("home.dealer", {}, { reload: true });
-    //            break;
-    //        case USER_ROLES.SALE: $state.go("home.sale", {}, { reload: true });
-    //            break;
-    //        case USER_ROLES.SC: $state.go("home.sc", {}, { reload: true });
-    //            break;
-    //    }
-    //}
-
-    $rootScope.$on('$stateChangeStart', function (event, next, nextParams, fromState) {
-
-        // AuthService.checkVersion(appVersion);
-        if (!AuthService.isAuthenticated()) {
-            if (next.name !== 'login') {
-                event.preventDefault();
-                $state.go('login');
-            }
-        }
-    });
 })
 
 .directive('stopEvent', function () {

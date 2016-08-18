@@ -1703,6 +1703,7 @@ app
     $scope.indicators = 0;
 
     $scope.success = false;
+    $scope.processing = false;
     $scope.legacyConfirm = false;
 
     $scope.backPage = function () {
@@ -1819,6 +1820,7 @@ app
     }
 
     $scope.createOrder = function () {
+        $scope.processing = true;
         $scope.openLoading();
         var orderdetails = [];
         for (var idx in $scope.orderListGroupBy) {
@@ -1854,6 +1856,7 @@ app
             $scope.success = true;
             //$state.go('home.dealer', {}, { reload: true });
         }, function (err) {
+            $scope.processing = false;
             $scope.modal.dismiss('closing');
             console.log(err);
             $rootScope.processRequestError(err);

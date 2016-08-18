@@ -1530,6 +1530,7 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
     $scope.indicators = 0;
 
     $scope.success = false;
+    $scope.processing = false;
     $scope.backPage = function () {
         window.history.back();
     }
@@ -1644,6 +1645,7 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
     }
 
     $scope.createOrder = function () {
+        $scope.processing = true;
         $scope.openLoading();
         var orderdetails = [];
         for (var idx in $scope.orderListGroupBy) {
@@ -1678,6 +1680,7 @@ app.controller('ASMController', function ($scope, $rootScope, $timeout, $statePa
             $scope.success = true;
             //$state.go('home.dealer', {}, { reload: true });
         }, function (err) {
+            $scope.processing = false;
             $scope.modal.dismiss('closing');
             console.log(err);
             $rootScope.processRequestError(err);
