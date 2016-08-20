@@ -393,7 +393,7 @@ a > i {
 
 @media only screen and (min-device-height: 480px) {
     .filter-height {
-        height: 200px !important;
+        height: 250px !important;
     }
 
     .modal-header {
@@ -412,7 +412,7 @@ a > i {
     }
 }
 
-@media only screen and  (min-device-height: 640px) {
+@media only screen and (min-device-height: 640px) {
     .filter-height {
         height: 360px !important;
     }
