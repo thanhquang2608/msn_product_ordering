@@ -393,7 +393,7 @@ a > i {
 
 @media screen and (max-height: 480px) {
     .filter-height {
-        height: 50px !important;
+        height: 180px !important;
     }
 
     .modal-header {
