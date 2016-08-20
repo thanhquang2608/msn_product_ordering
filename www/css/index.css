@@ -391,7 +391,7 @@ a > i {
     height: 400px;
 }
 
-@media screen and (max-device-height: 480px) {
+@media only screen and (max-device-height: 480px) {
     .filter-height {
         height: 50px !important;
     }
@@ -412,7 +412,7 @@ a > i {
     }
 }
 
-@media screen and  (max-device-height: 640px) {
+@media only screen and  (max-device-height: 640px) {
     .filter-height {
         height: 200px !important;
     }
