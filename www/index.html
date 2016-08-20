@@ -436,10 +436,7 @@
                             </td>
                         </tr>-->
                         <tr>
-                            <td class="col-md-2 col-sm-2 col-xs-2">co{{'PRODUCT_
-CODE' | translate}}</td>
-                            </td>
-                            T_
+                            <td class="col-md-2 col-sm-2 col-xs-2">co{{'PRODUCT_CODE' | translate}}</td>
                             <td class="col-md-4 col-sm-4 col-xs-4">
                                 {{order.selectedProduct.ProductName}} ({{order.selectedProduct.ProductLineName}})
                             </td>
@@ -511,7 +508,9 @@ CODE' | translate}}</td>
                         {{product.ProductName}} {{product.ProductLineName}}
                     </li>
                 </ul>
-                <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                <div class="modal-footer no-margin-bot">
+                    <button type="button" class="btn btn-default btn-lg" ng-click="cancel()">{{'CLOSE' | translate}}</button>
+                </div>        
             </div>
         </script>
         <!--prevent tiny screen-->
