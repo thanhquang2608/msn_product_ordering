@@ -391,9 +391,9 @@ a > i {
     height: 400px;
 }
 
-@media screen and (max-height: 480px) {
+@media screen and (max-device-height: 480px) {
     .filter-height {
-        height: 180px !important;
+        height: 50px !important;
     }
 
     .modal-header {
@@ -412,7 +412,7 @@ a > i {
     }
 }
 
-@media screen and  (max-height: 640px) {
+@media screen and  (max-device-height: 640px) {
     .filter-height {
         height: 200px !important;
     }
