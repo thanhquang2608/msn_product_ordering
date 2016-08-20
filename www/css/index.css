@@ -467,6 +467,6 @@ a > i {
     padding-left: 2px !important;
     padding-right: 2px !important;
 }
-td {
-    line-height: 100%;
+td, .row {
+    line-height: 110%;
 }
