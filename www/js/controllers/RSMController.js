@@ -91,6 +91,7 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         });
     };
 
+
     $scope.openLoading = function () {
 
         if ($scope.modal == null) {
@@ -109,6 +110,13 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
             //alert('Modal dismissed at: ' + new Date());
         });
     };
+
+    $scope.closeLoading = function () {
+        if ($scope.modal != null) {
+            $scope.modal.dismiss('closing');
+        }
+    };
+    
     $scope.lock = false;
     $rootScope.loadOrderInMonth = function () {
         console.log('loadOrderInMonth');
@@ -1675,14 +1683,14 @@ app.controller('RSMController', function ($scope, $rootScope, $timeout, $statePa
         };
         console.log(params);
         CommonService.addOrder(params).then(function (data) {
-            $scope.modal.dismiss('closing');
+            $scope.closeLoading();
             console.log(data);
             $scope.$parent.prevState = '';
             $scope.success = true;
             //$state.go('home.dealer', {}, { reload: true });
         }, function (err) {
             $scope.processing = false;
-            $scope.modal.dismiss('closing');
+            $scope.closeLoading();
             console.log(err);
             $rootScope.processRequestError(err);
         });

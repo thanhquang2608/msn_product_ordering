@@ -102,13 +102,20 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         }
 
         $scope.modal.result.then(function (from) {
-            $scope.modal = null;
+            $scope.modal = null;    
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
             $scope.modal = null;
             //alert('Modal dismissed at: ' + new Date());
         });
     };
+
+    $scope.closeLoading = function () {
+        if ($scope.modal != null) {
+            $scope.modal.dismiss('closing');
+        }
+    };
+
     $scope.lock = false;
     $rootScope.loadOrderInMonth = function () {
         console.log('loadOrderInMonth');
@@ -1641,6 +1648,9 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
     }
 
     $scope.createOrder = function () {
+        if ($scope.processing)
+            return;
+
         $scope.processing = true;
         $scope.openLoading();
         var orderdetails = [];
@@ -1670,14 +1680,14 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         };
         console.log(params);
         CommonService.addOrder(params).then(function (data) {
-            $scope.modal.dismiss('closing');
+            $scope.closeLoading();
             console.log(data);
             $scope.$parent.prevState = '';
             $scope.success = true;
             //$state.go('home.dealer', {}, { reload: true });
         }, function (err) {
             $scope.processing = false;
-            $scope.modal.dismiss('closing');
+            $scope.closeLoading();
             console.log(err);
             $rootScope.processRequestError(err);
         });
