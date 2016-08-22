@@ -93,22 +93,37 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
 
     $scope.openLoading = function () {
 
-        if ($scope.modal == null) {
-            $scope.modal = $modal.open({
-                animation: $scope.animationsEnabled,
-                templateUrl: 'loading.html',
-                size: 'sm'
-            });
-        }
+        $scope.modal = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'loading.html',
+            size: 'sm'
+        });
 
         $scope.modal.result.then(function (from) {
-            $scope.modal = null;
+
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
-            $scope.modal = null;
             //alert('Modal dismissed at: ' + new Date());
         });
     };
+    // $scope.openLoading = function () {
+
+    //     if ($scope.modal == null) {
+    //         $scope.modal = $modal.open({
+    //             animation: $scope.animationsEnabled,
+    //             templateUrl: 'loading.html',
+    //             size: 'sm'
+    //         });
+    //     }
+
+    //     $scope.modal.result.then(function (from) {
+    //         $scope.modal = null;    
+    //     }, function () {
+    //         $log.info('Modal dismissed at: ' + new Date());
+    //         $scope.modal = null;
+    //         //alert('Modal dismissed at: ' + new Date());
+    //     });
+    // };
     $scope.lock = false;
     $rootScope.loadOrderInMonth = function () {
         console.log('loadOrderInMonth');
@@ -1643,7 +1658,7 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
     $scope.createOrder = function () {
         if ($scope.processing)
             return;
-        
+
         $scope.processing = true;
         $scope.openLoading();
         var orderdetails = [];
