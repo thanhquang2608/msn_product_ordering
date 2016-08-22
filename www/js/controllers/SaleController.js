@@ -1641,6 +1641,9 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
     }
 
     $scope.createOrder = function () {
+        if ($scope.processing)
+            return;
+        
         $scope.processing = true;
         $scope.openLoading();
         var orderdetails = [];

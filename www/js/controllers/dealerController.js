@@ -1820,6 +1820,8 @@ app
     }
 
     $scope.createOrder = function () {
+        if ($scope.processing)
+            return;
         $scope.processing = true;
         $scope.openLoading();
         var orderdetails = [];
