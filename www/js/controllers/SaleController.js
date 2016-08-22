@@ -93,37 +93,29 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
 
     $scope.openLoading = function () {
 
-        $scope.modal = $modal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'loading.html',
-            size: 'sm'
-        });
+        if ($scope.modal == null) {
+            $scope.modal = $modal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'loading.html',
+                size: 'sm'
+            });
+        }
 
         $scope.modal.result.then(function (from) {
-
+            $scope.modal = null;    
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
+            $scope.modal = null;
             //alert('Modal dismissed at: ' + new Date());
         });
     };
-    // $scope.openLoading = function () {
 
-    //     if ($scope.modal == null) {
-    //         $scope.modal = $modal.open({
-    //             animation: $scope.animationsEnabled,
-    //             templateUrl: 'loading.html',
-    //             size: 'sm'
-    //         });
-    //     }
+    $scope.closeLoading = function () {
+        if ($scope.modal != null) {
+            $scope.modal.dismiss('closing');
+        }
+    };
 
-    //     $scope.modal.result.then(function (from) {
-    //         $scope.modal = null;    
-    //     }, function () {
-    //         $log.info('Modal dismissed at: ' + new Date());
-    //         $scope.modal = null;
-    //         //alert('Modal dismissed at: ' + new Date());
-    //     });
-    // };
     $scope.lock = false;
     $rootScope.loadOrderInMonth = function () {
         console.log('loadOrderInMonth');
@@ -1688,14 +1680,14 @@ app.controller('SaleController', function ($scope, $rootScope, $timeout, $stateP
         };
         console.log(params);
         CommonService.addOrder(params).then(function (data) {
-            $scope.modal.dismiss('closing');
+            $scope.closeLoading();
             console.log(data);
             $scope.$parent.prevState = '';
             $scope.success = true;
             //$state.go('home.dealer', {}, { reload: true });
         }, function (err) {
             $scope.processing = false;
-            $scope.modal.dismiss('closing');
+            $scope.closeLoading();
             console.log(err);
             $rootScope.processRequestError(err);
         });
