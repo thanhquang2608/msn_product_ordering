@@ -260,8 +260,8 @@ app.constant('APP', {
 })
 
 .constant('NETWORK', {
-    BASE_URL: 'http://server-masanbak.rhcloud.com',
-    //BASE_URL: 'http://server-masan.rhcloud.com'
+    //BASE_URL: 'http://server-masanbak.rhcloud.com',
+    BASE_URL: 'http://server-masan.rhcloud.com'
 })
 
 .constant('TIMER', {
