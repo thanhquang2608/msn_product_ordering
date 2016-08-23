@@ -1,7 +1,7 @@
 ﻿var db;
 var DB_CONSTANTS = {};
 var sqliteHelper = {};
-sqliteHelper.DB_NAME = 'demo1.db';
+sqliteHelper.DB_NAME = 'eOrder.db';
 sqliteHelper.TABLE_NAME = 'AppInfo';
 sqliteHelper.FEILD_NAME_TOKEN = 'token';
 sqliteHelper.FEILD_NAME_USER = 'user';
