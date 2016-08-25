@@ -18,12 +18,24 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
     function loadUserCredentials() {
         var deferred = $.Deferred();
         var promises = [];
-        promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN));
-        promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USERNAME));
-        promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USER));
-        //var token = $localstorage.get(LOCAL_TOKEN_KEY);
-        //var appVersion = $localstorage.get(APP_VERSION_KEY);
-        //var retrievedUser = $localstorage.get(LOCAL_USER_KEY);
+
+        // Edit by Quang
+        var localToken = $localstorage.get(LOCAL_TOKEN_KEY);
+        // var localAppVersion = $localstorage.get(APP_VERSION_KEY);
+        var localUser = $localstorage.get(LOCAL_USER_KEY);
+        var localUsername = $localstorage.get(LOCAL_USERNAME_KEY);
+
+        if (!localToken || !localUser || !localUsername) {
+            localToken = $sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN);
+            localUsername = $sqliteStorage.get(sqliteHelper.FEILD_NAME_USERNAME);
+            localUser = $sqliteStorage.get(sqliteHelper.FEILD_NAME_USER);
+        }
+
+        promises.push(localToken);
+        promises.push(localUsername);
+        promises.push(localUser);
+        // Edit by Quang
+       
         $.when.apply(null, promises).then(function () {
             //alert('token ' + arguments[0] + ' ' + arguments[2]);
             if (arguments[0] && arguments[2]) {
