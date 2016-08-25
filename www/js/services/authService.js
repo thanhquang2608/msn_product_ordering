@@ -31,6 +31,12 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
                user = JSON.parse(localUser);
                username = localUsername;
                remember = true;
+
+                // Clean local storage
+               $localstorage.deleteObject(LOCAL_TOKEN_KEY);
+               $localstorage.deleteObject(LOCAL_USER_KEY);
+               $localstorage.deleteObject(LOCAL_USERNAME_KEY);
+
                deferred.resolve();
             });
         } else {
