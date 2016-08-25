@@ -21,27 +21,17 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
 
         // Edit by Quang
         var localToken = $localstorage.get(LOCAL_TOKEN_KEY);
-        // var localAppVersion = $localstorage.get(APP_VERSION_KEY);
         var localUser = $localstorage.get(LOCAL_USER_KEY);
         var localUsername = $localstorage.get(LOCAL_USERNAME_KEY);
 
         if (localToken && localUser && localUsername) {
-            promises.push(localToken);
-            promises.push(localUsername);
-            promises.push(localUser);
-
             // Store user credentials to sqlite
             storeUserCredentials(localUser, localToken, localUsername, true).then(function () {
-                $.when.apply(null, promises).then(function () {
-                    //alert('token ' + arguments[0] + ' ' + arguments[2]);
-                    if (arguments[0] && arguments[2]) {
-                        useCredentials(arguments[0]);
-                        user = JSON.parse(arguments[2]);
-                    }
-                    username = arguments[1];
-                    remember = true;
-                    deferred.resolve();
-                });
+               useCredentials(localToken);
+               user = JSON.parse(localUser);
+               username = localUsername;
+               remember = true;
+               deferred.resolve();
             });
         } else {
             promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN));
@@ -49,7 +39,6 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
             promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USER));
 
             $.when.apply(null, promises).then(function () {
-                //alert('token ' + arguments[0] + ' ' + arguments[2]);
                 if (arguments[0] && arguments[2]) {
                     useCredentials(arguments[0]);
                     user = JSON.parse(arguments[2]);
@@ -66,16 +55,7 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
     }
 
     function storeUserCredentials(u, token, userName, rememberme) {
-        //$localstorage.set(LOCAL_TOKEN_KEY, token);
-        //$localstorage.set(LOCAL_USER_KEY, JSON.stringify(u));
-        //$localstorage.setObject(LOCAL_REMEMBER_ME_KEY, rememberme);
-
-        //if (rememberme)
-        //    $localstorage.set(LOCAL_USERNAME_KEY, username);
-        //else
-        //    $localstorage.deleteObject(LOCAL_USERNAME_KEY);
         var deferred = $.Deferred();
-        //$localstorage.set(LOCAL_USERNAME_KEY, username);
         var keyList = [sqliteHelper.FEILD_NAME_TOKEN, sqliteHelper.FEILD_NAME_USER, sqliteHelper.FEILD_NAME_LANGUAGE, sqliteHelper.FEILD_NAME_USERNAME];
         var valueList = [token, JSON.stringify(u), '', userName];
         $sqliteStorage.set(keyList, valueList).then(function () {
@@ -92,11 +72,6 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
     function useCredentials(token) {
         isAuthenticated = true;
         authToken = token;
-        //console.log(token);
-
-        // Set the token as header for your requests!
-        // $http.defaults.headers.common['X-Auth-Token'] = 'Bearer ' + token;
-        // $http.defaults.headers.common.Authorization = 'Bearer ' + token;
     }
 
     function checkVersion(currentVersion) {
@@ -111,8 +86,12 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
         var deferred = $.Deferred();
         authToken = undefined;
         isAuthenticated = false;
-        //$localstorage.deleteObject(LOCAL_TOKEN_KEY);
-        //$localstorage.deleteObject(LOCAL_USER_KEY);
+        // Clean local storage
+        $localstorage.deleteObject(LOCAL_TOKEN_KEY);
+        $localstorage.deleteObject(LOCAL_USER_KEY);
+        $localstorage.deleteObject(LOCAL_USERNAME_KEY);
+
+        // Clean DB
         var keyList = [sqliteHelper.FEILD_NAME_TOKEN, sqliteHelper.FEILD_NAME_USER, sqliteHelper.FEILD_NAME_LANGUAGE];
         var valueList = ['', '', ''];
         $sqliteStorage.set(keyList, valueList).then(function () {
@@ -153,20 +132,6 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
                     reject(response);
                 //}
             });
-            //var data = "username=" + id + "&password=" + pass;
-            //$http.post(serviceBase + '/login', data, { timeout: $rootScope.TIME_OUT })
-            //    .then(function successCallback(response) {
-            //        var user = response.data.user;
-            //        var token = response.data.token;
-
-            //        storeUserCredentials(user, token);
-            //        resolve('Login success.');
-            //    }, function errorCallback(response) {
-            //        if (response.status != 0 && response.status != 408) {
-            //            console.log("login failed, statusCode: " + response.status);
-            //            reject(response);
-            //        }
-            //    });
         });
     };
 
@@ -191,8 +156,6 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
         }
         return (isAuthenticated && authorizedRoles.indexOf(role) !== -1);
     };
-
-    //loadUserCredentials();
 
     var changePassword = function (newPassword) {
         return $q(function (resolve, reject) {

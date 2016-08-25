@@ -25,7 +25,6 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localst
         }, function () {
             deferred.resolve(config);
         });
-        //var token = $localstorage.get(LOCAL_TOKEN_KEY);
         return deferred.promise;
     }
 
