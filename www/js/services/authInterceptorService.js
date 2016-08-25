@@ -20,7 +20,7 @@ app.factory('authInterceptorService', ['$q', '$injector', '$location', '$localst
                 config.headers.Authorization = 'Bearer ' + token;
             }
             config.headers['Accept-Language'] = TranslateService.getDefaultLanguageKey();
-			config.headers['Version'] = '1.0.9';
+			config.headers['Version'] = '1.1.0';
             deferred.resolve(config);
         }, function () {
             deferred.resolve(config);

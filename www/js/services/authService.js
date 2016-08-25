@@ -25,28 +25,42 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
         var localUser = $localstorage.get(LOCAL_USER_KEY);
         var localUsername = $localstorage.get(LOCAL_USERNAME_KEY);
 
-        if (!localToken || !localUser || !localUsername) {
+        if (localToken && localUser && localUsername) {
             promises.push(localToken);
             promises.push(localUsername);
             promises.push(localUser);
+
+            // Store user credentials to sqlite
+            storeUserCredentials(localUser, localToken, localUsername, true).then(function () {
+                $.when.apply(null, promises).then(function () {
+                    //alert('token ' + arguments[0] + ' ' + arguments[2]);
+                    if (arguments[0] && arguments[2]) {
+                        useCredentials(arguments[0]);
+                        user = JSON.parse(arguments[2]);
+                    }
+                    username = arguments[1];
+                    remember = true;
+                    deferred.resolve();
+                });
+            });
         } else {
             promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN));
             promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USERNAME));
             promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USER));
+
+            $.when.apply(null, promises).then(function () {
+                //alert('token ' + arguments[0] + ' ' + arguments[2]);
+                if (arguments[0] && arguments[2]) {
+                    useCredentials(arguments[0]);
+                    user = JSON.parse(arguments[2]);
+                }
+                username = arguments[1];
+                remember = true;
+                deferred.resolve();
+                
+            });
         }
-        // Edit by Quang
-       
-        $.when.apply(null, promises).then(function () {
-            //alert('token ' + arguments[0] + ' ' + arguments[2]);
-            if (arguments[0] && arguments[2]) {
-                useCredentials(arguments[0]);
-                user = JSON.parse(arguments[2]);
-            }
-            username = arguments[1];
-            remember = true;
-            deferred.resolve();
-            
-        });
+        // Edit by Quang 
         
         return deferred.promise();
     }

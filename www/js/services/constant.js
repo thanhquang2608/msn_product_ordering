@@ -1,6 +1,6 @@
 ﻿'use strict';
 app.constant('APP', {
-    VERSION: '1.0.9'
+    VERSION: '1.1.0'
 })
     .constant('AUTH_EVENTS', {
     authenticated: 'authenticated',

@@ -5,7 +5,7 @@
 
 (function () {
     "use strict";
-    var currentVersion = '1.0.9';
+    var currentVersion = '1.1.0';
     var curLanguage = 'vi';
     var languagePack = {
         'en': {
