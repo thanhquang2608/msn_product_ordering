@@ -26,14 +26,14 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
         var localUsername = $localstorage.get(LOCAL_USERNAME_KEY);
 
         if (!localToken || !localUser || !localUsername) {
-            localToken = $sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN);
-            localUsername = $sqliteStorage.get(sqliteHelper.FEILD_NAME_USERNAME);
-            localUser = $sqliteStorage.get(sqliteHelper.FEILD_NAME_USER);
+            promises.push(localToken);
+            promises.push(localUsername);
+            promises.push(localUser);
+        } else {
+            promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_TOKEN));
+            promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USERNAME));
+            promises.push($sqliteStorage.get(sqliteHelper.FEILD_NAME_USER));
         }
-
-        promises.push(localToken);
-        promises.push(localUsername);
-        promises.push(localUser);
         // Edit by Quang
        
         $.when.apply(null, promises).then(function () {
@@ -47,6 +47,7 @@ app.service('AuthService', function ($rootScope, $q, $http, $localstorage, $sqli
             deferred.resolve();
             
         });
+        
         return deferred.promise();
     }
 
